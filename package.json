@@ -26,7 +26,8 @@
     "eos-transit-tokenpocket-provider": "^3.0.1",
     "eosjs": "^21.0.3",
     "pure-vue-chart": "^0.4.0",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "vuejs-countdown": "^0.2.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

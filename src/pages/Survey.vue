@@ -3,7 +3,7 @@
   <div class="q-gutter-y-md q-mx-auto" style="max-width: 550px">
   <q-card flat bordered class="mycard">
     <q-card-section>
-      <div class="text-h6 text-center">This Weeks Survey</div>
+      <div class="text-h5 text-center">This Weeks Survey</div>
       <div class="text-subtitle2 text-center">Survey iteration &nbsp; {{iteration}}</div>
     </q-card-section>
     <!--  -->
@@ -43,15 +43,15 @@
       <div>
         <div class="example ex1">
             <p><label class="radio greyux">
-              <input type="radio" id="1" value="1" name="group1" v-model="picked"/>
+              <input type="radio" id="1" value="1" name="group1" v-model="value_radio1"/>
               <span>Growing (bull market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" id="2" value="2" name="group1" v-model="picked"/>
+              <input type="radio" id="2" value="2" name="group1" v-model="value_radio1"/>
               <span>Shrinking (bear market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" id="3" value="3" name="group1" v-model="picked"/>
+              <input type="radio" id="3" value="3" name="group1" v-model="value_radio1"/>
               <span>Neither (going sideways)</span>
             </label></p>
         </div>
@@ -61,23 +61,32 @@
       <p></p>
       <p>Q2: How long will the above Bitcoin and crypto market last before it changes direction?
       </p>
-      <div id="q-app" style="min-height: 100vh;">
+      <div>
         <div class="q-pa-md">
           <q-slider
-            :model-value="lazy"
-            @change="val => { lazy = val }"
+            v-model="slider1"
             :min="1"
             :max="48"
             :step="1"
             color="grey-6"
             label
-            :label-value="'Months:' + lazy"
+            :label-value="'Months:' + slider1"
             label-always
           ></q-slider>
-          <div class="text-center">
-            <q-badge class="text-subtitle2" outline color="grey-8">
-              Months: {{ lazy }}
-            </q-badge>
+          <div class="row">
+            <div class="col">
+              1
+            </div>
+            <div class="col">
+              <div class="text-center">
+                <q-badge class="text-subtitle2" outline color="grey-8">
+                  Months: {{ slider1 }}
+                </q-badge>
+              </div>
+            </div>
+            <div class="col text-right">
+              48
+            </div>
           </div>
         </div>
       </div>
@@ -85,24 +94,29 @@
     </q-card>
     <q-card flat bordered class="mycard">
     <!-- Second Group of Questions -->
+      <!-- -->
+      <q-card-section class="bg-grey-6 tx-white">
+        <div class="text-h6 text-white text-center">Next Questions</div>
+      </q-card-section>
+      <!-- -->
     <q-card-section>
       <div class="text-subtitle2 text-center">Freeos Economy Sentiment</div>
-      Do you feel the Freeos economy is growing (bull market),
+      Q3: Do you feel the Freeos economy is growing (bull market),
       shrinking (bear market) or neither (going sideways)?
       <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       <!-- <div id="q-app" style="min-height: 100vh;"> -->
       <div>
         <div class="example ex1">
           <p><label class="radio greyux">
-            <input type="radio" value="radio-1" v-model="value_radio" name="group2"/>
+            <input type="radio" value="radio-1" v-model="value_radio2" name="group2"/>
             <span>Growing (bull market)</span>
           </label></p>
           <p><label class="radio greyux">
-            <input type="radio" value="radio-2" v-model="value_radio" name="group2"/>
+            <input type="radio" value="radio-2" v-model="value_radio2" name="group2"/>
             <span>Shrinking (bear market)</span>
           </label></p>
           <p><label class="radio greyux">
-            <input type="radio" value="radio-3" v-model="value_radio" name="group2"/>
+            <input type="radio" value="radio-3" v-model="value_radio2" name="group2"/>
             <span>Neither (going sideways)</span>
           </label></p>
         </div>
@@ -110,25 +124,34 @@
       <!-- -->
       <q-separator inset class="grey6"></q-separator>
       <p></p>
-      <p>Q2: How long will the above Freeos market last before it changes direction?
+      <p>Q4: How long will the above Freeos market last before it changes direction?
       </p>
-      <div id="q-app" style="min-height: 100vh;">
+      <div>
         <div class="q-pa-md">
           <q-slider
-            :model-value="freeos"
-            @change="val => { freeos = val }"
+            v-model="slider2"
             :min="1"
             :max="48"
             :step="1"
             color="grey-6"
             label
-            :label-value="'Months:' + freeos"
+            :label-value="'Months:' + slider2"
             label-always
           ></q-slider>
-          <div class="text-center">
-            <q-badge class="text-subtitle2" outline color="grey-8">
-              Months: {{ lazy }}
-            </q-badge>
+          <div class="row">
+            <div class="col">
+              1
+            </div>
+            <div class="col">
+              <div class="text-center">
+                <q-badge class="text-subtitle2" outline color="grey-8">
+                  Months: {{ slider2 }}
+                </q-badge>
+              </div>
+            </div>
+            <div class="col text-right">
+              48
+            </div>
           </div>
         </div>
       </div>
@@ -136,6 +159,40 @@
     <!-- -->
   </q-card>
 <!-- MAIN CARD -->
+    <q-card flat bordered class="mycard">
+      <!-- -->
+      <q-card-section class="bg-grey-6 tx-white">
+        <div class="text-h6 text-white text-center">Last Questions</div>
+      </q-card-section>
+      <!-- -->
+      <div class="text-subtitle2 text-center">Priorities</div>
+      <div class="q-pa-md">
+      <div> Q5: Select the three most priorities for this week:</div><br>
+        Ordered, weighted vote for;<br>
+        Growing the participants <br>
+        Stabilising the price<br>
+        Raising the locking threshold<br>
+        Burning FREEOS<br>
+        Pooling FREEOS in a Liquidity Pool<br>
+        Growing the Reserve Pool (to prepare for future price drops/economic crashes)
+      </div>
+      <p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+      <div>
+        <div class="q-pa-md">
+      <div class="q-gutter-y-md column" style="max-width: 350px">
+        <q-select clearable filled color="grey-6" v-model="selection1" :options="options" label="Select Priority 1"></q-select>
+        <q-select clearable filled color="grey-6" v-model="selection2" :options="options" label="Select Priority 2"></q-select>
+        <q-select clearable filled color="grey-6" v-model="selection3" :options="options" label="Select Priority 3"></q-select>
+      </div>
+          <!-- -->
+          <br>
+          <q-separator class="grey6"></q-separator>
+          <p></p>
+          <p>Q6: Not defined question TODO blah last before it changes direction?
+          </p>
+      </div>
+      </div>
+    </q-card>
 </div>
 </template>
 
@@ -146,14 +203,24 @@ export default {
     return {
       version: '',
       iteration: 0.0,
-      lazy: 1,
-      freeos: 1,
-      picked: 2,
+      // sliders:
+      slider1: 1,
+      slider2: 1,
+      // selectors:
+      options: [
+        'Ordered, weighted vote for', 'Growing the participants', 'Stabilising the price', 'Raising the locking treshold',
+        'Burning FREEOS', 'Pooling FREEOS in a Liquidity Pool', 'Growing the Reserve Pool'
+      ],
+      selection1: '',
+      selection2: '',
+      selection3: '',
+      // radio buttons:
       radio: 2,
       radio2: 1,
-      group1: 1,
-      group2: 1,
-      value_radio: '',
+      group1: 2,
+      group2: 2,
+      value_radio1: '',
+      value_radio2: '',
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
