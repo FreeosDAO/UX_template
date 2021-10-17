@@ -193,6 +193,18 @@
       </div>
       </div>
     </q-card>
+    <q-card flat bordered class="mycard">
+      <q-card-section class="text-center">
+        <q-btn
+          size="18px"
+          disabled
+          no-caps
+          class="q-px-xl q-py-xs center"
+          color="grey-6"
+          label="Submit"
+        ></q-btn>
+      </q-card-section>
+    </q-card>
 </div>
 </template>
 

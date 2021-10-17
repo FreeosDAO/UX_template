@@ -137,6 +137,12 @@ const menuList = [
     label: 'Test',
     separator: true,
     route: '/test'
+  },
+  {
+    icon: 'get_app',
+    label: 'Congratulations',
+    separator: true,
+    route: '/congs'
   }
 ]
 export default {
