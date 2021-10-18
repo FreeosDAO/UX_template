@@ -272,6 +272,7 @@ export default {
       slider1: 1,
       slider2: 6,
       slider3: 6,
+      slider4: 0,
       selection1: '',
       selection2: '',
       selection3: '',

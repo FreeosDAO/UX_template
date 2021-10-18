@@ -134,6 +134,12 @@ const menuList = [
   },
   {
     icon: 'get_app',
+    label: 'Ratification',
+    separator: true,
+    route: '/ratify'
+  },
+  {
+    icon: 'get_app',
     label: 'Test',
     separator: true,
     route: '/test'
