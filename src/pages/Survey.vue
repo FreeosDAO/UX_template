@@ -92,13 +92,13 @@
            <div>
             <div class="q-pa-md">
               <q-slider
-                v-model="slider1"
+                v-model="submitData.slider1"
                 :min="1"
                 :max="48"
                 :step="1"
                 color="grey-6"
                 label
-                :label-value="'Months:' + slider1"
+                :label-value="'Months:' + submitData.slider1"
                 label-always
               ></q-slider>
               <div class="row">
@@ -108,7 +108,7 @@
                 <div class="col">
                   <div class="text-center">
                     <q-badge class="text-subtitle2" outline color="grey-8">
-                      Months: {{ slider1 }}
+                      Months: {{ submitData.slider1 }}
                     </q-badge>
                   </div>
                 </div>
@@ -161,13 +161,13 @@
         <div>
           <div class="q-pa-md">
             <q-slider
-              v-model="slider2"
+              v-model="submitData.slider2"
               :min="1"
               :max="48"
               :step="1"
               color="grey-6"
               label
-              :label-value="'Months:' + slider2"
+              :label-value="'Months:' + submitData.slider2"
               label-always
             ></q-slider>
             <div class="row">
@@ -177,7 +177,7 @@
               <div class="col">
                 <div class="text-center">
                   <q-badge class="text-subtitle2" outline color="grey-8">
-                    Months: {{ slider2 }}
+                    Months: {{ submitData.slider2 }}
                   </q-badge>
                 </div>
               </div>
@@ -189,7 +189,7 @@
         </div>
       </q-card-section>
     </q-card>
-        </q-expansion-item>
+    </q-expansion-item>
     </q-card>
     </q-card>
     <!-- MAIN CARD -->
@@ -232,7 +232,7 @@
       <q-card-section class="text-center">
         <q-btn
           size="18px"
-          disabled
+          @click="submit()"
           no-caps
           class="q-px-xl q-py-xs center"
           color="grey-6"
@@ -243,16 +243,17 @@
 </div>
 </template>
 
-<script scooped>
+<script>
 export default {
   name: 'Survey',
   data () {
     return {
       version: '',
       iteration: 0.0,
-      // sliders:
-      slider1: 1,
-      slider2: 1,
+      submitData: { // results to be passed to the backend
+        slider1: 1,
+        slider2: 1
+      },
       // selectors:
       options: [
         'Growing the participants', 'Stabilising the price', 'Raising the locking treshold',
@@ -280,8 +281,22 @@ export default {
   methods: {
     ver () {
       this.version = process.env.V_STRING
+    },
+    submit () {
+      const self = this
+      this.submitData.currentAccountName = this.accountName
+      console.log('Survey Data = ', this.submitData)
+      // TODO Verify entry data here e.g. Is the survey complete?
+      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
+      // // .then(response => { // TODO remove it
+      self.resetForm()
+    },
+    resetForm () {
+      this.submitData = {
+        // TODO is that necessary ??
+      }
     }
-  },
+  }, // end of methods
   created () {
     this.ver()
   }

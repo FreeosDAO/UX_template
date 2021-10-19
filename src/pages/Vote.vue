@@ -31,15 +31,18 @@
       </q-card-section>
     </q-card>
     <!-- end of Title/Intro section -->
-    <!-- Start Voting section-->
+    <!-- Start Voting section -->
     <q-card flat bordered class="mycard">
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Start Voting</div>
-      </q-card-section>
-      <q-card-section>
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Start voting"
+      >
+    <q-card flat bordered class="mycard">
+      <q-card-section class="text-black text-body2">
         <div class="text-subtitle2 text-center">Issuance</div>
-        Q1: What percentage of the issuance should be minted this week?
-        <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+        <div class="text-left"> Q1: What percentage of the issuance should be minted this week? </div>
+        <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       </q-card-section>
         <div class="q-pa-md">
           <q-slider
@@ -52,7 +55,7 @@
             :label-value="slider1 + ' percent'"
             label-always
           ></q-slider>
-          <div class="row">
+          <div class="row text-subtitle2 text-black text-left" >
             <div class="col">
               0%
             </div>
@@ -69,16 +72,21 @@
           </div>
         </div>
     </q-card>
-    <!-- end of 'Start Voting' section-->
-    <!-- 'Next vote' section-->
+      </q-expansion-item>
+    </q-card>
+    <!-- end of 'Start Voting' section -->
+    <!-- *** 'Next vote' section *** -->
     <q-card flat bordered class="mycard">
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Next Vote</div>
-      </q-card-section>
-      <q-card-section>
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Next vote"
+      >
+    <q-card flat bordered class="mycard">
+      <q-card-section class="text-black text-body2">
         <div class="text-subtitle2 text-center">Mint Fee</div>
-        Q2: What should be the mint fee for this week?
-        <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+        <div class="text-left">Q2: What should be the mint fee for this week? </div>
+        <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
@@ -91,7 +99,7 @@
           :label-value="slider2 + ' percent'"
           label-always
         ></q-slider>
-        <div class="row">
+        <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
             6%
           </div>
@@ -108,16 +116,22 @@
         </div>
       </div>
     </q-card>
-    <!-- end of 'Next vote' section-->
+      </q-expansion-item>
+    </q-card>
+    <!-- *** end of 'Next vote' section *** -->
+    <!---->
     <!-- Start 'Half way there' section-->
     <q-card flat bordered class="mycard">
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Half way there...</div>
-      </q-card-section>
-      <q-card-section>
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Half way there"
+      >
+        <q-card flat bordered class="mycard">
+      <q-card-section class="text-black text-body2">
         <div class="text-subtitle2 text-center">Locking Threshold</div>
-        Q3: What price should the Locking Threshold be this week?
-        <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+        <div class="text-left"> Q3: What price should the Locking Threshold be this week? </div>
+        <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
@@ -130,7 +144,7 @@
           :label-value="slider3 + ' percent'"
           label-always
         ></q-slider>
-        <div class="row">
+        <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
             6%
           </div>
@@ -147,16 +161,22 @@
         </div>
       </div>
     </q-card>
+      </q-expansion-item>
+    </q-card>
     <!-- end of 'Half way there' section-->
-    <!-- 'Next vote' section -->
+    <!-- duplicated title next vote -->
     <q-card flat bordered class="mycard">
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Next vote</div>
-      </q-card-section>
-      <q-card-section>
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Next vote (duplo??)"
+      >
+        <q-card flat bordered class="mycard">
+      <q-card-section class="text-black text-body2">
         <div class="text-subtitle2 text-center">Pool or burn?</div>
-        Q4: Should this week's FREEOS used to pay the mint fee to be Burned, or sent to Liquidity Pools?
-        <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+        <div class="text-left"> Q4: Should this week's FREEOS used to pay the mint fee to be Burned,
+          or sent to Liquidity Pools? </div>
+        <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
         <!-- <div id="q-app" style="min-height: 100vh;"> -->
         <div>
           <div class="example ex1">
@@ -172,15 +192,21 @@
         </div>
       </q-card-section>
     </q-card>
+      </q-expansion-item>
+    </q-card>
+    <!-- end of duplicated next vote title -->
     <!-- 'Nearly there' section -->
     <q-card flat bordered class="mycard">
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Nearly there...</div>
-      </q-card-section>
-      <q-card-section>
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Nearly there"
+      >
+        <q-card flat bordered class="mycard">
+          <q-card-section class="text-black text-body2">
         <div class="text-subtitle2 text-center">Reserve Pool % to be released</div>
-        Q5: What percentage of the Reserve Pool assets should be released for sale?
-        <br><br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
+            <div class="text-left"> Q5: What percentage of the Reserve Pool assets should be released for sale? </div>
+        <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
@@ -193,7 +219,7 @@
           :label-value="slider4 + ' percent'"
           label-always
         ></q-slider>
-        <div class="row">
+        <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
             0%
           </div>
@@ -210,16 +236,20 @@
         </div>
       </div>
     </q-card>
+      </q-expansion-item>
+    </q-card>
     <!-- end of 'Nearly there' section-->
     <!-- 'Next vote' section -->
     <q-card flat bordered class="mycard">
-      <!-- -->
-      <q-card-section class="bg-grey-6 tx-white">
-        <div class="text-h6 text-white text-center">Next vote</div>
-      </q-card-section>
-      <!-- -->
+      <q-expansion-item class="text-h6 bg-grey-6 text-white text-center"
+                        expand-separator
+                        icon="perm_identity"
+                        label="Next vote (duplo??)"
+      >
+        <q-card flat bordered class="mycard">
+          <q-card-section class="text-black text-body2">
       <div class="text-subtitle2 text-center">Allocate to Partners</div>
-      <div class="q-pa-md">
+      <div class="q-pa-md text-left">
         <div> Select your top three choices to receive partner founding this week:</div><br>
         - ABC<br>
         - XYZ<br>
@@ -239,7 +269,11 @@
           </div>
         </div>
       </div>
+          </q-card-section>
     </q-card>
+      </q-expansion-item>
+    </q-card>
+    <!-- submit -->
     <q-card flat bordered class="mycard">
       <q-card-section class="text-center">
       <q-btn
@@ -268,6 +302,9 @@ export default {
         'Square Tire', 'Pooling Idiot', 'Liquid Support', 'Usable Monkey'
       ],
       iteration: 0,
+      submitData: { // results to be passed to the backend
+        whatever: ''
+      },
       expiration_timer: '2 days 10 hours 30 min',
       slider1: 1,
       slider2: 6,
@@ -293,8 +330,22 @@ export default {
   methods: {
     ver () {
       this.version = process.env.V_STRING
+    },
+    submit () {
+      const self = this
+      this.submitData.currentAccountName = this.accountName
+      console.log('Survey Data = ', this.submitData)
+      // TODO Verify entry data here e.g. Is the survey complete?
+      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
+      // // .then(response => { // TODO remove it
+      self.resetForm()
+    },
+    resetForm () {
+      this.submitData = {
+        // TODO is that necessary ??
+      }
     }
-  },
+  }, // end of methods
   created () {
     this.ver()
   }
