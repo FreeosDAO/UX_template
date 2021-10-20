@@ -56,6 +56,12 @@ const menuList = [
   },
   {
     icon: 'get_app',
+    label: 'Landing',
+    separator: true,
+    route: '/land'
+  },
+  {
+    icon: 'get_app',
     label: 'My Freeos',
     separator: true,
     route: '/test'
