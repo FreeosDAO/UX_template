@@ -140,7 +140,16 @@
         <div class="q-pa-md text-center">
           <div> The ratification vote is to ensure whatever ipsum sophia loren ala ma kokota whatever again?</div><br>
           <div class="q-gutter-sm">
-          <q-btn size="30px" align="left" class="btn-fixed-width width=45%" color="grey-6" label="Yes"></q-btn>
+            <q-btn
+              size="30px"
+              align="left"
+              @click="submit()"
+              no-caps
+              class="btn-fixed-width width=45%"
+              color="grey-6"
+              label="Yes"
+            ></q-btn>
+          <!-- <q-btn size="30px" align="left"  color="grey-6" label="Yes"></q-btn> -->
           <q-btn size="30px" align="right" class="btn-fixed-width width=45%" color="grey-6" label="No"></q-btn>
           </div>
         </div>
@@ -150,6 +159,8 @@
 </template>
 
 <script>
+import notifyAlert from 'src/services/notify-alert'
+
 export default {
   name: 'Vote',
   data () {
@@ -178,6 +189,18 @@ export default {
     }
   },
   methods: {
+    submit () {
+      // const self = this
+      // this.submitData.currentAccountName = this.accountName //TODO
+      console.log('Ratifying Data = ', this.submitData)
+      // TODO Verify entry data here e.g. Is the ratify complete?
+      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
+      // // .then(response => { // TODO remove it
+      // self.resetForm()
+      notifyAlert('success', 'Ratifying Successful.')
+      // Set up user_mode in Vuex to enable further landing page actions.
+      this.$router.push('/congs')
+    },
     ver () {
       this.version = process.env.V_STRING
     }

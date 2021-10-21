@@ -244,6 +244,7 @@
 </template>
 
 <script>
+import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'Survey',
   data () {
@@ -283,13 +284,16 @@ export default {
       this.version = process.env.V_STRING
     },
     submit () {
-      const self = this
+      // const self = this
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
       // TODO Verify entry data here e.g. Is the survey complete?
       // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
-      self.resetForm()
+      // self.resetForm()
+      notifyAlert('success', 'Survey Submit Successful.')
+      // Set up user_mode in Vuex to enable further landing page actions.
+      this.$router.push('/congs')
     },
     resetForm () {
       this.submitData = {

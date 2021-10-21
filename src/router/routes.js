@@ -7,7 +7,7 @@ const routes = [
       { path: '/test', component: () => import('pages/Test.vue') },
       { path: '/survey', component: () => import('pages/Survey.vue') },
       { path: '/vote', component: () => import('pages/Vote.vue') },
-      { path: '/congs', component: () => import('pages/congr_survey.vue') },
+      { path: '/congs', component: () => import('pages/congrats.vue') },
       { path: '/ratify', component: () => import('pages/ratify.vue') },
       { path: '/land', component: () => import('pages/landing.vue') }
     ]

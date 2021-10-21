@@ -5,12 +5,13 @@
     <q-card flat bordered class="mycard">
       <q-card-section>
         <div class="text-h5 text-center">This Weeks Vote</div>
+        <div class="text-subtitle1 text-center">Yours vote runs the economy</div>
         <div class="text-subtitle2 text-center">Voting iteration &nbsp; {{iteration}}</div>
         <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div>
       </q-card-section>
       <q-card flat class="mycard1">
         <q-card-section>
-          <div class="text-subtitle2 text-center"> About this weeks survey</div>
+          <div class="text-subtitle2 text-center"> About this weeks voting</div>
           {{ lorem }}
         </q-card-section>
       </q-card>
@@ -276,14 +277,14 @@
     <!-- submit -->
     <q-card flat bordered class="mycard">
       <q-card-section class="text-center">
-      <q-btn
-        size="18px"
-        disabled
-        no-caps
-        class="q-px-xl q-py-xs center"
-        color="grey-6"
-        label="Submit"
-      ></q-btn>
+        <q-btn
+          size="18px"
+          @click="submit()"
+          no-caps
+          class="q-px-xl q-py-xs center"
+          color="grey-6"
+          label="Submit"
+        ></q-btn>
       </q-card-section>
     </q-card>
     <!-- end of 'Next vote' section -->
@@ -292,6 +293,8 @@
 </template>
 
 <script>
+import notifyAlert from 'src/services/notify-alert'
+import { mapState } from 'vuex'
 export default {
   name: 'Vote',
   data () {
@@ -332,13 +335,16 @@ export default {
       this.version = process.env.V_STRING
     },
     submit () {
-      const self = this
+      // const self = this
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
       // TODO Verify entry data here e.g. Is the survey complete?
       // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
-      self.resetForm()
+      // self.resetForm()
+      notifyAlert('success', 'Vote Submit Successful.')
+      // Set up user_mode in Vuex to enable further landing page actions.
+      this.$router.push('/congs') // Congratulation page
     },
     resetForm () {
       this.submitData = {
@@ -348,6 +354,11 @@ export default {
   }, // end of methods
   created () {
     this.ver()
+  },
+  computed: { // TODO consider is necessary?
+    ...mapState({
+      accountName: state => state.account.accountName
+    })
   }
 }
 </script>

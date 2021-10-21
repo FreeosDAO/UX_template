@@ -24,10 +24,10 @@
       <q-card-section class="text-center">
         <q-btn
           size="18px"
-          disabled
           no-caps
           class="q-px-xl q-py-xs center"
           color="grey-6"
+          @click="handleClick()"
           label="Back Home"
         ></q-btn>
       </q-card-section>
@@ -37,7 +37,7 @@
 </template>
 <script>
 export default {
-  name: 'congr_survey',
+  name: 'congrats',
   data () {
     return {
       version: '',
@@ -51,6 +51,11 @@ export default {
   methods: {
     ver () {
       this.version = process.env.V_STRING
+    },
+    submit () {
+    },
+    handleClick () {
+      this.$router.push('/land')
     }
   },
   created () {
