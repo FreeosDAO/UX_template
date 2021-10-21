@@ -31,25 +31,50 @@
       <!---->
       <div class="row justify-center" >
       <q-card flat round bordered class="mycard1 bg-grey-4" style="position: absolute; top:300px; center:10px;">
-        <div class="text-body2 text-black text-left"><br>
+        <br>
         <div class="row">
-          <div class="col text-body1">
-            yryrtyrtyrty
-          </div>
           <div class="col">
+            <div class="mini text-left">Points</div>
+            <div class="text-body1">{{points}}</div>
           </div>
-          <div class="col text-right"> Last Week:
-            <q-badge color="grey-6">
-              uyyutrut
-            </q-badge>
+          <div class="col text-center">
+            <div  class="mini">Mint</div>
+            <div> <q-btn outline round color="gray-6" icon="animation" no-caps/> </div>
           </div>
-        </div>
+          <div class="col text-right">
+            <div class="mini text-right">FREEOS TOKENS</div>
+            <div class="text-body1">{{freetok}}</div><br>
+            <div class="mini text-right">Freeby</div>
+            <div class="text-body1">{{freeby}}</div>
+          </div>
         </div>
       </q-card>
       </div>
       <q-card-section>
         <div style="height: 350px"></div>
       </q-card-section>
+      <div class="row justify-center" >
+      <q-card flat round bordered class="mycard1 bg-grey-4" style="position: relative; bottom:150px; center:10px;">
+        <br>
+        <div class="row">
+          <div class="col">
+            <div class="mini text-left">FREEOS Price(USD)</div>
+            <div class="text-body1">${{fprice}}</div>
+            <div class="mini">{{btcprice}} (BTC)</div>
+          </div>
+          <div class="col text-right">
+
+          </div>
+        </div>
+        <q-btn
+          style="position: absolute; bottom:50px; left:120px;"
+          size="35px"
+          round
+          color="grey-6"
+          icon="map"
+        ></q-btn>
+      </q-card>
+      </div>
     </q-card>
   </div>
 </template>
@@ -62,6 +87,11 @@ export default {
   data () {
     return {
       landing_mode: 3,
+      points: '82345.65',
+      freetok: '43555.93',
+      fprice: '0.3564434333',
+      btcprice: '0.00000000675645',
+      freeby: '2435.89',
       countdown_timer: '2 days 10 hours 30 min',
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
@@ -84,7 +114,8 @@ export default {
   },
   created () {
     this.ver()
-  }
+  },
+  mint () {}
 }
 </script>
 <style scoped>
@@ -100,5 +131,10 @@ export default {
 .mycard1 {
   width: 350px;
   max-width: 400px;
+  border: 1px solid #3B4752;
+  padding: 0px 10px 0px;
+}
+.mini {
+  font-size: 12px;
 }
 </style>
