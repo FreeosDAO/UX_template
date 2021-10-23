@@ -18,14 +18,20 @@
       <div class="row justify-center" style="position:relative;">
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
-        <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[landing_mode]}}</p></div>
-        <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div>
+        <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
+        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{this.countdown_timer}}</div>
+        <div v-else class="text-subtitle3 bg-grey-2 text-center">Close in: &nbsp;{{this.countdown_timer}}</div>
+        <!-- <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div> -->
           <div><br></div>
         </q-card-section>
       </q-card>
-        <q-btn size="20px" no-caps class="bg-grey-6 text-white text-body1" style="position: absolute;
+        <q-btn v-if="mode===0" size="20px" disable no-caps class="bg-grey-6 text-white text-body1" style="position: absolute;
           top:100px; center:0px; ">
-          Start &nbsp;{{this.landing_text[landing_mode]}}
+          <div >Start &nbsp;{{this.landing_text[mode+1]}}</div>
+         </q-btn>
+        <q-btn v-else size="20px" no-caps class="bg-grey-6 text-white text-body1" style="position: absolute;
+          top:100px; center:0px; ">
+          <div>Start &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
       </div>
       <!---->
@@ -86,7 +92,6 @@ export default {
   name: 'landing',
   data () {
     return {
-      landing_mode: 3,
       points: '82345.65',
       freetok: '43555.93',
       fprice: '0.3564434333',
@@ -103,7 +108,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accountName: state => state.account.accountName
+      accountName: state => state.account.accountName,
+      mode: state => state.account.user_mode
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },

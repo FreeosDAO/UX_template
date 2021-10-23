@@ -162,3 +162,7 @@ export async function getwhitelistTable (state) {
   }
   state.commit('setwhitelistTableAttrVal', val)
 }
+
+export function setMode (state, mode) {
+  state.commit('SET_USER_MODE', mode)
+}

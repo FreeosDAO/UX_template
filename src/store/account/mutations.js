@@ -50,3 +50,7 @@ export const setwhitelistTableAttrVal = function (state, payload) {
   if (val[2].idno === 1) { state.proposer = val[2].user }
   console.log('*whitelist proposer*', state.proposer)
 }
+
+export const SET_USER_MODE = function (state, mode) {
+  state.user_mode = mode
+}
