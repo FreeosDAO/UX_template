@@ -182,43 +182,22 @@ export default {
         this.onSelectMenu(menuList[0])
       }
     },
-    initiateValues () {
-      this.getEwsTable()
-      this.getByUserTotal()
-    },
     onSelectMenu (menuItem) {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel = menuItem.label
     },
-    ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout', 'getActionProposal']),
-    ...mapActions('account', ['getwhitelistTable']),
-    DividendCompute () {
-      this.actionDividendCompute(this.accountName)
-    }
+    ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout'])
   },
   watch: {
     isAuthenticated: {
       immediate: true,
       handler: function (val) {
-        // if (val && this.accountName) {
-        // this.getAccountInfo()
-        // this.getActionProposal()
-        // }
         if (val && this.$route.query.returnUrl) {
           this.$router.push({ path: this.$route.query.returnUrl })
         }
       }
     }
-  },
-  created () {
-    this.checkIfLoggedIn()
-    // this.initiateValues() // TODO commented
-    this.getwhitelistTable()
-    this.version = process.env.V_STRING // TODO
   }
-  // mounted () {
-  // this.getwhitelistTable(this.accountName)
-  // }
 }
 // Photo by Matthew Henry on Unsplash
 </script>

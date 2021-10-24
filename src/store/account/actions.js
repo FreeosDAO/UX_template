@@ -1,7 +1,7 @@
 import notifyAlert from 'src/services/notify-alert'
-import { connect } from 'src/utils/smartContractRequest'
+// import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
-import { Notify } from 'quasar'
+// import { Notify } from 'quasar'
 
 export async function checkIfLoggedIn (state) {
   const { auth } = await ProtonSDK.restoreSession()
@@ -89,26 +89,6 @@ export const logout = async function ({ commit }) {
   await ProtonSDK.logout()
 }
 
-export function getInfo (state) {
-  state.dispatch('getActionProposal')
-}
-
-// retrieve current proposal info
-export async function getActionProposal (state) {
-  const result = await connect({
-    json: true,
-    code: process.env.APP_NAME,
-    scope: process.env.APP_NAME,
-    table: 'proposals',
-    limit: -1
-  })
-  const val = {
-    key: 'proposalInfo',
-    value: result.rows[0]
-  }
-  state.commit('setProposalAttrVal', val)
-}
-
 export const setpath = function ({ commit }, pathe) {
   console.log(this.$route.fullPath)
   console.log('whatever', pathe)
@@ -116,53 +96,10 @@ export const setpath = function ({ commit }, pathe) {
   // this.$router.push('/')
 }
 
-// run action query from the blockchain TODO replace whole function
-export async function getVersionQuery ({ state }, accountName) {
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'version',
-    authorization: [{
-      actor: accountName,
-      permission: 'active'
-    }],
-    data: {
-      eosaccount: accountName
-    }
-  }]
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Version identified'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
-    return result
-  } catch (e) {
-    console.log(e)
-    return e
-  }
-}
+// export function setMode (state, mode) {
+// state.commit('SET_USER_MODE', mode)
+// }
 
-// retrieve whitelist
-// retrieve ews info
-export async function getwhitelistTable (state) {
-  const result = await connect({
-    json: true,
-    code: process.env.APP_NAME,
-    scope: process.env.APP_NAME,
-    table: 'whitelist',
-    limit: 3
-  })
-  const val = {
-    // key: accountName,
-    value: result.rows
-  }
-  state.commit('setwhitelistTableAttrVal', val)
-}
-
-export function setMode (state, mode) {
-  state.commit('SET_USER_MODE', mode)
+export function setUserMode ({ commit }, active) { // TODO
+  commit('setUserModeAct', active)
 }

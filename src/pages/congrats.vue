@@ -36,11 +36,14 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'congrats',
   data () {
     return {
       version: '',
+      tmpmode: 0,
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -48,18 +51,25 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
+  computed: {
+    ...mapState({
+      mode: state => state.account.user_mode
+    })
+  },
   methods: {
-    ver () {
-      this.version = process.env.V_STRING
-    },
-    submit () {
-    },
+    ...mapActions('account', ['setUserMode']),
     handleClick () {
+      /* TODO Note: If user will change page using back/forward on browser,
+      * this will make unexpected results. Find a way to prevent that
+      * e.g. by restore 'mode' in the landing.vue! Consider moving increment to 'created'
+      * section. */
+      console.log('@@@ mode:', this.mode)
+      this.tmpmode = this.mode + 1
+      if (this.tmpmode === 4) { this.tmpmode = 0 }
+      console.log('### mode:', this.tmpmode)
+      this.setUserMode(this.tmpmode)
       this.$router.push('/land')
     }
-  },
-  created () {
-    this.ver()
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <!-- Vote.vue -->
+  <!-- Vote.vue TODO Note that only 'Start' part of a button is sensitive. -->
   <div class="q-gutter-y-md q-mx-auto" style="max-width: 550px">
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard"> <!-- Main Q-card -->
@@ -25,11 +25,13 @@
           <div><br></div>
         </q-card-section>
       </q-card>
-        <q-btn v-if="mode===0" size="20px" disable no-caps class="bg-grey-6 text-white text-body1" style="position: absolute;
+        <q-btn v-if="mode===0" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+               style="position: absolute;
           top:100px; center:0px; ">
           <div >Start &nbsp;{{this.landing_text[mode+1]}}</div>
          </q-btn>
-        <q-btn v-else size="20px" no-caps class="bg-grey-6 text-white text-body1" style="position: absolute;
+        <q-btn v-else size="20px" @click="submit()" no-caps class="bg-grey-6 text-white text-body1"
+               style="position: absolute;
           top:100px; center:0px; ">
           <div>Start &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
@@ -116,12 +118,27 @@ export default {
   methods: {
     ver () {
       this.version = process.env.V_STRING
-    }
+    },
+    submit () {
+      switch (this.mode) {
+        case 1: // Goto Survey
+          this.$router.push('/survey')
+          break
+        case 2:
+          this.$router.push('/vote')
+          break
+        case 3:
+          this.$router.push('/ratify')
+          break
+        default:
+        // default statement or expression;
+      }
+    },
+    mint () {}
   },
   created () {
     this.ver()
-  },
-  mint () {}
+  }
 }
 </script>
 <style scoped>
