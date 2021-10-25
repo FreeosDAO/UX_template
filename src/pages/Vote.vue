@@ -342,7 +342,7 @@ export default {
       // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
-      notifyAlert('success', 'Vote Submit Successful.')
+      notifyAlert('success', 'Vote Submitted Successfully.')
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs') // Congratulation page
     },

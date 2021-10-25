@@ -1,16 +1,45 @@
 <template>
   <!-- Vote.vue TODO Note that only 'Start' part of a button is sensitive. -->
-  <div class="q-gutter-y-md q-mx-auto" style="max-width: 550px">
+  <div class="q-gutter-y-md q-mx-auto centered" style="max-width: 400px">
     <!-- Title/Intro Section -->
-    <q-card flat bordered class="mycard"> <!-- Main Q-card -->
-      <q-toolbar class="bg-grey-4">
-        <q-toolbar-title class="text-body2">
+    <q-card flat bordered class="mycard">
+      <!-- Main Q-card -->
+      <q-toolbar>
+        <q-toolbar-title class="text-body2 bg-grey-4">
           {{accountName}}
         </q-toolbar-title>
-        <q-btn flat round dense>
-          <q-icon name="menu"></q-icon>
+        <q-btn dense flat round icon="menu">
+          <q-menu anchor="bottom left" self="top right"
+            :style="{ backgroundColor: '#eee', color: 'blue'}">
+            <q-list style="min-width: 100px">
+              <q-item clickable>
+                <q-item-section>Home</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>MyFreeos</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Mint</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Re-Register</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Sign-out</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Help &amp; Feedback</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
         </q-btn>
       </q-toolbar>
+      <!-- Drawer -->
+      <!-- -->
+    </q-card>
       <!---->
       <div class="text-black q-pa-md text-center">
        <img width="35" src="~assets/tfreeos.png"> &nbsp;
@@ -36,9 +65,12 @@
           <div>Start &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
       </div>
-      <!---->
+      <!-- Central Card -->
       <div class="row justify-center" >
-      <q-card flat round bordered class="mycard1 bg-grey-4" style="position: absolute; top:300px; center:10px;">
+      <q-card
+        flat round bordered
+        style="position: absolute; top:370px; center:0px;"
+        class="mycard1 bg-grey-4">
         <br>
         <div class="row">
           <div class="col">
@@ -47,7 +79,12 @@
           </div>
           <div class="col text-center">
             <div  class="mini">Mint</div>
-            <div> <q-btn outline round color="gray-6" icon="animation" no-caps/> </div>
+            <div>
+              <q-btn outline
+                     @click="doit()"
+                     round color="gray-6"
+                     icon="animation"></q-btn>
+            </div>
           </div>
           <div class="col text-right">
             <div class="mini text-right">FREEOS TOKENS</div>
@@ -58,38 +95,34 @@
         </div>
       </q-card>
       </div>
-      <q-card-section>
-        <div style="height: 350px"></div>
-      </q-card-section>
+      <!-- <q-card-section>
+         <div style="height: 350px" class="bg-grey-6"></div>
+      </q-card-section> -->
+      <!-- Bottom Card -->
       <div class="row justify-center" >
-      <q-card flat round bordered class="mycard1 bg-grey-4" style="position: relative; bottom:150px; center:10px;">
+      <q-card flat round bordered class="mycard1 bg-grey-4"
+              style="position: relative; bottom:-165px; center:10px;">
         <br>
-        <div class="row">
-          <div class="col">
+        <div style="padding: 0px 5px 5px;">
             <div class="mini text-left">FREEOS Price(USD)</div>
-            <div class="text-body1">${{fprice}}</div>
+            <div class="text-body1 text-left">${{fprice}}</div>
             <div class="mini">{{btcprice}} (BTC)</div>
-          </div>
-          <div class="col text-right">
-
-          </div>
         </div>
         <q-btn
-          style="position: absolute; bottom:50px; left:120px;"
-          size="35px"
+          style="position: absolute; bottom:50px; left:127px;"
+          size="30px"
           round
+          no-caps
           color="grey-6"
-          icon="map"
-        ></q-btn>
+        ><div class="mini1">Claimed</div></q-btn>
       </q-card>
       </div>
-    </q-card>
+    <!-- </q-card> -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-
 export default {
   name: 'landing',
   data () {
@@ -118,6 +151,13 @@ export default {
   methods: {
     ver () {
       this.version = process.env.V_STRING
+    },
+    onSelectMenu (menuItem) {
+      (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
+      this.selectedItemLabel1 = menuItem.label
+    },
+    doit () {
+      console.log('DO IT!')
     },
     submit () {
       switch (this.mode) {
@@ -159,5 +199,20 @@ export default {
 }
 .mini {
   font-size: 12px;
+}
+.mini1 {
+  font-size: 16px;
+}
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 </style>
