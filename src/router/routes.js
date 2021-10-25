@@ -9,7 +9,8 @@ const routes = [
       { path: '/vote', component: () => import('pages/Vote.vue') },
       { path: '/congs', component: () => import('pages/congrats.vue') },
       { path: '/ratify', component: () => import('pages/ratify.vue') },
-      { path: '/land', component: () => import('pages/landing.vue') }
+      { path: '/land', component: () => import('pages/landing.vue') },
+      { path: '/econ', component: () => import('pages/Economy.vue') }
     ]
   },
   // Always leave this as last one,

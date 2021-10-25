@@ -70,7 +70,7 @@ const menuList = [
     icon: 'get_app',
     label: 'Freeos Economy',
     separator: true,
-    route: '/test'
+    route: '/econ'
   },
   {
     icon: 'get_app',
