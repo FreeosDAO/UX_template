@@ -1,5 +1,4 @@
 <template>
-  <!-- Vote.vue TODO Note that only 'Start' part of a button is sensitive. -->
   <div class="q-gutter-y-md q-mx-auto centered" style="max-width: 400px">
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">

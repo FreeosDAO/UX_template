@@ -1,0 +1,203 @@
+<template>
+  <!-- Vote.vue TODO Note that only 'Start' part of a button is sensitive. -->
+  <div class="q-gutter-y-md q-mx-auto" style="max-width: 400px">
+    <!-- Title/Intro Section -->
+    <q-card flat bordered class="mycard">
+      <!-- Main Q-card -->
+      <q-toolbar>
+        <q-toolbar-title class="text-body2 bg-grey-4">
+          {{accountName}} &nbsp; &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
+        </q-toolbar-title>
+        <q-btn dense flat round icon="menu">
+          <q-menu anchor="bottom left" self="top right"
+                  :style="{ backgroundColor: '#eee', color: 'blue'}">
+            <q-list style="min-width: 100px">
+              <q-item clickable>
+                <q-item-section>Home</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>MyFreeos</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Mint</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Re-Register</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Sign-out</q-item-section>
+              </q-item>
+              <q-separator></q-separator>
+              <q-item clickable>
+                <q-item-section>Help &amp; Feedback</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-toolbar>
+      <q-card-section>
+        <div class="text-h5 text-left">Mint / Convert</div>
+      </q-card-section>
+    <!-- Grey Intro Section -->
+      <div class="row justify-center" >
+        <q-card
+          flat round bordered
+          class="mycard1 bg-grey-4">
+          <br>
+          <div class="row">
+            <div class="col">
+              <div class="mini text-left">POINTS</div>
+              <div class="text-h6">{{points}}</div>
+              <br>
+              <div class="mini text-left">Freeby</div>
+              <div class="text-h6">{{freeby}}</div>
+            </div>
+            <div class="col-2 box1"></div>
+            <div class="col text-right">
+              <div class="mini1 text-right">Minted FREEOS TOKENS</div>
+              <div class="text-h6">{{freetok}}</div><br>
+            </div>
+          </div>
+        </q-card>
+      </div>
+      <!-- Un-Locked Points -->
+      <q-card-section>
+        <div class="row justify-center"><q-btn no-caps outline class="full-width text-black" color="grey-6">Unlock {{unlockpercent}}% of your POINTS</q-btn></div>
+      </q-card-section>
+      <!-- Mint or Convert Card -->
+      <div class="row justify-center" >
+      <q-card flat bordered class="mycard2 text-black">
+        <q-card-section>
+          <div class="text-h5 text-left">Mint or Convert</div><br>
+          <div class="row">
+            <div class="col">
+                <q-btn-dropdown color="primary" label="POINTS">
+                  <q-list>
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Photos</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Videos</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Articles</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+            </div>
+            <div class="col-2"></div>
+            <div class="col text-right">
+                <q-btn-dropdown color="grey-6" label="FREEOS">
+                  <q-list>
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Photos</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Videos</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item clickable v-close-popup @click="onItemClick">
+                      <q-item-section>
+                        <q-item-label>Articles</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+      </div>
+      <!-- go home -->
+      <q-card-section>
+        <br><br>
+        <div class="q-gutter-sm row justify-center">
+            <q-btn
+              no-caps
+              size="25px"
+              align="center"
+              @click="gohome()"
+              class="q-px-xl q-py-xs center"
+              color="grey-6"
+              label="Home"
+            ></q-btn>
+          </div>
+      </q-card-section>
+    </q-card>
+  </div>
+</template>
+
+<script>
+// import notifyAlert from 'src/services/notify-alert'
+export default {
+  name: 'Vote',
+  data () {
+    return {
+      points: '12,235',
+      freetok: '38,000',
+      price: '0.02145',
+      price_trend: '0.0025',
+      stackedpoints: '1123',
+      iteration: 0,
+      unlockpercent: '13',
+      freeby: '23433.12'
+    }
+  },
+  methods: {
+    gohome () {
+      // tt
+    }
+  }
+}
+</script>
+<style scoped>
+.grey6 {
+  background-color: #3B4752;
+}
+.mycard {
+  width: 400px;
+  max-width: 450px;
+  background-color: #F4F5F4;
+  text-color: #FFFFFF;
+}
+.mycard1 {
+  background-color: #E0E1E1;
+  padding: 3px;
+  width: 380px;
+  max-width: 400px;
+}
+.mycard2 {
+  background-color: #F4F5F4;
+  padding: 3px;
+  width: 380px;
+  max-width: 400px;
+  border-width: 3px;
+  border-color: #7a747a;
+}
+.mini {
+  size: 12px;
+}
+.mini1 {
+  size: 10px;
+}
+.box1 {
+  width: 5px;
+  height: 16vh;
+  border-right: 2px solid grey;
+}
+</style>

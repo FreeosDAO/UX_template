@@ -64,7 +64,7 @@ const menuList = [
     icon: 'get_app',
     label: 'My Freeos',
     separator: true,
-    route: '/test'
+    route: '/myfre'
   },
   {
     icon: 'get_app',
@@ -86,9 +86,9 @@ const menuList = [
   },
   {
     icon: 'get_app',
-    label: 'Mint',
+    label: 'Mint/Convert',
     separator: true,
-    route: '/test'
+    route: '/mint'
   },
   {
     icon: 'get_app',
