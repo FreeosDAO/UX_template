@@ -37,107 +37,155 @@
           </q-menu>
         </q-btn>
       </q-toolbar>
-      <q-card-section>
-        <div class="text-h5 text-left">Mint / Convert</div>
-      </q-card-section>
-    <!-- Grey Intro Section -->
-      <div class="row justify-center" >
-        <q-card
-          flat round bordered
-          class="mycard1 bg-grey-4">
-          <br>
-          <div class="row">
-            <div class="col">
-              <div class="mini text-left">POINTS</div>
-              <div class="text-h6">{{points}}</div>
-              <br>
-              <div class="mini text-left">Freeby</div>
-              <div class="text-h6">{{freeby}}</div>
-            </div>
-            <div class="col-2 box1"></div>
-            <div class="col text-right">
-              <div class="mini1 text-right">Minted FREEOS TOKENS</div>
-              <div class="text-h6">{{freetok}}</div><br>
-            </div>
-          </div>
-        </q-card>
-      </div>
-      <!-- Un-Locked Points -->
-      <q-card-section>
-        <div class="row justify-center"><q-btn no-caps outline class="full-width text-black" color="grey-6">Unlock {{unlockpercent}}% of your POINTS</q-btn></div>
-      </q-card-section>
-      <!-- Mint or Convert Card -->
-      <div class="row justify-center" >
-      <q-card flat bordered class="mycard2 text-black">
-        <q-card-section>
-          <div class="text-h5 text-left">Mint or Convert</div><br>
-          <div class="row">
-            <div class="col">
-                <q-btn-dropdown color="primary" label="POINTS">
-                  <q-list>
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Photos</q-item-label>
-                      </q-item-section>
-                    </q-item>
-
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Videos</q-item-label>
-                      </q-item-section>
-                    </q-item>
-
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Articles</q-item-label>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-btn-dropdown>
-            </div>
-            <div class="col-2"></div>
-            <div class="col text-right">
-                <q-btn-dropdown color="grey-6" label="FREEOS">
-                  <q-list>
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Photos</q-item-label>
-                      </q-item-section>
-                    </q-item>
-
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Videos</q-item-label>
-                      </q-item-section>
-                    </q-item>
-
-                    <q-item clickable v-close-popup @click="onItemClick">
-                      <q-item-section>
-                        <q-item-label>Articles</q-item-label>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-btn-dropdown>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-      </div>
-      <!-- go home -->
-      <q-card-section>
-        <br><br>
-        <div class="q-gutter-sm row justify-center">
-            <q-btn
-              no-caps
-              size="25px"
-              align="center"
-              @click="gohome()"
-              class="q-px-xl q-py-xs center"
-              color="grey-6"
-              label="Home"
-            ></q-btn>
-          </div>
-      </q-card-section>
+          <q-card-section>
+            <div class="text-h5 text-left">Mint / Convert</div>
+          </q-card-section>
+             <!-- Grey Intro Section -->
+             <div class="row justify-center" >
+               <q-card
+                      flat round bordered
+                      class="mycard1 bg-grey-4"
+               >
+                 <br>
+                 <div class="row">
+                   <div class="col">
+                      <div class="mini text-left">POINTS</div>
+                      <div class="text-h6">{{points}}</div>
+                      <br>
+                      <div class="mini text-left">Freeby</div>
+                      <div class="text-h6">{{freeby}}</div>
+                   </div>
+                   <div class="col-2 box1"></div>
+                   <div class="col text-right">
+                     <div class="mini1 text-right">Minted FREEOS TOKENS</div>
+                     <div class="text-h6">{{freetok}}</div><br>
+                   </div>
+                 </div>
+               </q-card>
+             </div>
+             <!-- Un-Locked Points -->
+             <q-card-section>
+               <div class="row justify-center">
+                 <q-btn no-caps outline class="full-width text-black" color="grey-6">Unlock {{unlockpercent}}% of your POINTS</q-btn>
+               </div>
+             </q-card-section>
+             <!-- Mint or Convert Card -->
+             <div class="row justify-center" >
+               <q-card flat bordered class="mycard2 text-black">
+                 <q-card-section>
+                   <div class="text-h5 text-left">Mint or Convert &nbsp; &nbsp;
+                     <q-icon size="sm" class="text-grey-5" name="info">
+                     </q-icon>
+                   </div><br>
+                   <!---->
+                   <div class="row">
+                     <div class="col">
+                       <q-btn-dropdown color="primary" label="POINTS">
+                         <q-list>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                               <q-item-label>Photos</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                               <q-item-label>Videos</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                               <q-item-label>Articles</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                         </q-list>
+                       </q-btn-dropdown>
+                     </div>
+                     <div class="col-2"></div>
+                     <div class="col text-right">
+                       <q-btn-dropdown color="grey-6" label="FREEOS">
+                         <q-list>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                                <q-item-label>Photos</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                               <q-item-label>Videos</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                           <q-item clickable v-close-popup @click="onItemClick">
+                             <q-item-section>
+                               <q-item-label>Articles</q-item-label>
+                             </q-item-section>
+                           </q-item>
+                         </q-list>
+                       </q-btn-dropdown>
+                     </div>
+                   </div> <!-- div class row -->
+                   <!---->
+                   <div class="mini row justify-center">Mint<br></div>
+                   <div class="row">
+                     <div class="col"><q-input outlined dense v-model="text"></q-input>
+                     </div>
+                     <div class="col">
+                       <div class="row justify-center">
+                         <div class="justify-center">
+                           <q-btn outline
+                                  @click="doit()"
+                                  round color="gray-6"
+                                  icon="animation">
+                           </q-btn>
+                         </div>
+                       </div>
+                     </div>
+                     <div class="col">
+                       <q-field outlined dense stack-label>
+                         <template v-slot:control>
+                           <div class="self-center full-width no-outline" tabindex="0">Field content1</div>
+                         </template>
+                       </q-field>
+                     </div>
+                   </div><br>
+                 </q-card-section>
+                 <!-- Summary Section -->
+                 <q-card-section>
+                   <div class="row">
+                     <div class="col"></div>
+                     <div class="col"></div>
+                     <div class="col">
+                       <q-field outlined dense stack-label>
+                         <template v-slot:control>
+                           <div class="self-center full-width dense no-outline" tabindex="0">Field1</div>
+                         </template>
+                       </q-field><br>
+                       <q-field outlined dense stack-label>
+                         <template v-slot:control>
+                           <div class="self-center full-width dense no-outline" tabindex="0">Field2</div>
+                         </template>
+                       </q-field>
+                     </div>
+                   </div>
+                 </q-card-section>
+                 <!---->
+              </q-card>
+                <!-- go home -->
+                 <q-card-section>
+                   <br><br>
+                   <div class="q-gutter-sm row justify-center">
+                     <q-btn
+                           no-caps
+                           size="25px"
+                           align="center"
+                           @click="gohome()"
+                           class="q-px-xl q-py-xs center"
+                           color="grey-6"
+                           label="Home"
+                           >
+                     </q-btn>
+                   </div>
+                 </q-card-section>
+             </div>
     </q-card>
   </div>
 </template>
@@ -194,6 +242,11 @@ export default {
 }
 .mini1 {
   size: 10px;
+}
+.input_box {
+  width: 75px;
+  height: 7vh;
+  border: 2px solid grey;
 }
 .box1 {
   width: 5px;

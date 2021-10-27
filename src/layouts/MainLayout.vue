@@ -87,9 +87,9 @@ const menuList = [
   },
   {
     icon: 'get_app',
-    label: 'Mint',
+    label: 'MintConvert',
     separator: true,
-    route: '/test'
+    route: '/mint'
   },
   {
     icon: 'get_app',
