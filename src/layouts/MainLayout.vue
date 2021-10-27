@@ -1,4 +1,5 @@
 <template>
+  <!-- Version UX_Old -->
   <q-layout view="hHh Lpr fFf">
     <q-header reveal bordered color="grey-2" height-hint="98">
       <q-toolbar style="justify-content: space-between;" bordered class="ux_bar text-uxblue">
@@ -64,13 +65,13 @@ const menuList = [
     icon: 'get_app',
     label: 'My Freeos',
     separator: true,
-    route: '/myfre'
+    route: '/test'
   },
   {
     icon: 'get_app',
     label: 'Freeos Economy',
     separator: true,
-    route: '/econ'
+    route: '/test'
   },
   {
     icon: 'get_app',
@@ -86,9 +87,9 @@ const menuList = [
   },
   {
     icon: 'get_app',
-    label: 'Mint/Convert',
+    label: 'Mint',
     separator: true,
-    route: '/mint'
+    route: '/test'
   },
   {
     icon: 'get_app',
@@ -182,22 +183,42 @@ export default {
         this.onSelectMenu(menuList[0])
       }
     },
+    initiateValues () {
+      this.getEwsTable()
+      this.getByUserTotal()
+    },
     onSelectMenu (menuItem) {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel = menuItem.label
     },
-    ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout'])
+    ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout']),
+    DividendCompute () {
+      // this.actionDividendCompute(this.accountName)
+    }
   },
   watch: {
     isAuthenticated: {
       immediate: true,
       handler: function (val) {
+        // if (val && this.accountName) {
+        // this.getAccountInfo()
+        // this.getActionProposal()
+        // }
         if (val && this.$route.query.returnUrl) {
           this.$router.push({ path: this.$route.query.returnUrl })
         }
       }
     }
+  },
+  created () {
+    this.checkIfLoggedIn()
+    // this.initiateValues() // TODO commented
+    // this.getwhitelistTable()
+    this.version = process.env.V_STRING // TODO
   }
+  // mounted () {
+  // this.getwhitelistTable(this.accountName)
+  // }
 }
 // Photo by Matthew Henry on Unsplash
 </script>
