@@ -13,7 +13,9 @@ const routes = [
       { path: '/econ', component: () => import('pages/Economy.vue') },
       { path: '/myfre', component: () => import('pages/Myfreeos.vue') },
       { path: '/mint', component: () => import('pages/Mintconv.vue') },
-      { path: '/goal', component: () => import('pages/Goalsreward.vue') }
+      { path: '/goal', component: () => import('pages/Goalsreward.vue') },
+      { path: '/tran', component: () => import('pages/Transfer.vue') },
+      { path: '/claim', component: () => import('pages/Claim.vue') }
     ]
   },
   // Always leave this as last one,

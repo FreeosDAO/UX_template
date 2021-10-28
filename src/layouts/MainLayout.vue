@@ -53,7 +53,7 @@ const menuList = [
     icon: 'get_app',
     label: 'Claim',
     separator: true,
-    route: '/test'
+    route: '/claim'
   },
   {
     icon: 'get_app',
@@ -83,7 +83,7 @@ const menuList = [
     icon: 'get_app',
     label: 'Transfer',
     separator: true,
-    route: '/test'
+    route: '/tran'
   },
   {
     icon: 'get_app',

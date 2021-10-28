@@ -149,7 +149,7 @@
 <script>
 // import notifyAlert from 'src/services/notify-alert'
 export default {
-  name: 'Vote',
+  name: 'Myfreos',
   data () {
     return {
       points: '12,235',

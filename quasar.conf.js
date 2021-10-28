@@ -131,9 +131,9 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'dividend',
-        short_name: 'dividend',
-        description: 'Application to distribute dividends',
+        name: 'freeosgov',
+        short_name: 'freeosgov',
+        description: 'Frontend for Freeos Governance Services',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

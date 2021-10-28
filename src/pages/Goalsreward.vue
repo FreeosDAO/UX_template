@@ -144,7 +144,7 @@
 <script>
 // import notifyAlert from 'src/services/notify-alert'
 export default {
-  name: 'Vote',
+  name: 'Goalsreward',
   data () {
     return {
       points: '12,235',

@@ -1,8 +1,8 @@
 {
-  "name": "dividend",
+  "name": "freeosgov",
   "version": "0.0.1",
-  "description": "Dividend",
-  "productName": "Dividend App",
+  "description": "freeosgov",
+  "productName": "Freeos Governance",
   "author": "andyzal",
   "private": true,
   "scripts": {
