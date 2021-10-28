@@ -146,7 +146,7 @@
                          </template>
                        </q-field>
                      </div>
-                   </div><br>
+                   </div>
                  </q-card-section>
                  <!-- Summary Section -->
                  <q-card-section>
@@ -158,7 +158,11 @@
                          <template v-slot:control>
                            <div class="self-center full-width dense no-outline" tabindex="0">Field1</div>
                          </template>
-                       </q-field><br>
+                       </q-field>
+                       <div style="font-size:10px;">- Subject to mint fee &nbsp;
+                         <q-icon class="text-grey-5" name="info">
+                         </q-icon>
+                       </div>
                        <q-field outlined dense stack-label>
                          <template v-slot:control>
                            <div class="self-center full-width dense no-outline" tabindex="0">Field2</div>
@@ -171,14 +175,14 @@
               </q-card>
                 <!-- go home -->
                  <q-card-section>
-                   <br><br>
                    <div class="q-gutter-sm row justify-center">
+                     <div>Transaction click <i>here</i></div>
                      <q-btn
                            no-caps
                            size="25px"
                            align="center"
                            @click="gohome()"
-                           class="q-px-xl q-py-xs center"
+                           class="full-width q-px-xl q-py-xs center"
                            color="grey-6"
                            label="Home"
                            >
@@ -242,6 +246,9 @@ export default {
 }
 .mini1 {
   size: 10px;
+}
+.mini8 {
+  size: 8px;
 }
 .input_box {
   width: 75px;

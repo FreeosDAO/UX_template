@@ -77,7 +77,7 @@ const menuList = [
     icon: 'get_app',
     label: 'Goal/Rewards',
     separator: true,
-    route: '/test'
+    route: '/goal'
   },
   {
     icon: 'get_app',
@@ -87,7 +87,7 @@ const menuList = [
   },
   {
     icon: 'get_app',
-    label: 'MintConvert',
+    label: 'Mint/Convert',
     separator: true,
     route: '/mint'
   },
