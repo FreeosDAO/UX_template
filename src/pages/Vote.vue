@@ -47,13 +47,13 @@
       </q-card-section>
         <div class="q-pa-md">
           <q-slider
-            v-model="slider1"
+            v-model="voteData.q1slider"
             :min="1"
             :max="100"
             :step="1"
             color="grey-6"
             label
-            :label-value="slider1 + ' percent'"
+            :label-value="voteData.q1slider + ' percent'"
             label-always
           ></q-slider>
           <div class="row text-subtitle2 text-black text-left" >
@@ -63,7 +63,7 @@
             <div class="col">
               <div class="text-center">
                 <q-badge class="text-subtitle2" outline color="grey-8">
-                  {{ slider1 }} percent
+                  {{ voteData.q1slider }} percent
                 </q-badge>
               </div>
             </div>
@@ -91,13 +91,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="slider2"
+          v-model="voteData.q2slider"
           :min="6"
           :max="30"
           :step="1"
           color="grey-6"
           label
-          :label-value="slider2 + ' percent'"
+          :label-value="voteData.q2slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -107,7 +107,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ slider2 }} percent
+                {{ voteData.q2slider }} percent
               </q-badge>
             </div>
           </div>
@@ -136,13 +136,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="slider3"
+          v-model="voteData.q3slider"
           :min="6"
           :max="30"
           :step="1"
           color="grey-6"
           label
-          :label-value="slider3 + ' percent'"
+          :label-value="voteData.q3slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -152,7 +152,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ slider3 }} percent
+                {{ voteData.q3slider }} percent
               </q-badge>
             </div>
           </div>
@@ -182,6 +182,8 @@
         <div>
           <div class="example ex1">
             <p><label class="radio greyux">
+              <!-- Note: value_radio1 and value_radio2 will be translated to one voteData.q4radio
+              before submitting to the back-end. TODO -->
               <input type="radio" id="1" value="1" name="group1" v-model="value_radio1"/>
               <span>Burned</span>
             </label></p>
@@ -211,13 +213,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="slider4"
+          v-model="voteData.q5slider"
           :min="0"
           :max="50"
           :step="1"
           color="grey-6"
           label
-          :label-value="slider4 + ' percent'"
+          :label-value="voteData.q5slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -227,7 +229,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ slider4 }} percent
+                {{ voteData.q5slider }} percent
               </q-badge>
             </div>
           </div>
@@ -251,7 +253,7 @@
           <q-card-section class="text-black text-body2">
       <div class="text-subtitle2 text-center">Allocate to Partners</div>
       <div class="q-pa-md text-left">
-        <div> Select your top three choices to receive partner founding this week:</div><br>
+        <div> Q6: Select your top three choices to receive partner founding this week:</div><br>
         - ABC<br>
         - XYZ<br>
         - DEF<br>
@@ -264,9 +266,9 @@
       <div>
         <div class="q-pa-md">
           <div class="q-gutter-y-md column" style="max-width: 350px">
-            <q-select clearable filled color="grey-6" v-model="selection1" :options="options" label="Select Priority 1"></q-select>
-            <q-select clearable filled color="grey-6" v-model="selection2" :options="options" label="Select Priority 2"></q-select>
-            <q-select clearable filled color="grey-6" v-model="selection3" :options="options" label="Select Priority 3"></q-select>
+            <q-select clearable filled color="grey-6" v-model="voteData.q6choice1" :options="options" label="Select Priority 1"></q-select>
+            <q-select clearable filled color="grey-6" v-model="voteData.q6choice2" :options="options" label="Select Priority 2"></q-select>
+            <q-select clearable filled color="grey-6" v-model="voteData.q6choice3" :options="options" label="Select Priority 3"></q-select>
           </div>
         </div>
       </div>
@@ -309,20 +311,24 @@ export default {
         whatever: ''
       },
       expiration_timer: '2 days 10 hours 30 min',
-      slider1: 1,
-      slider2: 6,
-      slider3: 6,
-      slider4: 0,
-      selection1: '',
-      selection2: '',
-      selection3: '',
+      // Data passed as a result to the back-end as a result of voting.
+      voteData: {
+        q1slider: 0,
+        q2slider: 6, // Must start from 6.
+        q3slider: 6, // Must start from 6.
+        q4radio: 1,
+        q5slider: 0,
+        q6choice1: 0,
+        q6choice2: 0,
+        q6choice3: 0
+      },
       // radio buttons:
       radio: 2,
       radio2: 1,
       group1: 2,
       group2: 2,
-      value_radio1: '',
-      value_radio2: '',
+      value_radio1: '', // keep it - used to create voteData.q4radio
+      value_radio2: '', // keep it - used to create voteData.q4radio
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -331,14 +337,11 @@ export default {
     }
   },
   methods: {
-    ver () {
-      this.version = process.env.V_STRING
-    },
     submit () {
       // const self = this
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
-      // TODO Verify entry data here e.g. Is the survey complete?
+      // TODO Verify entry data here e.g. Is the survey complete? Left that for back-end?
       // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
@@ -348,7 +351,7 @@ export default {
     },
     resetForm () {
       this.submitData = {
-        // TODO is that necessary ??
+        // TODO function to consider?
       }
     }
   }, // end of methods
