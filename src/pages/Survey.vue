@@ -92,13 +92,13 @@
            <div>
             <div class="q-pa-md">
               <q-slider
-                v-model="submitData.slider1"
+                v-model="surveyData.q1slider"
                 :min="1"
                 :max="48"
                 :step="1"
                 color="grey-6"
                 label
-                :label-value="'Months:' + submitData.slider1"
+                :label-value="'Months:' + surveyData.q1slider"
                 label-always
               ></q-slider>
               <div class="row">
@@ -108,7 +108,7 @@
                 <div class="col">
                   <div class="text-center">
                     <q-badge class="text-subtitle2" outline color="grey-8">
-                      Months: {{ submitData.slider1 }}
+                      Months: {{ surveyData.q1slider }}
                     </q-badge>
                   </div>
                 </div>
@@ -161,13 +161,13 @@
         <div>
           <div class="q-pa-md">
             <q-slider
-              v-model="submitData.slider2"
+              v-model="surveyData.q4slider"
               :min="1"
               :max="48"
               :step="1"
               color="grey-6"
               label
-              :label-value="'Months:' + submitData.slider2"
+              :label-value="'Months:' + surveyData.q4slider"
               label-always
             ></q-slider>
             <div class="row">
@@ -177,7 +177,7 @@
               <div class="col">
                 <div class="text-center">
                   <q-badge class="text-subtitle2" outline color="grey-8">
-                    Months: {{ submitData.slider2 }}
+                    Months: {{ surveyData.q4slider }}
                   </q-badge>
                 </div>
               </div>
@@ -250,28 +250,42 @@ export default {
   data () {
     return {
       version: '',
-      iteration: 0.0,
-      submitData: { // results to be passed to the backend
-        slider1: 1,
-        slider2: 1
+      iteration: 0,
+      // Data passed as a result to the back-end as a result of voting.
+      SurveyData: {
+        q1radio1: false,
+        q1radio2: false,
+        q1radio3: false,
+        q2slider: 0,
+        q3radio1: false,
+        q3radio2: false,
+        q3radio3: false,
+        q4slider: 0,
+        q5select1: false,
+        q5select2: false,
+        q5select3: false,
+        q5select4: false,
+        q5select5: false,
+        q5select6: false
       },
+      value_radio1: '', // TODO - Must be unpacked to parameters before submit to back-end.
+      value_radio2: '', // TODO - Must be unpacked to parameters
       // selectors:
       options: [
         'Growing the participants', 'Stabilising the price', 'Raising the locking treshold',
         'Burning FREEOS', 'Pooling FREEOS in a Liquidity Pool',
         'Growing the Reserve Pool (to prepare for future price drops/economic crashes'
       ],
+      // Selection on question Q5: TODO Must be unpacked before submit to back-end.
       selection1: '',
       selection2: '',
       selection3: '',
       bar2: false,
-      // radio buttons:
+      // radio buttons: // TODO Verify initial setup for radio buttons:
       radio: 2,
       radio2: 1,
       group1: 2,
       group2: 2,
-      value_radio1: '',
-      value_radio2: '',
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
