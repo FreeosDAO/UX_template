@@ -92,13 +92,13 @@
            <div>
             <div class="q-pa-md">
               <q-slider
-                v-model="surveyData.q1slider"
+                v-model="surveyData.q2slider"
                 :min="1"
                 :max="48"
                 :step="1"
                 color="grey-6"
                 label
-                :label-value="'Months:' + surveyData.q1slider"
+                :label-value="'Months:' + surveyData.q2slider"
                 label-always
               ></q-slider>
               <div class="row">
@@ -108,7 +108,7 @@
                 <div class="col">
                   <div class="text-center">
                     <q-badge class="text-subtitle2" outline color="grey-8">
-                      Months: {{ surveyData.q1slider }}
+                      Months: {{ surveyData.q2slider }}
                     </q-badge>
                   </div>
                 </div>
@@ -140,15 +140,15 @@
         <div>
           <div class="example ex1">
             <p><label class="radio greyux">
-              <input type="radio" value="radio-1" v-model="value_radio2" name="group2"/>
+              <input type="radio" value="radio-1" v-model="value_radio3" name="group2"/>
               <span>Growing (bull market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="radio-2" v-model="value_radio2" name="group2"/>
+              <input type="radio" value="radio-2" v-model="value_radio3" name="group2"/>
               <span>Shrinking (bear market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="radio-3" v-model="value_radio2" name="group2"/>
+              <input type="radio" value="radio-3" v-model="value_radio3" name="group2"/>
               <span>Neither (going sideways)</span>
             </label></p>
           </div>
@@ -158,7 +158,7 @@
         <p></p>
         <div class="text-left">Q4: How long will the above Freeos market last before it changes direction?
         </div><br>
-        <div>
+        <div> <!-- :max="mintest" -->
           <div class="q-pa-md">
             <q-slider
               v-model="surveyData.q4slider"
@@ -245,6 +245,7 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'Survey',
   data () {
@@ -252,7 +253,8 @@ export default {
       version: '',
       iteration: 0,
       // Data passed as a result to the back-end as a result of voting.
-      SurveyData: {
+      surveyData: { // Be exported to back-end
+        accountName: '',
         q1radio1: false,
         q1radio2: false,
         q1radio3: false,
@@ -261,31 +263,34 @@ export default {
         q3radio2: false,
         q3radio3: false,
         q4slider: 0,
-        q5select1: false,
-        q5select2: false,
-        q5select3: false,
-        q5select4: false,
-        q5select5: false,
-        q5select6: false
+        q5select1: 0,
+        q5select2: 0,
+        q5select3: 0,
+        q5select4: 0,
+        q5select5: 0,
+        q5select6: 0
       },
-      value_radio1: '', // TODO - Must be unpacked to parameters before submit to back-end.
-      value_radio2: '', // TODO - Must be unpacked to parameters
+      value_radio1: 1, // TODO - Must be mapped inside submit() into 'q1radio?' before send to back-end.
+      value_radio3: 1, // TODO - -- "" -- 'q3radio?' (where '?' replace appropriate number)
       // selectors:
       options: [
         'Growing the participants', 'Stabilising the price', 'Raising the locking treshold',
         'Burning FREEOS', 'Pooling FREEOS in a Liquidity Pool',
         'Growing the Reserve Pool (to prepare for future price drops/economic crashes'
       ],
-      // Selection on question Q5: TODO Must be unpacked before submit to back-end.
-      selection1: '',
-      selection2: '',
-      selection3: '',
+      // The below are working variables required by UX items.
+      // Selection on question Q5: TODO Must be mapped inside submit() to q5select1 - q5select6 before send to backend.
+      // This below contains selection results from Q6
+      selection1: '', // to selected item q5select? should be assigned 3 points
+      selection2: '', // should be assigned 2 points
+      selection3: '', // should be assigned 1 point, other not selected have value 0.
       bar2: false,
       // radio buttons: // TODO Verify initial setup for radio buttons:
       radio: 2,
       radio2: 1,
       group1: 2,
       group2: 2,
+      mintest: 30,
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -293,25 +298,46 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName,
+      mode: state => state.account.user_mode
+    }),
+    ...mapGetters('account', ['isAuthenticated', 'connecting']) // ??
+  },
   methods: {
     ver () {
       this.version = process.env.V_STRING
     },
-    submit () {
+    // accountName, q1radio1, q1radio2, q1radio3, q2slider,
+    // q3radio1, q3radio2, q3radio3, q4slider,
+    // q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
+    submit () { // Export survey results to back-end.
+      if (this.value_radio1 === 1) {
+        this.surveyData.q1radio1 = true
+      } else if (this.value_radio1 === 2) {
+        this.surveyData.q1radio2 = true
+      } else { this.submitData.q1radio3 = true }
+      if (this.value_radio1 === 1) {
+        this.surveyData.q1radio1 = true
+      } else if (this.value_radio1 === 2) {
+        this.surveyData.q1radio2 = true
+      } else { this.surveyData.q1radio3 = true }
       // const self = this
-      this.submitData.currentAccountName = this.accountName
-      console.log('Survey Data = ', this.submitData)
+      // TODO Note: Here should be mapping of data for correct backend action parameters format
+      this.surveyData.accountName = this.accountName
+      console.log('Survey Data = ', this.surveyData)
       // TODO Verify entry data here e.g. Is the survey complete?
-      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
-      // // .then(response => { // TODO remove it
-      // self.resetForm()
+      // this.surveyAdd(this.submitData) // Submit to back-end to sum with global results
+      // .then(response => { // TODO Consider receiving feedback from back-end,
+      // self.resetForm() // TODO Is this necessary?
       notifyAlert('success', 'Survey Submitted Successfully.')
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs')
     },
     resetForm () {
       this.submitData = {
-        // TODO is that necessary ??
+        // TODO is that necessary - consider later??
       }
     }
   }, // end of methods

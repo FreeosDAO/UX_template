@@ -8,7 +8,7 @@ import { Notify } from 'quasar'
 // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response, double q3response, string q4response,
 // uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 // ---
-export async function surveyAdd ({ state }, data) {
+export async function surveyAdd (data) {
   const {
     currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
     q3radio1, q3radio2, q3radio3, q4slider,
