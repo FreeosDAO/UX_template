@@ -252,8 +252,8 @@ export default {
     return {
       version: '',
       iteration: 0,
-      // Data passed as a result to the back-end as a result of voting.
-      surveyData: { // Be exported to back-end
+      // surveyData are passed as this survey-result to the back-end.
+      surveyData: {
         accountName: '',
         q1radio1: false,
         q1radio2: false,
@@ -274,16 +274,37 @@ export default {
       value_radio3: 1, // TODO - -- "" -- 'q3radio?' (where '?' replace appropriate number)
       // selectors:
       options: [
-        'Growing the participants', 'Stabilising the price', 'Raising the locking treshold',
-        'Burning FREEOS', 'Pooling FREEOS in a Liquidity Pool',
-        'Growing the Reserve Pool (to prepare for future price drops/economic crashes'
+        {
+          label: 'Growing the participants',
+          value: '1'
+        },
+        {
+          label: 'Stabilising the price',
+          value: '2'
+        },
+        {
+          label: 'Raising the locking threshold',
+          value: '3'
+        },
+        {
+          label: 'Burning FREEOS',
+          value: '4'
+        },
+        {
+          label: 'Pooling FREEOS in a Liquidity Pool',
+          value: '5'
+        },
+        {
+          label: 'Growing the Reserve Pool (to prepare for future price drops/economic crashes',
+          value: '6'
+        }
       ],
       // The below are working variables required by UX items.
       // Selection on question Q5: TODO Must be mapped inside submit() to q5select1 - q5select6 before send to backend.
       // This below contains selection results from Q6
-      selection1: '', // to selected item q5select? should be assigned 3 points
-      selection2: '', // should be assigned 2 points
-      selection3: '', // should be assigned 1 point, other not selected have value 0.
+      selection1: 0, // to selected item q5select? should be assigned 3 points
+      selection2: 0, // should be assigned 2 points
+      selection3: 0, // should be assigned 1 point, other not selected have value 0.
       bar2: false,
       // radio buttons: // TODO Verify initial setup for radio buttons:
       radio: 2,
@@ -313,31 +334,45 @@ export default {
     // q3radio1, q3radio2, q3radio3, q4slider,
     // q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
     submit () { // Export survey results to back-end.
-      if (this.value_radio1 === 1) {
-        this.surveyData.q1radio1 = true
-      } else if (this.value_radio1 === 2) {
-        this.surveyData.q1radio2 = true
-      } else { this.submitData.q1radio3 = true }
+      // Mapping of form data into format required by the backend:
       if (this.value_radio1 === 1) {
         this.surveyData.q1radio1 = true
       } else if (this.value_radio1 === 2) {
         this.surveyData.q1radio2 = true
       } else { this.surveyData.q1radio3 = true }
+      //
+      if (this.value_radio3 === 1) {
+        this.surveyData.q3radio1 = true
+      } else if (this.value_radio3 === 2) {
+        this.surveyData.q3radio2 = true
+      } else { this.surveyData.q3radio3 = true }
+      const selector = [this.selection1.value, this.selection2.value, this.selection3.value]
+      // "Javascript does not have variable variables (such as $$varname in php) so this really is the only answer."
+      let points = 3
+      for (const x in selector) {
+        console.log('selector=', selector[x])
+        if (selector[x] === '1') { this.surveyData.q5select1 = points }
+        if (selector[x] === '2') { this.surveyData.q5select2 = points }
+        if (selector[x] === '3') { this.surveyData.q5select3 = points }
+        if (selector[x] === '4') { this.surveyData.q5select4 = points }
+        if (selector[x] === '5') { this.surveyData.q5select5 = points }
+        if (selector[x] === '6') { this.surveyData.q5select6 = points }
+        points = points - 1
+      }
       // const self = this
-      // TODO Note: Here should be mapping of data for correct backend action parameters format
       this.surveyData.accountName = this.accountName
       console.log('Survey Data = ', this.surveyData)
-      // TODO Verify entry data here e.g. Is the survey complete?
+      // TODO Verify here completeness of the survey:
       // this.surveyAdd(this.submitData) // Submit to back-end to sum with global results
-      // .then(response => { // TODO Consider receiving feedback from back-end,
-      // self.resetForm() // TODO Is this necessary?
+      // .then(response => { // TODO receiving feedback message from back-end,
+      // self.resetForm() // TODO Is this necessary? Yes.
       notifyAlert('success', 'Survey Submitted Successfully.')
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs')
     },
     resetForm () {
       this.submitData = {
-        // TODO is that necessary - consider later??
+        // TODO consider later??
       }
     }
   }, // end of methods

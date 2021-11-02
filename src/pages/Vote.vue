@@ -254,21 +254,20 @@
       <div class="text-subtitle2 text-center">Allocate to Partners</div>
       <div class="q-pa-md text-left">
         <div> Q6: Select your top three choices to receive partner founding this week:</div><br>
-        - ABC<br>
-        - XYZ<br>
-        - DEF<br>
-        - HIJ<br>
-        - KLM<br>
-        - NMO<br>
-        - PQU
+        - {{this.options[0].label}}<br>
+        - {{this.options[1].label}}<br>
+        - {{this.options[2].label}}<br>
+        - {{this.options[3].label}}<br>
+        - {{this.options[4].label}}<br>
+        - {{this.options[5].label}}<br>
       </div>
       <p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       <div>
         <div class="q-pa-md">
           <div class="q-gutter-y-md column" style="max-width: 350px">
-            <q-select clearable filled color="grey-6" v-model="voteData.q6choice1" :options="options" label="Select Priority 1"></q-select>
-            <q-select clearable filled color="grey-6" v-model="voteData.q6choice2" :options="options" label="Select Priority 2"></q-select>
-            <q-select clearable filled color="grey-6" v-model="voteData.q6choice3" :options="options" label="Select Priority 3"></q-select>
+            <q-select clearable filled color="grey-6" v-model="selection1" :options="options" label="Select Priority 1"></q-select>
+            <q-select clearable filled color="grey-6" v-model="selection2" :options="options" label="Select Priority 2"></q-select>
+            <q-select clearable filled color="grey-6" v-model="selection3" :options="options" label="Select Priority 3"></q-select>
           </div>
         </div>
       </div>
@@ -299,17 +298,39 @@ import notifyAlert from 'src/services/notify-alert'
 import { mapState } from 'vuex'
 export default {
   name: 'Vote',
-  data () {
+  data () { // VOTE
     return {
       version: '',
+      selection1: 0,
+      selection2: 0,
+      selection3: 0,
       options: [
-        'Pink Coin Panda', 'Robin Hood', 'Night Glut', 'BabokOne',
-        'Square Tire', 'Pooling Idiot', 'Liquid Support', 'Usable Monkey'
+        {
+          label: 'The One Planet ... (Obama)',
+          value: '1'
+        },
+        {
+          label: 'Nelson Mandela Foundation',
+          value: '2'
+        },
+        {
+          label: 'Environmental Education',
+          value: '3'
+        },
+        {
+          label: 'Animal Protection',
+          value: '4'
+        },
+        {
+          label: 'Open Society Foundation',
+          value: '5'
+        },
+        {
+          label: 'Blockchain Charity Fund',
+          value: '6'
+        }
       ],
       iteration: 0,
-      submitData: { // results to be passed to the backend
-        whatever: ''
-      },
       expiration_timer: '2 days 10 hours 30 min',
       // Data passed as a result to the back-end as a result of voting.
       voteData: {
@@ -318,7 +339,7 @@ export default {
         q3slider: 6, // Must start from 6.
         q4radio: 1,
         q5slider: 0,
-        q6choice1: 0,
+        q6choice1: 0, // Return number of selected option for each selector.
         q6choice2: 0,
         q6choice3: 0
       },
@@ -337,12 +358,24 @@ export default {
     }
   },
   methods: {
-    submit () {
+    // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response,
+    // double q3response, string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
+    submit () { // VOTE
+      // Export Q1 vote results to back-end.
+      // Mapping of form data into format required by the backend:
+      if (this.value_radio1 === 1) {
+        this.voteData.q1radio1 = 'BURN'
+      } else if (this.value_radio1 === 2) {
+        this.voteData.q1radio2 = 'POOL'
+      }
+      this.voteData.q6choice1 = this.selection1.value
+      this.voteData.q6choice2 = this.selection2.value
+      this.voteData.q6choice3 = this.selection3.value
       // const self = this
-      this.submitData.currentAccountName = this.accountName
-      console.log('Survey Data = ', this.submitData)
+      this.voteData.currentAccountName = this.accountName
+      console.log('Vote Data = ', this.voteData)
       // TODO Verify entry data here e.g. Is the survey complete? Left that for back-end?
-      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
+      // // this.voteAdd(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
       notifyAlert('success', 'Vote Submitted Successfully.')
@@ -355,9 +388,6 @@ export default {
       }
     }
   }, // end of methods
-  created () {
-    this.ver()
-  },
   computed: { // TODO consider is necessary?
     ...mapState({
       accountName: state => state.account.accountName

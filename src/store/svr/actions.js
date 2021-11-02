@@ -55,8 +55,11 @@ export async function surveyAdd (data) {
     return e
   }
 }
+// VOTE
+// void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response,
+// double q3response, string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 
-export async function voteAdd ({ state }, data) {
+export async function voteAdd (data) {
   const {
     currentAccountName, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3
   } = data // eslint-disable-line
@@ -72,9 +75,9 @@ export async function voteAdd ({ state }, data) {
       q1response: q1slider, // uint8_t
       q2response: q2slider, // uint8_t
       q3response: q3slider, // double
-      q4response: q4radio, // string  // TODO Convert Answer to this format.
+      q4response: q4radio, // string
       q5response: q5slider, // uint8_t
-      q6choice1: q6choice1, // -"-
+      q6choice1: q6choice1, // -"- TODO verify - the data may be deliver as numeric strings?
       q6choice2: q6choice2, // -"-
       q6choice3: q6choice3 // -"-
     }
@@ -83,7 +86,7 @@ export async function voteAdd ({ state }, data) {
     const result = await ProtonSDK.sendTransaction(actions)
     let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
-      responseMessage = 'Survey Data submission successful'
+      responseMessage = 'Voting Data submission successful'
     }
     Notify.create({
       message: responseMessage,
