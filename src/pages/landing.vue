@@ -121,7 +121,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
+// import { getParametersTable } from 'src/store/svr/actions'
 export default {
   name: 'landing',
   data () {
@@ -143,11 +144,12 @@ export default {
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
-      mode: state => state.account.user_mode
+      mode: state => state.svr.user_mode
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
+    ...mapActions('svr', ['getSvrsTable', 'getParametersTable']),
     ver () {
       this.version = process.env.V_STRING
     },
@@ -158,7 +160,7 @@ export default {
     doit () {
       console.log('DO IT!')
     },
-    submit () {
+    submit () { // TODO need to be rewritten to react on switching table value
       switch (this.mode) {
         case 1: // Goto Survey
           this.$router.push('/survey')
@@ -176,7 +178,8 @@ export default {
     mint () {}
   },
   created () {
-    this.ver()
+    this.getSvrsTable(this.accountName)
+    this.getParametersTable()
   }
 }
 </script>

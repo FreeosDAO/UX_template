@@ -163,7 +163,7 @@ export default {
   },
   methods: {
     gohome () {
-      // tt
+      // TODO
     }
   }
 }

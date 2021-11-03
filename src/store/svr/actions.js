@@ -1,6 +1,6 @@
 // S-V-R Sending results of single user interactions to back-end to summarize
 // import notifyAlert from 'src/services/notify-alert'
-// import { connect } from 'src/utils/smartContractRequest'
+import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
 // import { RpcError } from 'eosjs'
@@ -98,4 +98,33 @@ export async function voteAdd (data) {
     return e
   }
 }
+// retrieve system status and user status info (ready)
+export async function getSvrsTable (state, name) {
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: name, // TODO scope as currentAccountName !
+    table: 'svrs',
+    limit: 1
+  })
+  const val = {
+    key: 'SVRSData',
+    value: result.rows
+  }
+  state.commit('setSVRSTableAttrVal', val)
+}
 
+export async function getParametersTable (state) {
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: process.env.APP_NAME,
+    table: 'parameters',
+    limit: 10
+  })
+  const val = {
+    key: 'ParamData',
+    value: result.rows
+  }
+  state.commit('setParamTableAttrVal', val)
+}

@@ -245,7 +245,7 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 export default {
   name: 'Survey',
   data () {
@@ -327,6 +327,7 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting']) // ??
   },
   methods: {
+    ...mapActions('svr', ['surveyAdd']),
     ver () {
       this.version = process.env.V_STRING
     },
@@ -363,7 +364,7 @@ export default {
       this.surveyData.accountName = this.accountName
       console.log('Survey Data = ', this.surveyData)
       // TODO Verify here completeness of the survey:
-      // this.surveyAdd(this.submitData) // Submit to back-end to sum with global results
+      this.surveyAdd(this.surveyData) // Submit to back-end to sum with global results
       // .then(response => { // TODO receiving feedback message from back-end,
       // self.resetForm() // TODO Is this necessary? Yes.
       notifyAlert('success', 'Survey Submitted Successfully.')
