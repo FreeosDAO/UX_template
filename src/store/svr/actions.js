@@ -8,6 +8,7 @@ import { Notify } from 'quasar'
 // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response, double q3response, string q4response,
 // uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 // ---
+
 export async function surveyAdd (data) {
   const {
     currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
@@ -41,7 +42,7 @@ export async function surveyAdd (data) {
   }]
   try {
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
+    let responseMessage = '' // result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Survey Data submission successful'
     }
@@ -84,7 +85,7 @@ export async function voteAdd (data) {
   }]
   try {
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
+    let responseMessage = '' // result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Voting Data submission successful'
     }
@@ -127,4 +128,51 @@ export async function getParametersTable (state) {
     value: result.rows
   }
   state.commit('setParamTableAttrVal', val)
+}
+
+// TODO
+// run action query from the blockchain TODO replace whole function
+export async function getVersionQuery ({ state }, accountName) {
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'version',
+    authorization: [{
+      actor: accountName,
+      permission: 'active'
+    }],
+    data: {
+      eosaccount: accountName
+    }
+  }]
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Version identified'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
+
+// retrieve system table (ready)
+export async function getSystemTable (state) {
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: process.env.APP_NAME,
+    table: 'system'
+    // limit: 1
+  })
+  const val = {
+    key: 'SystemData',
+    value: result.rows
+  }
+  state.commit('setSystemTableAttrVal', val)
 }

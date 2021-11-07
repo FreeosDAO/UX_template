@@ -295,7 +295,7 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Vote',
   data () { // VOTE
@@ -334,6 +334,7 @@ export default {
       expiration_timer: '2 days 10 hours 30 min',
       // Data passed as a result to the back-end as a result of voting.
       voteData: {
+        accountName: '',
         q1slider: 0,
         q2slider: 6, // Must start from 6.
         q3slider: 6, // Must start from 6.
@@ -358,8 +359,7 @@ export default {
     }
   },
   methods: {
-    // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response,
-    // double q3response, string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
+    ...mapActions('svr', ['voteAdd']),
     submit () { // VOTE
       // Export Q1 vote results to back-end.
       // Mapping of form data into format required by the backend:
@@ -374,8 +374,7 @@ export default {
       // const self = this
       this.voteData.currentAccountName = this.accountName
       console.log('Vote Data = ', this.voteData)
-      // TODO Verify entry data here e.g. Is the survey complete? Left that for back-end?
-      // // this.voteAdd(this.submitData) // Submit to back-end to sum with global results
+      this.voteAdd(this.voteData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
       notifyAlert('success', 'Vote Submitted Successfully.')
@@ -383,7 +382,7 @@ export default {
       this.$router.push('/congs') // Congratulation page
     },
     resetForm () {
-      this.submitData = {
+      this.voteData = {
         // TODO function to consider?
       }
     }

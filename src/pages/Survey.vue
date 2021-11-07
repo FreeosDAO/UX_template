@@ -254,7 +254,7 @@ export default {
       iteration: 0,
       // surveyData are passed as this survey-result to the back-end.
       surveyData: {
-        accountName: '',
+        currentAccountName: '',
         q1radio1: false,
         q1radio2: false,
         q1radio3: false,
@@ -324,16 +324,10 @@ export default {
       accountName: state => state.account.accountName,
       mode: state => state.account.user_mode
     }),
-    ...mapGetters('account', ['isAuthenticated', 'connecting']) // ??
+    ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
     ...mapActions('svr', ['surveyAdd']),
-    ver () {
-      this.version = process.env.V_STRING
-    },
-    // accountName, q1radio1, q1radio2, q1radio3, q2slider,
-    // q3radio1, q3radio2, q3radio3, q4slider,
-    // q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
     submit () { // Export survey results to back-end.
       // Mapping of form data into format required by the backend:
       if (this.value_radio1 === 1) {
@@ -361,10 +355,9 @@ export default {
         points = points - 1
       }
       // const self = this
-      this.surveyData.accountName = this.accountName
+      this.surveyData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.surveyData)
-      // TODO Verify here completeness of the survey:
-      this.surveyAdd(this.surveyData) // Submit to back-end to sum with global results
+      this.surveyAdd(this.surveyData) // Submit to back-end to sum with global results // TODO
       // .then(response => { // TODO receiving feedback message from back-end,
       // self.resetForm() // TODO Is this necessary? Yes.
       notifyAlert('success', 'Survey Submitted Successfully.')
@@ -372,14 +365,11 @@ export default {
       this.$router.push('/congs')
     },
     resetForm () {
-      this.submitData = {
+      this.surveyData = {
         // TODO consider later??
       }
     }
-  }, // end of methods
-  created () {
-    this.ver()
-  }
+  } // end of methods
 }
 </script>
 <style scoped>

@@ -17,7 +17,7 @@
 
       <div class="text-h2" style="opacity:.4">
       </div>
-
+      <q-btn @click="todo ()">test</q-btn>
       <q-btn
         class="q-mt-xl"
         color="white"
@@ -44,7 +44,25 @@ export default {
       app_chain_endpoint: process.env.APP_CHAIN_ENDPOINT,
       token_name: process.env.TOKEN_NAME,
       token_precision: process.env.TOKEN_PRECISION,
-      v_string: process.env.V_STRING
+      v_string: process.env.V_STRING,
+      a: 10,
+      b: this.a
+    }
+  },
+  methods: {
+    todo () {
+      // const now = new Date()
+      // Note that getTime() returns milliseconds, not plain seconds.
+      const currentT = Math.floor((new Date()).getTime() / 1000)
+      console.log('Correct UTC timestamp ' + currentT)
+      const str = '2021-09-15T00:00:00.000'
+      const replaced = str.replace('T', ', ')
+      const myDate = new Date(replaced)
+      console.log('myDate', replaced)
+      const myEpoch = myDate.getTime() / 1000.0
+      console.log('epoch', myEpoch) // TODO ... and this
+      const diff = Math.floor(((currentT - myEpoch) / 604800) + 1)
+      console.log('Iteration = ', diff)
     }
   }
 }

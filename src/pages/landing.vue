@@ -144,13 +144,14 @@ export default {
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
-      mode: state => state.svr.user_mode
+      mode: state => state.svr.user_mode,
+      init_time: state => state.svr.init_time_seconds
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
-    ...mapActions('svr', ['getSvrsTable', 'getParametersTable']),
-    ver () {
+    ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getSystemTable']),
+    ver () { // TODO can be removed
       this.version = process.env.V_STRING
     },
     onSelectMenu (menuItem) {
@@ -161,6 +162,7 @@ export default {
       console.log('DO IT!')
     },
     submit () { // TODO need to be rewritten to react on switching table value
+      console.log('time_init_point=', this.init_time)
       switch (this.mode) {
         case 1: // Goto Survey
           this.$router.push('/survey')
@@ -180,6 +182,7 @@ export default {
   created () {
     this.getSvrsTable(this.accountName)
     this.getParametersTable()
+    this.getSystemTable()
   }
 }
 </script>
