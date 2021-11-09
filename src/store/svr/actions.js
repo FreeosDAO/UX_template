@@ -8,7 +8,8 @@ import { Notify } from 'quasar'
 // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response, double q3response, string q4response,
 // uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 // ---
-
+// surveyAdd
+// Where called: survey.vue
 export async function surveyAdd (data) {
   const {
     currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
@@ -59,7 +60,9 @@ export async function surveyAdd (data) {
 // VOTE
 // void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response,
 // double q3response, string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
-
+//
+// voteAdd
+// Where called: vote.vue
 export async function voteAdd (data) {
   const {
     currentAccountName, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3
@@ -99,7 +102,11 @@ export async function voteAdd (data) {
     return e
   }
 }
-// retrieve system status and user status info (ready)
+// ---
+// svrs table
+// Where called: landing.vue
+// retrieve userStatus info
+//
 export async function getSvrsTable (state, name) {
   const result = await connect({
     json: true,
@@ -114,7 +121,11 @@ export async function getSvrsTable (state, name) {
   }
   state.commit('setSVRSTableAttrVal', val)
 }
-
+//
+// ---
+// parameters table (retrieve)
+// Where called: MainLayout.vue
+//
 export async function getParametersTable (state) {
   const result = await connect({
     json: true,
@@ -130,38 +141,40 @@ export async function getParametersTable (state) {
   state.commit('setParamTableAttrVal', val)
 }
 
-// TODO
-// run action query from the blockchain TODO replace whole function
-export async function getVersionQuery ({ state }, accountName) {
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'version',
-    authorization: [{
-      actor: accountName,
-      permission: 'active'
-    }],
-    data: {
-      eosaccount: accountName
-    }
-  }]
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Version identified'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
-    return result
-  } catch (e) {
-    console.log(e)
-    return e
-  }
-}
-
-// retrieve system table (ready)
+// TODO --- not necessary
+// run action query from the blockchain
+// export async function getVersionQuery ({ state }, accountName) {
+// const actions = [{
+// account: process.env.APP_NAME,
+// name: 'version',
+// authorization: [{
+// actor: accountName,
+// permission: 'active'
+// }],
+// data: {
+// eosaccount: accountName
+// }
+// }]
+// try {
+// const result = await ProtonSDK.sendTransaction(actions)
+// let responseMessage = result.processed.action_traces[0].console
+// if (!responseMessage) {
+// responseMessage = 'Version identified'
+// }
+// Notify.create({
+// message: responseMessage,
+// color: 'positive'
+// })
+// return result
+// } catch (e) {
+// console.log(e)
+// return e
+// }
+// }
+//
+// ---
+// system table (retrieve)
+// Where called: MainLayout.vue
 export async function getSystemTable (state) {
   const result = await connect({
     json: true,

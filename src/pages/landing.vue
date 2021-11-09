@@ -150,7 +150,7 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
-    ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getSystemTable']),
+    ...mapActions('svr', ['getSvrsTable']),
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
     },
@@ -161,7 +161,7 @@ export default {
     doit () {
       console.log('DO IT!')
     },
-    submit () { // TODO need to be rewritten to react on switching table value
+    submit () { // TODO need to react on switching table value
       console.log('time_init_point=', this.init_time)
       switch (this.mode) {
         case 1: // Goto Survey
@@ -179,10 +179,8 @@ export default {
     },
     mint () {}
   },
-  created () {
+  created () { // TODO consider move to computed()
     this.getSvrsTable(this.accountName)
-    this.getParametersTable()
-    this.getSystemTable()
   }
 }
 </script>

@@ -47,6 +47,7 @@
 <script>
 // import WalletLoginDialog from 'components/accountManagement/WalletLoginDialog'
 import { mapState, mapActions, mapGetters } from 'vuex'
+// import { getSystemTable } from 'src/store/svr/actions'
 
 const menuList = [
   {
@@ -176,16 +177,13 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
+    ...mapActions('svr', ['getParametersTable', 'getSystemTable']),
     onSigninFinish (event) {
       if (event.isFinished) {
         this.isShowDrawerButton = true
         this.drawer = true
         this.onSelectMenu(menuList[0])
       }
-    },
-    initiateValues () {
-      this.getEwsTable()
-      this.getByUserTotal()
     },
     onSelectMenu (menuItem) {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
@@ -212,9 +210,9 @@ export default {
   },
   created () {
     this.checkIfLoggedIn()
-    // this.initiateValues() // TODO commented
-    // this.getwhitelistTable()
-    this.version = process.env.V_STRING // TODO
+    this.version = process.env.V_STRING
+    this.getParametersTable()
+    this.getSystemTable()
   }
   // mounted () {
   // this.getwhitelistTable(this.accountName)

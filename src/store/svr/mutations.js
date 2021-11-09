@@ -14,7 +14,12 @@ export const setParamTableAttrVal = function (state, payload) {
   console.log('paramname.lockfactor', val[0].value)
   state.ParamInfo[attr] = val
 }
-
+// Function setSystemTableAttrVal called from getSystemTable called from landing.vue in computed()
+// Input Backend (freeosgov): system table
+// Output (to Vuex):
+// - init_time_seconds
+// - iteration (current iteration build up from already existing data)
+//
 export const setSystemTableAttrVal = function (state, payload) {
   // const attr = payload.key
   const val = payload.value
@@ -33,5 +38,5 @@ export const setSystemTableAttrVal = function (state, payload) {
   console.log('Correct UTC timestamp ' + currentTimeSec)
   console.log('Iteration = ', diff)
   state.iteration = diff // active iteration number
-  // state.SystemInfo[attr] = val // TODO not yet
+  // state.SystemInfo[attr] = val // TODO not yet if at all
 }
