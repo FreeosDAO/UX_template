@@ -8,11 +8,22 @@ export const setSVRSTableAttrVal = function (state, payload) {
 }
 
 export const setParamTableAttrVal = function (state, payload) {
-  const attr = payload.key
+  // const attr = payload.key
   const val = payload.value
   console.log('*** parameters:', JSON.stringify(val)) // test
-  console.log('paramname.lockfactor', val[0].value)
-  state.ParamInfo[attr] = val
+  // console.log('paramname.lockfactor', val[0].value)
+  state.ratifyend = val[1].value
+  state.ratifystart = val[2].value
+  state.surveyend = val[3].value
+  state.surveyranges = val[4].value
+  state.surveystart = val[5].value
+  // state.userlifespan = val[6].value
+  state.voteend = val[7].value
+  state.voteranges = val[8].value
+  state.votestart = val[9].value
+  console.log(' votestart - ', val[9].value)
+  console.log(' ratifyend = ', val[1].value)
+  // state.ParamInfo[attr] = val
 }
 // Function setSystemTableAttrVal called from getSystemTable called from landing.vue in computed()
 // Input Backend (freeosgov): system table
@@ -32,11 +43,5 @@ export const setSystemTableAttrVal = function (state, payload) {
   const myEpoch = myDate.getTime() / 1000.0
   console.log('epoch', myEpoch)
   state.init_time_seconds = myEpoch // init point in UTC seconds
-  // Note that getTime() returns milliseconds, not plain seconds:
-  const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-  const diff = Math.floor(((currentTimeSec - myEpoch) / 604800) + 1)
-  console.log('Correct UTC timestamp ' + currentTimeSec)
-  console.log('Iteration = ', diff)
-  state.iteration = diff // active iteration number
   // state.SystemInfo[attr] = val // TODO not yet if at all
 }

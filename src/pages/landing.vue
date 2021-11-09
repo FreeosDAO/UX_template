@@ -5,7 +5,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}}
+          {{accountName}}/{{iteration}}
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
@@ -147,7 +147,16 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.init_time_seconds
     }),
-    ...mapGetters('account', ['isAuthenticated', 'connecting'])
+    ...mapGetters('account', ['isAuthenticated', 'connecting']),
+    iteration: function () { // TODO HERE !!!
+      // Note that getTime() returns milliseconds, not plain seconds:
+      const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
+      const diff = Math.floor(((currentTimeSec - this.init_time) / 604800) + 1) // TODO myEpoch take from Vuex
+      // console.log('Correct UTC timestamp ' + currentTimeSec)
+      console.log('Iteration = ', diff)
+      return this.diff
+      // state.iteration = diff // active iteration number
+    }
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable']),
