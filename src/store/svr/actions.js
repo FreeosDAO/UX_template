@@ -111,9 +111,9 @@ export async function getSvrsTable (state, name) {
   const result = await connect({
     json: true,
     code: process.env.APP_NAME,
-    scope: name, // TODO scope as currentAccountName !
+    scope: name,
     table: 'svrs',
-    limit: 1
+    limit: 12
   })
   const val = {
     key: 'SVRSData',

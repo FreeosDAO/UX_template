@@ -190,8 +190,8 @@ export default {
       this.selectedItemLabel = menuItem.label
     },
     ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout']),
-    DividendCompute () {
-      // this.actionDividendCompute(this.accountName)
+    whatever () { // test
+      // this.actionWhateverCompute(this.accountName)
     }
   },
   watch: {
@@ -199,8 +199,8 @@ export default {
       immediate: true,
       handler: function (val) {
         // if (val && this.accountName) {
-        // this.getAccountInfo()
-        // this.getActionProposal()
+        // this.getAccountBang()
+        // this.getActionBoo()
         // }
         if (val && this.$route.query.returnUrl) {
           this.$router.push({ path: this.$route.query.returnUrl })
@@ -215,7 +215,7 @@ export default {
     this.getSystemTable()
   }
   // mounted () {
-  // this.getwhitelistTable(this.accountName)
+  // this.getlistTable(this.accountName)
   // }
 }
 // Photo by Matthew Henry on Unsplash
