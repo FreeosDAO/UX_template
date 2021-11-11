@@ -24,6 +24,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const ratify3 = val[0].ratify3
   const ratify4 = val[0].ratify4
   const thisIteration = this.state.currentiteration
+  // Note: All of this is already updated after S-V-R update by the S-V-R pages.
   if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
      (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
     console.log('user has already completed the survey')
@@ -41,6 +42,32 @@ export const setSVRSTableAttrVal = function (state, payload) {
   } else state.ratifyDone = false
   console.log('userStatus: S=', state.surveyDone, ' V=', state.voteDone, ' R=', state.ratifyDone,
     ' thisIteration=', thisIteration)
+  console.log('mutation: isSurveyActive: ', state.isSurveyActive)
+  let nothing = false
+  let surveyOK = false
+  let voteOK = false
+  let SV_OK = false
+  let SVR_OK = false
+  // TODO this can make no sense to keep all of this variables in the store (consider??)
+  if (state.surveyDone && state.voteDone && state.ratifyDone) { SVR_OK = true } else nothing = true
+  if ((state.surveyDone === true) && (state.voteDone === false) && (state.ratifyDone === false)) { surveyOK = true }
+  if ((state.surveyDone === false) && (state.voteDone === true) && (state.ratifyDone === false)) { voteOK = true }
+  if ((state.surveyDone === true) && (state.voteDone === true) && (state.ratifyDone === false)) { SV_OK = true }
+  if (state.isSurveyActive) {
+    if (nothing) { state.mode = 1 }
+    if (surveyOK) { state.mode = 2 }
+  }
+  if (state.isVoteActive) {
+    if (nothing) { state.mode = 3 }
+    if (surveyOK) { state.mode = 3 }
+    if (SV_OK) { state.mode = 4 }
+  }
+  if (state.isRatifyActive) {
+    if (nothing) { state.mode = 5 }
+    if (surveyOK) { state.mode = 6 }
+    if (voteOK) { state.mode = 6 }
+    if (SVR_OK) { state.mode = 5 }
+  }
 }
 
 export const setParamTableAttrVal = function (state, payload) {

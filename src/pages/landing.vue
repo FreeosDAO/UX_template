@@ -145,7 +145,8 @@ export default {
       accountName: state => state.account.accountName,
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.init_time_seconds,
-      iteration: state => state.svr.currentiteration
+      iteration: state => state.svr.currentiteration,
+      surveyDone: state => state.svr.surveydone
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used
@@ -156,10 +157,13 @@ export default {
       console.log('Iteration = ', diff)
       return this.diff
       // state.iteration = diff // active iteration number
+    },
+    callswitcher: function () {
+      this.selectPageToGo() // The result will be returned as: 'mode: state => state.svr.user_mode'
+      return this
     }
   },
   mounted () {
-    // Determine
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable']),
@@ -173,26 +177,41 @@ export default {
     doit () {
       console.log('DO IT!')
     },
+    selectPageToGo () {
+      console.log('selectPageToGo')
+      // Page Switching Variables
+      console.log('@ switcher user = ', this.surveyDone)
+      // surveyDone: false,
+      // votingDone: false,
+      // ratifyDone: false
+      // console.log('@ switcher system = ', this.state.isSurveyActive)
+      // isSurveyActive: false,
+      // isVotingActive: false,
+      // isRatifyActive: false
+    },
     submit () { // TODO need to react on switching table value
       console.log('time_init_point=', this.init_time)
-      switch (this.mode) {
-        case 1: // Goto Survey
+      switch (this.mode) { // Jump to pre-determined page when button pushed.
+        case 1: // Goto survey.vue
           this.$router.push('/survey')
           break
-        case 2:
+        case 2: // Goto vote.vue
           this.$router.push('/vote')
           break
-        case 3:
+        case 3: // Goto ratify.vue
           this.$router.push('/ratify')
           break
-        default:
-        // default statement or expression;
+        default: // catch all cases above 3. or make another branches, whatever seems better?
+        // warn that there is:
+          // if (){ alert 'Nowhere to go'} with eventually different messages. This branch should catch
+          // nonsense uses of Submit button.
       }
     },
     mint () {}
   },
   created () { // TODO consider move to computed()
     this.getSvrsTable(this.accountName)
+    // determine next page to be ready to go
   }
 }
 </script>
