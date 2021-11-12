@@ -1,6 +1,7 @@
 export default () => ({
   // system status and user status info
-  user_mode: 1, // This shows the decision to route to S,V, or R.
+  user_mode: 0, // This shows the decision to route to S,V, or R.
+
   // systemStatus section:
   isSurveyActive: false,
   isVoteActive: false,

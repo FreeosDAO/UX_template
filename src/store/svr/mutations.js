@@ -54,20 +54,22 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((state.surveyDone === false) && (state.voteDone === true) && (state.ratifyDone === false)) { voteOK = true }
   if ((state.surveyDone === true) && (state.voteDone === true) && (state.ratifyDone === false)) { SV_OK = true }
   if (state.isSurveyActive) {
-    if (nothing) { state.mode = 1 }
-    if (surveyOK) { state.mode = 2 }
+    // state.user_mode = 0 means system inactive
+    if (nothing) { state.user_mode = 1 }
+    if (surveyOK) { state.user_mode = 2 }
   }
   if (state.isVoteActive) {
-    if (nothing) { state.mode = 3 }
-    if (surveyOK) { state.mode = 3 }
-    if (SV_OK) { state.mode = 4 }
+    if (nothing) { state.user_mode = 3 }
+    if (surveyOK) { state.user_mode = 3 }
+    if (SV_OK) { state.user_mode = 4 }
   }
   if (state.isRatifyActive) {
-    if (nothing) { state.mode = 5 }
-    if (surveyOK) { state.mode = 6 }
-    if (voteOK) { state.mode = 6 }
-    if (SVR_OK) { state.mode = 5 }
+    if (nothing) { state.user_mode = 5 }
+    if (surveyOK) { state.user_mode = 6 }
+    if (voteOK) { state.user_mode = 6 }
+    if (SVR_OK) { state.user_mode = 5 }
   }
+  console.log(' mutation:end: user_mode = ', state.user_mode)
 }
 
 export const setParamTableAttrVal = function (state, payload) {

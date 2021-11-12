@@ -5,7 +5,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp;Iter:{{iteration}}
+          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}}
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
@@ -48,7 +48,7 @@
         <q-card-section>
         <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
         <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{this.countdown_timer}}</div>
-        <div v-else class="text-subtitle3 bg-grey-2 text-center">Close in: &nbsp;{{this.countdown_timer}}</div>
+        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{this.countdown_timer}}</div>
         <!-- <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div> -->
           <div><br></div>
         </q-card-section>
@@ -56,12 +56,12 @@
         <q-btn v-if="mode===0" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:100px; center:0px; ">
-          <div >Start &nbsp;{{this.landing_text[mode+1]}}</div>
+          <div > &nbsp;{{this.landing_title[mode]}}</div>
          </q-btn>
         <q-btn v-else size="20px" @click="submit()" no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:100px; center:0px; ">
-          <div>Start &nbsp;{{this.landing_text[mode]}}</div>
+          <div> &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
       </div>
       <!-- Central Card -->
@@ -137,7 +137,32 @@ export default {
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
         ' quis nostrud exercitation ullamco laboris nisi ut aliquip' +
         ' ex ea commodo consequat.',
-      landing_text: ['Survey Coming Soon', 'Survey', 'Voting', 'Ratification Vote']
+      landing_text: [ // on the Button
+        'System Inactive',
+        'Start Survey Now',
+        'Wait for Vote',
+        'Start Vote Now',
+        'Wait for Ratify',
+        'Wait for New Iteration',
+        'Start Ratify Now'],
+      landing_title: [
+        'System Inactive',
+        'Survey Open',
+        'Wait for Vote',
+        'Vote Open',
+        'Wait for Ratify',
+        'Wait for New Iteration',
+        'Ratify Open'
+      ],
+      timerMessage: [
+        'System Inactive',
+        'Survey Closing in',
+        'Vote Opens in',
+        'Vote Closing in',
+        'Ratify Opens in',
+        'Next Iteration in',
+        'Ratify Closing in'
+      ]
     }
   },
   computed: {
@@ -146,7 +171,7 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.init_time_seconds,
       iteration: state => state.svr.currentiteration,
-      surveyDone: state => state.svr.surveydone
+      surveyDone: state => state.svr.surveyDone
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used
@@ -164,6 +189,7 @@ export default {
     }
   },
   mounted () {
+    // console.log('landing:mounted = ', this.mode)
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable']),
@@ -189,7 +215,8 @@ export default {
       // isVotingActive: false,
       // isRatifyActive: false
     },
-    submit () { // TODO need to react on switching table value
+    // TODO need to be rewritten due to changes in mode values meaning
+    submit () { // When pressed button the function interpret selected mode
       console.log('time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when button pushed.
         case 1: // Goto survey.vue
@@ -212,6 +239,7 @@ export default {
   created () { // TODO consider move to computed()
     this.getSvrsTable(this.accountName)
     // determine next page to be ready to go
+    console.log('landing:created = ', this.mode)
   }
 }
 </script>
