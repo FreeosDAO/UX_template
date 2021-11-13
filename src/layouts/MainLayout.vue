@@ -211,11 +211,11 @@ export default {
   created () {
     this.checkIfLoggedIn()
     this.version = process.env.V_STRING
-    this.getParametersTable()
     this.getSystemTable()
+    this.getParametersTable()
   }
   // mounted () {
-  // this.getlistTable(this.accountName)
+  // this.getTable(this.accountName)
   // }
 }
 // Photo by Matthew Henry on Unsplash

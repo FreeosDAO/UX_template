@@ -33,5 +33,7 @@ export default () => ({
   //
   // Retrieved and converted from the system table:
   init_time_seconds: 0, // Initial time point converted from 'init' of system table.
-  currentiteration: 0 // Current iteration number counted from blockchain data.
+  currentiteration: 0, // Current iteration number counted from blockchain data.
+  // const
+  iterationTime: 7200 // Normally: 604800
 })

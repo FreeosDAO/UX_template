@@ -53,6 +53,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((state.surveyDone === true) && (state.voteDone === false) && (state.ratifyDone === false)) { surveyOK = true }
   if ((state.surveyDone === false) && (state.voteDone === true) && (state.ratifyDone === false)) { voteOK = true }
   if ((state.surveyDone === true) && (state.voteDone === true) && (state.ratifyDone === false)) { SV_OK = true }
+  console.log('mutations:56: ', surveyOK, voteOK, SV_OK, SVR_OK) // todo UNDER TESTING
   if (state.isSurveyActive) {
     // state.user_mode = 0 means system inactive
     if (nothing) { state.user_mode = 1 }
@@ -92,7 +93,10 @@ export const setParamTableAttrVal = function (state, payload) {
   state.isVoteActive = false
   state.isRatifyActive = false
   const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
-  const currentoffset = (currentT - this.state.init_time_seconds) % 604800
+  const currentoffset = (currentT - state.init_time_seconds) % state.iterationTime
+  console.log(' mutation:96: currentT = ', currentT)
+  console.log(' mutation:97: init_time_seconds = ', state.init_time_seconds)
+  console.log(' mutation:98: currentoffset = ', currentoffset)
   const ratifyend = val[1].value
   const ratifystart = val[2].value
   const surveyend = val[3].value
@@ -100,10 +104,14 @@ export const setParamTableAttrVal = function (state, payload) {
   const voteend = val[7].value
   const votestart = val[9].value
   // set userStatus:
-  if (surveystart <= currentoffset <= surveyend) { state.isSurveyActive = true } // We are in Survey period.
-  if (votestart <= currentoffset <= voteend) { state.isVoteActive = true } // -- "" --  Vote period.
-  if (ratifystart <= currentoffset <= ratifyend) { state.isRatifyActive = true } // -- "" --  Ratify period.
-  // Unpack slider ranges for SVR displays:
+  console.log('mutations:106: S-V-R Active?', state.isSurveyActive, state.isVoteActive, state.isRatifyActive)
+
+  if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { state.isSurveyActive = true } // We are in Survey period.
+  if ((votestart <= currentoffset) && (currentoffset <= voteend)) { state.isVoteActive = true } // -- "" --  Vote period.
+  console.log('mutations:107: V Active?', votestart, currentoffset, voteend)
+  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { state.isRatifyActive = true } // -- "" --  Ratify period.
+  console.log('mutations:110: S-V-R Active?', state.isSurveyActive, state.isVoteActive, state.isRatifyActive)
+  // TODO Unpack slider ranges for SVR displays:
   // const surveyranges = val[4].value // TODO
   // const voteranges = val[8].value // TODO
   console.log(' votestart - ', val[9].value) // test
@@ -128,7 +136,8 @@ export const setSystemTableAttrVal = function (state, payload) {
   const myEpoch = myDate.getTime() / 1000.0
   console.log('epoch', myEpoch)
   console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // read directly from system
-  state.currentiteration = val[0].iteration
+  state.currentiteration = val[0].iteration // not agree now as iterations are shorter
   state.init_time_seconds = myEpoch // init point in UTC seconds
+  console.log(' mutation:136:state.init_time_seconds =', state.init_time_seconds)
   // state.SystemInfo[attr] = val // N/A
 }

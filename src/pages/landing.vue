@@ -192,7 +192,7 @@ export default {
     // console.log('landing:mounted = ', this.mode)
   },
   methods: {
-    ...mapActions('svr', ['getSvrsTable']),
+    ...mapActions('svr', ['getSvrsTable', 'getParametersTable']),
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
     },
@@ -238,6 +238,7 @@ export default {
   },
   created () { // TODO consider move to computed()
     this.getSvrsTable(this.accountName)
+    // this.getParametersTable() // actually called from layout.vue
     // determine next page to be ready to go
     console.log('landing:created = ', this.mode)
   }
