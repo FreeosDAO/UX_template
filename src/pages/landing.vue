@@ -171,13 +171,14 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.init_time_seconds,
       iteration: state => state.svr.currentiteration,
-      surveyDone: state => state.svr.surveyDone
+      surveyDone: state => state.svr.surveyDone, // TODO ??
+      iterationSize: state => state.svr.iterationSize
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used
       // Note that getTime() returns milliseconds, not plain seconds:
       const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-      const diff = Math.floor(((currentTimeSec - this.init_time) / 604800) + 1) // TODO myEpoch take from Vuex
+      const diff = Math.floor(((currentTimeSec - this.init_time) / this.iterationSize) + 1) // TODO myEpoch take from Vuex
       // console.log('Correct UTC timestamp ' + currentTimeSec)
       console.log('Iteration = ', diff)
       return this.diff

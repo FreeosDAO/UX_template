@@ -7,9 +7,9 @@ export default () => ({
   isVoteActive: false,
   isRatifyActive: false,
   // userStatus section:
-  surveyDone: false,
-  voteDone: false,
-  ratifyDone: false,
+  // surveyDone: false,
+  // voteDone: false,
+  // ratifyDone: false,
   SVRSInfo: {
     SVRSData: []
   },
@@ -34,6 +34,7 @@ export default () => ({
   // Retrieved and converted from the system table:
   init_time_seconds: 0, // Initial time point converted from 'init' of system table.
   currentiteration: 0, // Current iteration number counted from blockchain data.
+  iteration: 0, // as above but counted 'manually'
   // const
-  iterationTime: 7200 // Normally: 604800
+  iterationSize: 7200 // Normally: 604800
 })
