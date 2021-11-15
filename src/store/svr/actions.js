@@ -141,36 +141,6 @@ export async function getParametersTable (state) {
   state.commit('setParamTableAttrVal', val)
 }
 
-// TODO --- not necessary
-// run action query from the blockchain
-// export async function getVersionQuery ({ state }, accountName) {
-// const actions = [{
-// account: process.env.APP_NAME,
-// name: 'version',
-// authorization: [{
-// actor: accountName,
-// permission: 'active'
-// }],
-// data: {
-// eosaccount: accountName
-// }
-// }]
-// try {
-// const result = await ProtonSDK.sendTransaction(actions)
-// let responseMessage = result.processed.action_traces[0].console
-// if (!responseMessage) {
-// responseMessage = 'Version identified'
-// }
-// Notify.create({
-// message: responseMessage,
-// color: 'positive'
-// })
-// return result
-// } catch (e) {
-// console.log(e)
-// return e
-// }
-// }
 //
 // ---
 // system table (retrieve)

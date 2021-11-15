@@ -1,11 +1,17 @@
 export default () => ({
   // system status and user status info
   user_mode: 0, // This shows the decision to route to S,V, or R.
-
-  // systemStatus section:
-  isSurveyActive: false,
-  isVoteActive: false,
-  isRatifyActive: false,
+  // parameters table
+  lockfactor: 0,
+  ratifyend: 0,
+  ratifystart: 0,
+  surveyend: 0,
+  surveyranges: '',
+  surveystart: 0,
+  userlifespan: 0,
+  voteend: 0,
+  voteranges: '',
+  votestart: 0,
   // userStatus section:
   // surveyDone: false,
   // voteDone: false,
@@ -36,5 +42,5 @@ export default () => ({
   currentiteration: 0, // Current iteration number counted from blockchain data.
   iteration: 0, // as above but counted 'manually'
   // const
-  iterationSize: 7200 // Normally: 604800
+  iterationSize: 3600 // Normally: 604800
 })

@@ -7,6 +7,43 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // surveyDone, voteDone, and ratifyDone, then only 'mode' is passed to landing.vue
   // through Vuex.
   //
+  // Deal with parameters (LOGIC for PARAMETERS)
+  console.log('*** PARAMETERS processing') // test
+  // console.log('paramname.lockfactor', val[0].value) // not used here yet
+  // state.userlifespan = val[6].value // not used
+  //
+  let isSurveyActive = false
+  let isVoteActive = false
+  let isRatifyActive = false
+  const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
+  const currentoffset = (currentT - state.init_time_seconds) % state.iterationSize
+  console.log(' mutation:20: currentT = ', currentT)
+  console.log(' mutation:21: init_time_seconds = ', state.init_time_seconds)
+  console.log(' mutation:22: currentoffset = ', currentoffset)
+  const ratifyend = state.ratifyend
+  const ratifystart = state.ratifystart
+  const surveyend = state.surveyend
+  const surveystart = state.surveystart
+  const voteend = state.voteend
+  const votestart = state.votestart
+  // set userStatus:
+  console.log('mu.30: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
+  if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { isSurveyActive = true } // We are in Survey period.
+  if ((votestart <= currentoffset) && (currentoffset <= voteend)) { isVoteActive = true } // -- "" --  Vote period.
+  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true }
+  console.log('mu.33: surveystart=', surveystart, ' currentoffset=', currentoffset,
+    ' surveyend=', surveyend)
+  console.log('mu.33: votestart=', votestart, ' currentoffset=', currentoffset,
+    ' voteend=', voteend)
+  console.log('mu.33: ratifystart=', ratifystart, ' currentoffset=', currentoffset,
+    ' ratifyend=', ratifyend)
+  console.log('mu.40: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
+  // end of parameters processing
+  // === === ===
+  //
+  // === === ===
+  // SVRS processing - Main Body
+  //
   // const attr = payload.key
   const val = payload.value
   console.log('*** SVRS payload (landing)', JSON.stringify(val)) // test
@@ -15,7 +52,8 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let surveyDone = false
   let voteDone = false
   let ratifyDone = false
-  const survey1 = val[0].survey1
+  let survey1 = 0
+  survey1 = val[0].survey1 // todo ??
   const survey2 = val[0].survey2
   const survey3 = val[0].survey3
   const survey4 = val[0].survey4
@@ -28,8 +66,8 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const ratify3 = val[0].ratify3
   const ratify4 = val[0].ratify4
   const thisIteration = state.currentiteration // TODO undefined
-  console.log('mutations:27:thisIteration = ', thisIteration)
-  // Note: All of this is already updated after S-V-R update by the S-V-R pages.
+  console.log('mutations:31:thisIteration = ', thisIteration)
+  // Note: All of this is already updated by the S-V-R pages.
   if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
      (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
     surveyDone = false
@@ -51,88 +89,65 @@ export const setSVRSTableAttrVal = function (state, payload) {
     ratifyDone = true
     console.log('user has already completed the ratify')
   }
-  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
+  console.log('userStatus:54: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
     ' thisIteration=', thisIteration)
   let nothing = false
   let surveyOK = false
   let voteOK = false
   let SV_OK = false
   let SVR_OK = false
-  // TODO this can make no sense to keep all of this variables in the store (consider??)
+  //
   if ((surveyDone === false) && (voteDone === false) && (ratifyDone === false)) { nothing = true }
   if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { surveyOK = true }
   if ((surveyDone === false) && (voteDone === true) && (ratifyDone === false)) { voteOK = true }
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === true)) { SVR_OK = true }
-  console.log('mutations:57: ', nothing, surveyOK, voteOK, SV_OK, SVR_OK) // todo UNDER TESTING
-  console.log('mutation:58: isSurveyActive: ', state.isSurveyActive)
-  if (state.isSurveyActive) {
+  console.log('mutations:105: nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
+    ' SV_OK:', SV_OK, ' SVR_OK:', SVR_OK) // todo UNDER TESTING
+  console.log('mutation:69: isSurveyActive: ', isSurveyActive)
+  console.log('mutation:70: isVoteActive: ', isVoteActive)
+  console.log('mutation:71: isRatifyActive: ', isRatifyActive)
+  if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
-    if (nothing) { state.user_mode = 1 }
-    if (surveyOK) { state.user_mode = 2 }
+    if (nothing) { state.user_mode = 1 } // Survey Open
+    if (surveyOK) { state.user_mode = 2 } // Wait for Vote
   }
-  if (state.isVoteActive) {
-    if (nothing) { state.user_mode = 3 }
-    if (surveyOK) { state.user_mode = 3 }
-    if (SV_OK) { state.user_mode = 4 }
+  console.log('115', isVoteActive, nothing)
+  if (isVoteActive) {
+    if (nothing) {
+      state.user_mode = 3
+      console.log('Vote NOW')
+    } // Vote Open/Start Vote Now
+    if (surveyOK) { state.user_mode = 3 } // Vote Open/Start Vote Now
+    if (SV_OK) { state.user_mode = 4 } // Wait for Ratify
   }
-  if (state.isRatifyActive) {
-    if (nothing) { state.user_mode = 5 }
-    if (surveyOK) { state.user_mode = 6 }
-    if (voteOK) { state.user_mode = 6 }
-    if (SVR_OK) { state.user_mode = 5 }
+  if (isRatifyActive) {
+    if (nothing) { state.user_mode = 5 } // Wait for New Iteration
+    if (surveyOK) { state.user_mode = 6 } // Ratify Open
+    if (voteOK) { state.user_mode = 6 } // Ratify Open
+    if (SVR_OK) { state.user_mode = 5 } // Wait for New Iteration
   }
-  console.log(' mutation:end: user_mode = ', state.user_mode)
+  console.log(' final user_mode = ', state.user_mode)
 }
 
-// P A R A M E T E R S ---
+// P A R A M E T E R S --- TODO NOT TOUCH ------
 export const setParamTableAttrVal = function (state, payload) {
-  // Note: This mutation is called from xxx each time when landing (home) page
-  // is displayed.
-  // Parameters received as 'parameters' table from the backend are not
-  // saved directly to the Vuex. They are used only to count the systemStatus
-  // variables like: isSurveyActive, isVoteActive, and isRatifyActive.
-  // Next the above are stored in Vuex to be accessible by SVR pages
-  // appropriately.
+  // Called from LayoutMain.vue
+  // Parameters read are stored in Vuex, then used by SVRS.
   //
-  // const attr = payload.key // not used now
   const val = payload.value
+  state.ratifyend = val[1].value
+  state.ratifystart = val[2].value
+  state.surveyend = val[3].value
+  state.surveystart = val[5].value
+  state.voteend = val[7].value
+  state.votestart = val[9].value
   console.log('*** PARAMETERS payload:', JSON.stringify(val)) // test
-  // console.log('paramname.lockfactor', val[0].value) // not used here yet
-  // state.userlifespan = val[6].value // not used
-  //
-  // Reset systemStatus variables in Vuex.
-  state.isSurveyActive = false
-  state.isVoteActive = false
-  state.isRatifyActive = false
-  const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
-  const currentoffset = (currentT - state.init_time_seconds) % state.iterationSize
-  console.log(' mutation:96: currentT = ', currentT)
-  console.log(' mutation:97: init_time_seconds = ', state.init_time_seconds) // TODO wrong?
-  console.log(' mutation:98: currentoffset = ', currentoffset)
-  const ratifyend = val[1].value
-  const ratifystart = val[2].value
-  const surveyend = val[3].value
-  const surveystart = val[5].value
-  const voteend = val[7].value
-  const votestart = val[9].value
-  // set userStatus:
-  console.log('mutations:106: S-V-R Active?', state.isSurveyActive, state.isVoteActive, state.isRatifyActive)
-
-  if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { state.isSurveyActive = true } // We are in Survey period.
-  if ((votestart <= currentoffset) && (currentoffset <= voteend)) { state.isVoteActive = true } // -- "" --  Vote period.
-  console.log('mutations:107: V Active?', votestart, currentoffset, voteend)
-  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { state.isRatifyActive = true } // -- "" --  Ratify period.
-  console.log('mutations:110: S-V-R Active?', state.isSurveyActive, state.isVoteActive, state.isRatifyActive)
-  // TODO Unpack slider ranges for SVR displays:
-  // const surveyranges = val[4].value // TODO
-  // const voteranges = val[8].value // TODO
-  console.log(' votestart - ', val[9].value) // test
-  console.log(' ratifyend = ', val[1].value) // test
-  // state.ParamInfo[attr] = val // N/A
+  // TODO Unpack slider ranges for SVR displays here
+  // console.log(' ratifyend = ', val[1].value) // test
 }
 
-// S Y S T E M
+// S Y S T E M // TODO NOT TOUCH
 // Function setSystemTableAttrVal called from getSystemTable called from LayoutMain.vue in computed()
 // Input Backend (freeosgov): system table
 // Output (to Vuex):
@@ -150,7 +165,7 @@ export const setSystemTableAttrVal = function (state, payload) {
   console.log('init formatted:', replaced)
   const initUTC = myDate.getTime() / 1000.0
   console.log('init in UTC sec.', initUTC)
-  console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // read directly from system
+  // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // read directly from system
   state.currentiteration = val[0].iteration // not agree now as iterations are shorter
   state.init_time_seconds = initUTC // init point in UTC seconds
   // console.log(' mutation:152:state.init_time_seconds =', state.init_time_seconds)

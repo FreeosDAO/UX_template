@@ -4,7 +4,7 @@ export default () => ({
   connecting: false,
   path: '/',
   active: true,
-  mode: 1
+  mode: 0
   // Page Switching Variables
   // userStatus: {
   // surveyDone: false,

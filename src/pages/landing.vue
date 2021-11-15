@@ -5,7 +5,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}}
+          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}} ratifyend {{ratifyend}}
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
@@ -172,7 +172,8 @@ export default {
       init_time: state => state.svr.init_time_seconds,
       iteration: state => state.svr.currentiteration,
       surveyDone: state => state.svr.surveyDone, // TODO ??
-      iterationSize: state => state.svr.iterationSize
+      iterationSize: state => state.svr.iterationSize,
+      ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used
