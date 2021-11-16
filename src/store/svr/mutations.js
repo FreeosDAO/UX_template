@@ -16,10 +16,10 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let isVoteActive = false
   let isRatifyActive = false
   const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
-  const currentoffset = (currentT - state.init_time_seconds) % state.iterationSize
-  console.log(' mutation:20: currentT = ', currentT)
-  console.log(' mutation:21: init_time_seconds = ', state.init_time_seconds)
-  console.log(' mutation:22: currentoffset = ', currentoffset)
+  const currentoffset = (currentT - state.initUTC) % state.iterationSize
+  console.log(' currentT = ', currentT)
+  console.log(' init_time_seconds = ', state.initUTC)
+  console.log(' currentoffset = ', currentoffset)
   const ratifyend = state.ratifyend
   const ratifystart = state.ratifystart
   const surveyend = state.surveyend
@@ -39,9 +39,18 @@ export const setSVRSTableAttrVal = function (state, payload) {
     ' ratifyend=', ratifyend)
   console.log('mu.40: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
   // end of parameters processing
-  // === === ===
   //
   // === === ===
+  //
+  // SYSTEM data processing
+  //
+  const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
+  const diff = Math.floor(((currentTimeSec - state.initUTC) / state.iterationSize) + 1) // TODO myEpoch take from Vuex
+  state.iteration = diff // active iteration number
+  console.log('iteration:', diff)
+  //
+  // === === ===
+  //
   // SVRS processing - Main Body
   //
   // const attr = payload.key
@@ -52,8 +61,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let surveyDone = false
   let voteDone = false
   let ratifyDone = false
-  let survey1 = 0
-  survey1 = val[0].survey1 // todo ??
+  const survey1 = val[0].survey1
   const survey2 = val[0].survey2
   const survey3 = val[0].survey3
   const survey4 = val[0].survey4
@@ -65,8 +73,8 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const ratify2 = val[0].ratify2
   const ratify3 = val[0].ratify3
   const ratify4 = val[0].ratify4
-  const thisIteration = state.currentiteration // TODO undefined
-  console.log('mutations:31:thisIteration = ', thisIteration)
+  const thisIteration = state.iteration
+  console.log('thisIteration = ', thisIteration)
   // Note: All of this is already updated by the S-V-R pages.
   if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
      (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
@@ -89,7 +97,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
     ratifyDone = true
     console.log('user has already completed the ratify')
   }
-  console.log('userStatus:54: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
+  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
     ' thisIteration=', thisIteration)
   let nothing = false
   let surveyOK = false
@@ -102,11 +110,11 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((surveyDone === false) && (voteDone === true) && (ratifyDone === false)) { voteOK = true }
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === true)) { SVR_OK = true }
-  console.log('mutations:105: nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
+  console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
     ' SV_OK:', SV_OK, ' SVR_OK:', SVR_OK) // todo UNDER TESTING
-  console.log('mutation:69: isSurveyActive: ', isSurveyActive)
-  console.log('mutation:70: isVoteActive: ', isVoteActive)
-  console.log('mutation:71: isRatifyActive: ', isRatifyActive)
+  console.log('isSurveyActive: ', isSurveyActive)
+  console.log('isVoteActive: ', isVoteActive)
+  console.log('isRatifyActive: ', isRatifyActive)
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
     if (nothing) { state.user_mode = 1 } // Survey Open
@@ -148,32 +156,25 @@ export const setParamTableAttrVal = function (state, payload) {
 }
 
 // S Y S T E M // TODO NOT TOUCH
-// Function setSystemTableAttrVal called from getSystemTable called from LayoutMain.vue in computed()
+// Function setSystemTableAttrVal called from getSystemTable called from LayoutMain.vue
+// // in computed()
 // Input Backend (freeosgov): system table
 // Output (to Vuex):
-// - init_time_seconds
-// - iteration (current iteration build up from already existing data)
+// - initUTC - init time in seconds (converted from 'init' of system table).
+// - iteration (current iteration build up from already existing data) // Not used now
 //
 export const setSystemTableAttrVal = function (state, payload) {
   // const attr = payload.key
   const val = payload.value
-  console.log('*** SYSTEM Table Payload', JSON.stringify(val)) // test
-  console.log('init', val[0].init)
+  console.log('*** SYSTEM Table Payload', JSON.stringify(val))
   const str = val[0].init
   const replaced = str.replace('T', ', ')
   const myDate = new Date(replaced)
-  console.log('init formatted:', replaced)
   const initUTC = myDate.getTime() / 1000.0
+  state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)
   // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // read directly from system
-  state.currentiteration = val[0].iteration // not agree now as iterations are shorter
-  state.init_time_seconds = initUTC // init point in UTC seconds
-  // console.log(' mutation:152:state.init_time_seconds =', state.init_time_seconds)
-  // console.log(' mutation:153:state.currentiteration =', state.currentiteration)
-  // state.SystemInfo[attr] = val // N/A
-  // Note that getTime() returns milliseconds, not plain seconds:
-  const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-  const diff = Math.floor(((currentTimeSec - initUTC) / state.iterationSize) + 1) // TODO myEpoch take from Vuex
-  state.iteration = diff // active iteration number
-  console.log('mutations:161:iteration:', diff)
+  // state.currentiteration = val[0].iteration // not correct now as iterations are shorter
+  // I count now iteration number by myself in system data processing section of
+  // the setSVRSTableAttrVal.
 }

@@ -4,7 +4,7 @@
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
       <q-card-section>
-        <div class="text-h5 text-center">You voted, please ratify</div>
+        <div class="text-h5 text-center">Please ratify</div>
         <div class="text-subtitle2 text-center">Ratification iteration &nbsp; {{iteration}}</div>
         <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div>
       </q-card-section>
@@ -138,7 +138,7 @@
       <q-card-section>
         <div class="text-h5 text-center">Accept this vote?</div>
         <div class="q-pa-md text-center">
-          <div> The ratification vote is to ensure whatever ipsum sophia loren ala ma kokota whatever again?</div><br>
+          <div> The ratification vote is to ensure whatever ipsum sophghia lokren ala ma kokota whatever again?</div><br>
           <div class="q-gutter-sm">
             <q-btn
               size="30px"

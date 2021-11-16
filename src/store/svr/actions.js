@@ -11,34 +11,49 @@ import { Notify } from 'quasar'
 // surveyAdd
 // Where called: survey.vue
 export async function surveyAdd (data) {
-  const {
-    currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
-    q3radio1, q3radio2, q3radio3, q4slider,
-    q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
-  } = data // eslint-disable-line
+  // const {
+  // currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
+  // q3radio1, q3radio2, q3radio3, q4slider,
+  // q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
+  // } = data // eslint-disable-line
   const actions = [{
     account: process.env.APP_NAME,
     name: 'survey',
     authorization: [{
-      actor: currentAccountName,
+      actor: 'alanappleton', // currentAccountName,
       permission: 'active'
     }],
     data: {
-      user: currentAccountName,
-      r0: q1radio1,
-      r1: q1radio2,
-      r2: q1radio3,
-      r3: q2slider,
-      r4: q3radio1,
-      r5: q3radio2,
-      r6: q3radio3,
-      r7: q4slider,
-      r8: q5select1,
-      r9: q5select2,
-      r10: q5select3,
-      r11: q5select4,
-      r12: q5select5,
-      r13: q5select6
+      // user: currentAccountName,
+      // r0: q1radio1,
+      // r1: q1radio2,
+      // r2: q1radio3,
+      // r3: q2slider,
+      // r4: q3radio1,
+      // r5: q3radio2,
+      // r6: q3radio3,
+      // r7: q4slider,
+      // r8: q5select1,
+      // r9: q5select2,
+      // r10: q5select3,
+      // r11: q5select4,
+      // r12: q5select5,
+      // r13: q5select6
+      user: 'alanappleton', // currentAccountName,
+      r0: true, // q1radio1,
+      r1: false, // q1radio2,
+      r2: false, // q1radio3,
+      r3: 23, // q2slider,
+      r4: true, // q3radio1,
+      r5: false, // q3radio2,
+      r6: false, // q3radio3,
+      r7: 24, // q4slider,
+      r8: 3, // q5select1,
+      r9: 2, // q5select2,
+      r10: 1, // q5select3,
+      r11: 0, // q5select4,
+      r12: 0, // q5select5,
+      r13: 0 // q5select6
     }
   }]
   try {
@@ -102,6 +117,7 @@ export async function voteAdd (data) {
     return e
   }
 }
+
 // ---
 // svrs table
 // Where called: landing.vue
@@ -121,6 +137,7 @@ export async function getSvrsTable (state, name) {
   }
   state.commit('setSVRSTableAttrVal', val)
 }
+
 //
 // ---
 // parameters table (retrieve)

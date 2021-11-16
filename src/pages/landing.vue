@@ -169,7 +169,7 @@ export default {
     ...mapState({
       accountName: state => state.account.accountName,
       mode: state => state.svr.user_mode,
-      init_time: state => state.svr.init_time_seconds,
+      init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration,
       surveyDone: state => state.svr.surveyDone, // TODO ??
       iterationSize: state => state.svr.iterationSize,
@@ -224,10 +224,10 @@ export default {
         case 1: // Goto survey.vue
           this.$router.push('/survey')
           break
-        case 2: // Goto vote.vue
+        case 3: // Goto vote.vue
           this.$router.push('/vote')
           break
-        case 3: // Goto ratify.vue
+        case 4: // Goto ratify.vue
           this.$router.push('/ratify')
           break
         default: // catch all cases above 3. or make another branches, whatever seems better?

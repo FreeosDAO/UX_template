@@ -60,15 +60,9 @@ export default {
     ...mapActions('account', ['setUserMode']),
     handleClick () {
       /* TODO Note: If user will change page using back/forward on browser,
-      * this will make unexpected results. Find a way to prevent that
-      * e.g. by restore 'mode' in the landing.vue! Consider moving increment to 'created'
-      * section. */
-      console.log('@@@ mode:', this.mode)
-      this.tmpmode = this.mode + 1
-      if (this.tmpmode === 4) { this.tmpmode = 0 }
-      console.log('### mode:', this.tmpmode)
-      this.setUserMode(this.tmpmode)
-      this.$router.push('/land')
+      * nothing happen as landing (home) page updates the switching context anyway
+      */
+      this.$router.push('/land') // back to home page anyway
     }
   }
 }
