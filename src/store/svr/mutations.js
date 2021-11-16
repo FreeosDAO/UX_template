@@ -103,22 +103,22 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let surveyOK = false
   let voteOK = false
   let SV_OK = false
-  let SVR_OK = false
-  //
+  let R_OK = false
+  // // nothing - all three false
   if ((surveyDone === false) && (voteDone === false) && (ratifyDone === false)) { nothing = true }
   if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { surveyOK = true }
-  if ((surveyDone === false) && (voteDone === true) && (ratifyDone === false)) { voteOK = true }
+  if ((voteDone === true) && (ratifyDone === false)) { voteOK = true } // S-any, V-true, R-false
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
-  if ((surveyDone === true) && (voteDone === true) && (ratifyDone === true)) { SVR_OK = true }
+  if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
   console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
-    ' SV_OK:', SV_OK, ' SVR_OK:', SVR_OK) // todo UNDER TESTING
+    ' SV_OK:', SV_OK, ' R_OK:', R_OK) // todo UNDER TESTING
   console.log('isSurveyActive: ', isSurveyActive)
   console.log('isVoteActive: ', isVoteActive)
   console.log('isRatifyActive: ', isRatifyActive)
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
     if (nothing) { state.user_mode = 1 } // Survey Open
-    if (surveyOK) { state.user_mode = 2 } // Wait for Vote
+    if (surveyOK) { state.user_mode = 2 } // Wait for Vote // S-true, V,R - N/A
   }
   console.log('115', isVoteActive, nothing)
   if (isVoteActive) {
@@ -133,7 +133,8 @@ export const setSVRSTableAttrVal = function (state, payload) {
     if (nothing) { state.user_mode = 5 } // Wait for New Iteration
     if (surveyOK) { state.user_mode = 6 } // Ratify Open
     if (voteOK) { state.user_mode = 6 } // Ratify Open
-    if (SVR_OK) { state.user_mode = 5 } // Wait for New Iteration
+    if (SV_OK) { state.user_mode = 6 } // Ratify Open // extras
+    if (R_OK) { state.user_mode = 5 } // Wait for New Iteration
   }
   console.log(' final user_mode = ', state.user_mode)
 }

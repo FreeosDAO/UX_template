@@ -53,7 +53,7 @@
           <div><br></div>
         </q-card-section>
       </q-card>
-        <q-btn v-if="mode===0" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+        <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:100px; center:0px; ">
           <div > &nbsp;{{this.landing_title[mode]}}</div>
@@ -122,10 +122,13 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+// import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
   data () {
     return {
+      interval: null,
+      isWaiting: false,
       points: '82345.65',
       freetok: '43555.93',
       fprice: '0.3564434333',
@@ -171,12 +174,12 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration,
-      surveyDone: state => state.svr.surveyDone, // TODO ??
-      iterationSize: state => state.svr.iterationSize,
-      ratifyend: state => state.svr.ratifyend // TODO remove test
+      // surveyDone: state => state.svr.surveyDone, // TODO ??
+      iterationSize: state => state.svr.iterationSize
+      // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
-    iterationNow: function () { // Actually not used
+    iterationNow: function () { // Actually not used, this computation was made in svr/mutations.js
       // Note that getTime() returns milliseconds, not plain seconds:
       const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
       const diff = Math.floor(((currentTimeSec - this.init_time) / this.iterationSize) + 1) // TODO myEpoch take from Vuex
@@ -185,13 +188,9 @@ export default {
       return this.diff
       // state.iteration = diff // active iteration number
     },
-    callswitcher: function () {
-      this.selectPageToGo() // The result will be returned as: 'mode: state => state.svr.user_mode'
-      return this
+    modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
+      return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
     }
-  },
-  mounted () {
-    // console.log('landing:mounted = ', this.mode)
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable']),
@@ -202,47 +201,55 @@ export default {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel1 = menuItem.label
     },
-    doit () {
-      console.log('DO IT!')
+
+    allTimers () { // TODO rewrite
+      this.expires = (this.expires_at * 1000) // normalize UTC formats
+      // http://jsfiddle.net/JamesFM/bxEJd/
+      const timestamp = Date.now()
+      if (timestamp > this.expires) {
+        this.expiration_timer = 0.0
+      } else {
+        this.expiration_timer = (this.expires - timestamp) / 60000 // display in minutes
+        this.expiration_timer = this.expiration_timer.toFixed(2)
+      }
+      console.log('timestamp:', this.expires, timestamp)
     },
-    selectPageToGo () {
-      console.log('selectPageToGo')
-      // Page Switching Variables
-      console.log('@ switcher user = ', this.surveyDone)
-      // surveyDone: false,
-      // votingDone: false,
-      // ratifyDone: false
-      // console.log('@ switcher system = ', this.state.isSurveyActive)
-      // isSurveyActive: false,
-      // isVotingActive: false,
-      // isRatifyActive: false
+    secondsToHms (a) { // TODO rewrite
+      a = Number(a)
+      const d = Math.floor(a / 86400)
+      const h = Math.floor(a % 86400 / 3600)
+      const m = Math.floor(a % 3600 / 60)
+      const dDisplay = d > 0 ? d + (h === 1 ? ' hour, ' : ' hours, ') : ''
+      const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : ''
+      const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
+      return dDisplay + hDisplay + mDisplay
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+      // toTime(seconds) {
+      // var date = new Date(null);
+      // date.setSeconds(seconds);
+      // return date.toISOString().substr(11, 8);
+      // }
     },
-    // TODO need to be rewritten due to changes in mode values meaning
+    // TODO add alerts
     submit () { // When pressed button the function interpret selected mode
       console.log('time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when button pushed.
-        case 1: // Goto survey.vue
+        case 1: // Go to survey
           this.$router.push('/survey')
           break
-        case 3: // Goto vote.vue
+        case 3: // Go to Vote
           this.$router.push('/vote')
           break
-        case 4: // Goto ratify.vue
+        case 6: // Go to Ratify
           this.$router.push('/ratify')
           break
-        default: // catch all cases above 3. or make another branches, whatever seems better?
-        // warn that there is:
-          // if (){ alert 'Nowhere to go'} with eventually different messages. This branch should catch
-          // nonsense uses of Submit button.
+        default: // Waiting modes are {0, 2, 4, or 5}
+          // Nothing to do - see function modeNow(mode) in this file
       }
-    },
-    mint () {}
+    }
   },
-  created () { // TODO consider move to computed()
+  created () { // TODO add auto refresh
     this.getSvrsTable(this.accountName)
-    // this.getParametersTable() // actually called from layout.vue
-    // determine next page to be ready to go
-    console.log('landing:created = ', this.mode)
   }
 }
 </script>
