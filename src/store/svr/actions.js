@@ -5,8 +5,6 @@ import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
 // import { RpcError } from 'eosjs'
 
-// void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response, double q3response, string q4response,
-// uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 // ---
 // surveyAdd
 // Where called: survey.vue
@@ -118,6 +116,28 @@ export async function voteAdd (data) {
   }
 }
 
+// ratify:
+export async function addRatifyResult ({ state }, accountName, ratifyvote) {
+  try {
+    const actions = [{
+      account: process.env.AIRCLAIM_CONTRACT,
+      name: 'ratify',
+      authorization: [{
+        actor: accountName,
+        permission: 'active'
+      }],
+      data: {
+        user: accountName,
+        ratify_vote: ratifyvote
+      }
+    }]
+    const result = await ProtonSDK.sendTransaction(actions)
+    return result
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 // ---
 // svrs table
 // Where called: landing.vue
@@ -175,4 +195,36 @@ export async function getSystemTable (state) {
     value: result.rows
   }
   state.commit('setSystemTableAttrVal', val)
+}
+// TODO TEST below - remove
+export async function actionFakeReceiver (state, data) {
+  const { currentAccountName, answertype } = data
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'fakereceiver',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: {
+      username: currentAccountName,
+      answertype: answertype
+    }
+  }]
+
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'TESTING: Transaction Complete,'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
 }

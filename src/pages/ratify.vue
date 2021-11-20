@@ -129,6 +129,7 @@
       <!-- Allocation to Partners -->
       <q-card-section>
         <div class="text-body2 text-black text-left">Allocation to partners</div><br>
+        <!-- TODO This should be read from backend. -->
         {{P1}}<br>
         {{P2}}<br>
         {{P3}}<br>
@@ -143,14 +144,15 @@
             <q-btn
               size="30px"
               align="left"
-              @click="submit()"
+              @click="submit(true)"
               no-caps
               class="btn-fixed-width width=45%"
               color="grey-6"
               label="Yes"
             ></q-btn>
           <!-- <q-btn size="30px" align="left"  color="grey-6" label="Yes"></q-btn> -->
-          <q-btn size="30px" align="right" class="btn-fixed-width width=45%" color="grey-6" label="No"></q-btn>
+          <q-btn size="30px" align="right" @click="submit(false)" class="btn-fixed-width width=45%"
+                 color="grey-6" label="No"></q-btn>
           </div>
         </div>
       </q-card-section>
@@ -160,11 +162,13 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
+import { addRatifyResult } from 'src/store/svr/actions'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Vote',
   data () {
-    return {
+    return { // TODO Note: These data values should be read from somewhere:
       issuance: '12,235,167',
       issuatrend: '-0.2%',
       mintfees: '7.33',
@@ -180,7 +184,7 @@ export default {
       P3: 'FGH',
       version: '',
       iteration: 0,
-      expiration_timer: '2 days 10 hours 30 min',
+      expiration_timer: '2 days 10 hours 30 min', // TODO !!!
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -188,17 +192,24 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName
+    })
+  },
   methods: {
-    submit () {
-      // const self = this
-      // this.submitData.currentAccountName = this.accountName //TODO
-      console.log('Ratifying Data = ', this.submitData)
-      // TODO Verify entry data here e.g. Is the ratify complete?
-      // // this.addSurveyNew(this.submitData) // Submit to back-end to sum with global results
-      // // .then(response => { // TODO remove it
-      // self.resetForm()
-      notifyAlert('success', 'Ratifying Successful.')
-      // Set up user_mode in Vuex to enable further landing page actions.
+    ...mapActions('svr', ['addRatifyResult']),
+    submit (answer) {
+      const self = this
+      if (answer) {
+        notifyAlert('success', 'You have ratified the presented information.')
+      } else {
+        notifyAlert('warning', 'You not ratified the presented information.')
+      }
+      // Should we prevent another voting, even if ratify is active?
+      // I assume only one ratify attempt allowed.
+      console.log('### Ratify results:', self.accountName, answer)
+      addRatifyResult(self.accountName, answer)
       this.$router.push('/congs')
     },
     ver () {
@@ -209,6 +220,7 @@ export default {
     this.ver()
   }
 }
+// TODO Where to go if ratify is not accepted?
 </script>
 <style scoped>
 .grey6 {

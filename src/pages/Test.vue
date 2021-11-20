@@ -12,12 +12,16 @@
           <tr><td>TOKEN_NAME:</td><td>{{this.token_name}}</td></tr>
           <tr><td>TOKEN_PRECISION:</td><td>{{this.token_precision}}</td></tr>
           <tr><td>V_STRING:</td><td>{{this.v_string}}</td></tr>
+          <tr><td>Iteration Length Seconds:</td><td>{{this.iteration}}</td></tr>
+          <tr><td>Hard Exchange:</td><td>{{this.hardexchange}}</td></tr>
+          <tr><td>Issuance Proportion:</td><td>{{this.issuanceprop}}</td></tr>
         </table>
       </div>
 
       <div class="text-h2" style="opacity:.4">
       </div>
       <q-btn @click="todo ()">test</q-btn>
+      <q-btn @click="fuk ()">connect test</q-btn>
       <q-btn
         class="q-mt-xl"
         color="white"
@@ -32,6 +36,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'Test',
   data () {
@@ -45,11 +51,24 @@ export default {
       token_name: process.env.TOKEN_NAME,
       token_precision: process.env.TOKEN_PRECISION,
       v_string: process.env.V_STRING,
+      iteration: process.env.ITERATION_LENGTH_SECONDS,
+      hardexchange: process.env.HARD_EXCHANGE_RATE_FLOOR,
+      issuanceprop: process.env.ISSUANCE_PROPORTION_OF_CLS,
       a: 10,
-      b: this.a
+      b: this.a,
+      dataload: {
+        accountName: '',
+        answertype: false
+      }
     }
   },
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName
+    })
+  },
   methods: {
+    ...mapActions('svr', ['actionFakeReceiver']),
     todo () {
       // const now = new Date()
       // Note that getTime() returns milliseconds, not plain seconds.
@@ -63,6 +82,11 @@ export default {
       console.log('epoch', myEpoch) // TODO ... and this
       const diff = Math.floor(((currentT - myEpoch) / 604800) + 1)
       console.log('Iteration = ', diff)
+    },
+    fuk () { // backend connection TEST
+      this.dataload.connect = this.answertype
+      this.dataload.accountName = this.accountName
+      this.actionFakeReceiver(this.dataload)
     }
   }
 }

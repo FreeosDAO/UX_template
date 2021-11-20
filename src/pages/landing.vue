@@ -175,8 +175,8 @@ export default {
       init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration,
       // surveyDone: state => state.svr.surveyDone, // TODO ??
-      iterationSize: state => state.svr.iterationSize
-      // ratifyend: state => state.svr.ratifyend // TODO remove test
+      iterationSize: state => state.svr.iterationSize,
+      ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used, this computation was made in svr/mutations.js
