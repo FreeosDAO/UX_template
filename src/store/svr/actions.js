@@ -56,7 +56,7 @@ export async function surveyAdd (data) {
   }]
   try {
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = '' // result.processed.action_traces[0].console
+    let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Survey Data submission successful'
     }
@@ -101,7 +101,7 @@ export async function voteAdd (data) {
   }]
   try {
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = '' // result.processed.action_traces[0].console
+    let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Voting Data submission successful'
     }
@@ -197,34 +197,62 @@ export async function getSystemTable (state) {
   state.commit('setSystemTableAttrVal', val)
 }
 // TODO TEST below - remove
-export async function actionFakeReceiver (state, data) {
-  const { currentAccountName, answertype } = data
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'fakereceiver',
-    authorization: [{
-      actor: currentAccountName,
-      permission: 'active'
-    }],
-    data: {
-      username: currentAccountName,
-      answertype: answertype
-    }
-  }]
+// export async function actionFakeReceiver (state, data) {
+// const { currentAccountName, answertype, actionT } = data
+// const actions = [{
+// account: process.env.APP_NAME,
+// name: 'fakereceiver',
+// authorization: [{
+// actor: currentAccountName,
+// permission: 'active'
+// }],
+// data: {
+// username: currentAccountName,
+// answertype: answertype,
+// action: actionT
+// }
+// }]
+//
+// try {
+// const result = await ProtonSDK.sendTransaction(actions)
+// let responseMessage = result.processed.action_traces[0].console
+// if (!responseMessage) {
+// responseMessage = 'TESTING: Transaction Complete,'
+// }
+// Notify.create({
+// message: responseMessage,
+// color: 'positive'
+// })
+// return result
+// } catch (e) {
+// console.log(e)
+// return e
+// }
+// const result = await ProtonSDK.sendTransaction(actions)
+// return result
+// } catch (e) {
+// console.log(e)
+// }
 
+export async function actionFakeReceiver (state, data) {
+  const { currentAccountName, answertype, actionT } = data
   try {
+    const actions = [{
+      account: process.env.APP_NAME,
+      name: 'feceiver',
+      authorization: [{
+        actor: process.env.APP_NAME,
+        permission: 'active'
+      }],
+      data: {
+        username: currentAccountName,
+        answertype: answertype,
+        action: actionT
+      }
+    }]
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'TESTING: Transaction Complete,'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
     return result
   } catch (e) {
     console.log(e)
-    return e
   }
 }

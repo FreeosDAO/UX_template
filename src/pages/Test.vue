@@ -58,7 +58,8 @@ export default {
       b: this.a,
       dataload: {
         accountName: '',
-        answertype: false
+        answertype: false,
+        actionT: ''
       }
     }
   },

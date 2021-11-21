@@ -1,6 +1,6 @@
 export default () => ({
   // svr state
-  user_mode: 0, // This shows the final route decision (to route to S,V, or R page).
+  user_mode: 1, // TODO change back to zero after test // This shows the final route decision (to route to S,V, or R page).
   initUTC: 0, // Initial time point in UTC seconds (read from System table and converted).
   //             Counted in: setSystemTableAttrVal.
   // Used to transfer from parameters table to setSVRSTableAttrVal:
