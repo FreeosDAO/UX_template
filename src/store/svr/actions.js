@@ -233,13 +233,12 @@ export async function getSystemTable (state) {
 // } catch (e) {
 // console.log(e)
 // }
-
 export async function actionFakeReceiver (state, data) {
   const { currentAccountName, answertype, actionT } = data
   try {
     const actions = [{
       account: process.env.APP_NAME,
-      name: 'feceiver',
+      name: 'freceiver',
       authorization: [{
         actor: process.env.APP_NAME,
         permission: 'active'
@@ -254,5 +253,95 @@ export async function actionFakeReceiver (state, data) {
     return result
   } catch (e) {
     console.log(e)
+  }
+}
+//
+// actionSurveyTest', 'actionVoteTest', 'actionRatifyTest
+//
+export async function actionRatifyTest ({ state }, data) {
+  const { accountName, answertype } = data
+  console.log(' data: ', data, 'env: ', process.env.APP_NAME, answertype, accountName)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'verify',
+    authorization: [{
+      actor: accountName,
+      permission: 'active'
+    }],
+    data: {
+      // name: accountName,
+      // ratifyvote: (false).toString()
+    }
+  }]
+
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Ratify Transmission successful'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    return e
+  }
+}
+
+// export async function onRegisterUser ({ state }, dataload) { // TEST
+// const { aaccountName, answer } = dataload
+// console.log('### accountName', aaccountName, ' ### answer', answer)
+// try {
+// const actions = [{
+// account: process.env.APP_NAME,
+// name: 'ratify',
+// authorization: [{
+// actor: aaccountName,
+// permission: 'active'
+// }],
+// data: {
+// accountName: aaccountName,
+// ratifyvote: answer
+// }
+// }]
+// const result = await ProtonSDK.sendTransaction(actions)
+// return result
+// } catch (e) {
+// console.log(e)
+// }
+// }
+// // //
+export async function actionOwnerChange ({ state }, data) {
+  const { currentAccountName, target } = data
+  console.log('@@@ data =', data)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'ratify',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: {
+      accountName: currentAccountName,
+      ratifyvote: target
+    }
+  }]
+
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Ownership Change Successful'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
   }
 }

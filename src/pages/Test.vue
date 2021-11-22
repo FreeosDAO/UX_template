@@ -21,7 +21,8 @@
       <div class="text-h2" style="opacity:.4">
       </div>
       <q-btn @click="todo ()">test</q-btn>
-      <q-btn @click="fuk ()">connect test</q-btn>
+      <q-btn class="q-ma-lg" color="orange" no-caps @click="submit()" label="Make Change"/>
+      // <q-btn @click="fuk ()">connect test</q-btn>
       <q-btn
         class="q-mt-xl"
         color="white"
@@ -37,6 +38,9 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+// import { actionOwnerChange } from 'src/store/svr/actions'
+// import { onRegisterUser } from 'src/store/svr/actions'
+// import { actionRatifyTest } from 'src/store/svr/actions'
 
 export default {
   name: 'Test',
@@ -56,20 +60,33 @@ export default {
       issuanceprop: process.env.ISSUANCE_PROPORTION_OF_CLS,
       a: 10,
       b: this.a,
-      dataload: {
+      data_load: {
         accountName: '',
-        answertype: false,
-        actionT: ''
+        answer_type: ''
+      },
+      submitData: {
+        currentAccountName: '',
+        target: true
       }
     }
   },
   computed: {
     ...mapState({
-      accountName: state => state.account.accountName
+      currentAccountName: state => state.account.accountName
     })
   },
   methods: {
-    ...mapActions('svr', ['actionFakeReceiver']),
+    ...mapActions('svr', ['actionRatifyTest', 'actionOwnerChange']),
+    submit () {
+      // const self = this
+      this.submitData.currentAccountName = this.currentAccountName
+      console.log('@@@ account =', this.submitData.currentAccountName)
+      console.log('@@@ submitData =', this.submitData)
+      this.actionOwnerChange(this.submitData)
+      // .then(response => {
+      // console.log('That is OK:', response.statusCode)
+      // })
+    },
     todo () {
       // const now = new Date()
       // Note that getTime() returns milliseconds, not plain seconds.
@@ -85,9 +102,13 @@ export default {
       console.log('Iteration = ', diff)
     },
     fuk () { // backend connection TEST
-      this.dataload.connect = this.answertype
-      this.dataload.accountName = this.accountName
-      this.actionFakeReceiver(this.dataload)
+      // const self = this
+      // this.data_load.accountName = this.currentAccountName
+      // this.data_load.answer_type = true
+      // console.log('@ data_load', this.data_load)
+      // this.onRegisterUser(this.data_load)
+      // self.actionOwnerChange()
+      // console.log('@ data_load', this.data_load.accountName, '@ answertype', this.data_load.answer_type)
     }
   }
 }
