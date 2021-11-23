@@ -66,7 +66,14 @@ export default {
       },
       submitData: {
         currentAccountName: '',
-        target: true
+        q1response: 0, // uint8
+        q2response: 0, // uint8
+        q3response: 0.0, // double
+        q4response: '', // string
+        q5response: 0, // uint8
+        q6choice1: 0, // uint8
+        q6choice2: 0, // uint 8
+        q6choice3: 0 // uint8
       }
     }
   },
@@ -76,13 +83,22 @@ export default {
     })
   },
   methods: {
-    ...mapActions('svr', ['actionRatifyTest', 'actionOwnerChange']),
+    ...mapActions('svr', ['actionVote']), // 'actionOwnerChange']),
     submit () {
+      // fill up data for simulation, normally this should happen in template section input form
+      this.submitData.q1response = 0 // uint8
+      this.submitData.q2response = 0 // uint8
+      this.submitData.q3response = '10.0' // double
+      this.submitData.q4response = 'BURN' // string
+      this.submitData.q5response = 1 // uint8
+      this.submitData.q6choice1 = 1 // uint8
+      this.submitData.q6choice2 = 2 // uint 8
+      this.submitData.q6choice3 = 6 // uint8
       // const self = this
       this.submitData.currentAccountName = this.currentAccountName
       console.log('@@@ account =', this.submitData.currentAccountName)
       console.log('@@@ submitData =', this.submitData)
-      this.actionOwnerChange(this.submitData)
+      this.actionVote(this.submitData)
       // .then(response => {
       // console.log('That is OK:', response.statusCode)
       // })

@@ -76,10 +76,9 @@ export async function surveyAdd (data) {
 //
 // voteAdd
 // Where called: vote.vue
-export async function voteAdd (data) {
-  const {
-    currentAccountName, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3
-  } = data // eslint-disable-line
+export async function voteAdd ({ state }, data) {
+  const { currentAccountName /*, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3 */ } = data
+  console.log('### data =', data, 'APP_NAME', process.env.APP_NAME)
   const actions = [{
     account: process.env.APP_NAME,
     name: 'vote',
@@ -88,31 +87,34 @@ export async function voteAdd (data) {
       permission: 'active'
     }],
     data: {
-      user: currentAccountName,
+      name: currentAccountName
+      /*
       q1response: q1slider, // uint8_t
       q2response: q2slider, // uint8_t
       q3response: q3slider, // double
       q4response: q4radio, // string
       q5response: q5slider, // uint8_t
-      q6choice1: q6choice1, // -"- TODO verify - the data may be deliver as numeric strings?
+      q6choice1: q6choice1, // -"-
       q6choice2: q6choice2, // -"-
       q6choice3: q6choice3 // -"-
+      */
     }
   }]
+  //
   try {
     const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Voting Data submission successful'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
+    // let responseMessage = result.processed.action_traces[0].console
+    // if (!responseMessage) {
+    // responseMessage = 'Vote Successful'
+    // }
+    // Notify.create({
+    // message: responseMessage,
+    // color: 'positive'
+    // })
     return result
   } catch (e) {
     console.log(e)
-    return e
+    // return e
   }
 }
 
@@ -233,28 +235,29 @@ export async function getSystemTable (state) {
 // } catch (e) {
 // console.log(e)
 // }
-export async function actionFakeReceiver (state, data) {
-  const { currentAccountName, answertype, actionT } = data
-  try {
-    const actions = [{
-      account: process.env.APP_NAME,
-      name: 'freceiver',
-      authorization: [{
-        actor: process.env.APP_NAME,
-        permission: 'active'
-      }],
-      data: {
-        username: currentAccountName,
-        answertype: answertype,
-        action: actionT
-      }
-    }]
-    const result = await ProtonSDK.sendTransaction(actions)
-    return result
-  } catch (e) {
-    console.log(e)
-  }
-}
+// export async function actionFakeReceiver (state, data) {
+// const { currentAccountName, answertype, actionT } = data
+// try {
+// const actions = [{
+// account: process.env.APP_NAME,
+// name: 'freceiver',
+// authorization: [{
+// actor: process.env.APP_NAME,
+// permission: 'active'
+// }],
+// data: {
+// username: currentAccountName,
+// answertype: answertype,
+// action: actionT
+// }
+// }]
+// const result = await ProtonSDK.sendTransaction(actions)
+// return result
+// } catch (e) {
+// console.log(e)
+// }
+// }
+//
 //
 // actionSurveyTest', 'actionVoteTest', 'actionRatifyTest
 //
@@ -313,7 +316,7 @@ export async function actionRatifyTest ({ state }, data) {
 // }
 // }
 // // //
-export async function actionOwnerChange ({ state }, data) {
+/* export async function actionOwnerChange ({ state }, data) {
   const { currentAccountName, target } = data
   console.log('@@@ data =', data)
   const actions = [{
@@ -334,6 +337,38 @@ export async function actionOwnerChange ({ state }, data) {
     let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Ownership Change Successful'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
+*/
+export async function actionVote ({ state }, data) {
+  const { currentAccountName } = data
+  console.log('@@@ data =', data)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'vote',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: {
+      accountName: currentAccountName
+    }
+  }]
+
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Vote Update Successful'
     }
     Notify.create({
       message: responseMessage,
