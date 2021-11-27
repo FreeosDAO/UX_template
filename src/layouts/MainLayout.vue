@@ -82,6 +82,12 @@ const menuList = [
   },
   {
     icon: 'get_app',
+    label: 'Register',
+    separator: true,
+    route: '/register'
+  },
+  {
+    icon: 'get_app',
     label: 'Transfer',
     separator: true,
     route: '/tran'

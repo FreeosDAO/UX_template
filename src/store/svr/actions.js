@@ -350,7 +350,7 @@ export async function actionRatifyTest ({ state }, data) {
 }
 */
 export async function actionVote ({ state }, data) {
-  const { currentAccountName } = data
+  const { currentAccountName, q1response, q2response, q3response } = data
   console.log('@@@ data =', data)
   const actions = [{
     account: process.env.APP_NAME,
@@ -360,7 +360,10 @@ export async function actionVote ({ state }, data) {
       permission: 'active'
     }],
     data: {
-      accountName: currentAccountName
+      accountName: currentAccountName,
+      q1response: q1response,
+      q2response: q2response,
+      q3response: q3response
     }
   }]
 

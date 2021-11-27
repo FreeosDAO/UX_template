@@ -86,9 +86,9 @@ export default {
     ...mapActions('svr', ['actionVote']), // 'actionOwnerChange']),
     submit () {
       // fill up data for simulation, normally this should happen in template section input form
-      this.submitData.q1response = 0 // uint8
+      this.submitData.q1response = 1 // uint8
       this.submitData.q2response = 0 // uint8
-      this.submitData.q3response = '10.0' // double
+      this.submitData.q3response = 10.0 // double
       this.submitData.q4response = 'BURN' // string
       this.submitData.q5response = 1 // uint8
       this.submitData.q6choice1 = 1 // uint8
@@ -103,7 +103,7 @@ export default {
       // console.log('That is OK:', response.statusCode)
       // })
     },
-    todo () {
+    todo () { // helper for converting time
       // const now = new Date()
       // Note that getTime() returns milliseconds, not plain seconds.
       const currentT = Math.floor((new Date()).getTime() / 1000)
