@@ -16,6 +16,7 @@ const routes = [
       { path: '/goal', component: () => import('pages/Goalsreward.vue') },
       { path: '/tran', component: () => import('pages/Transfer.vue') },
       { path: '/register', component: () => import('pages/Register.vue') },
+      { path: '/terms', component: () => import('pages/terms.vue') },
       { path: '/claim', component: () => import('pages/Claim.vue') }
     ]
   },

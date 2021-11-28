@@ -76,6 +76,12 @@ const menuList = [
   },
   {
     icon: 'get_app',
+    label: 'terms',
+    separator: true,
+    route: '/terms'
+  },
+  {
+    icon: 'get_app',
     label: 'Goal/Rewards',
     separator: true,
     route: '/goal'

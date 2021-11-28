@@ -4,54 +4,31 @@ import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
 // import { RpcError } from 'eosjs'
-
 // ---
 // surveyAdd
 // Where called: survey.vue
-export async function surveyAdd (data) {
-  // const {
-  // currentAccountName, q1radio1, q1radio2, q1radio3, q2slider,
-  // q3radio1, q3radio2, q3radio3, q4slider,
-  // q5select1, q5select2, q5select3, q5select4, q5select5, q5select6
-  // } = data // eslint-disable-line
+export async function surveyAdd ({ state }, data) {
+  const
+    {
+      currentAccountName, q1radio1, q2slider1, q3radio2, q4slider2,
+      q5priority1, q5priority2, q5priority3
+    } = data
   const actions = [{
     account: process.env.APP_NAME,
     name: 'survey',
     authorization: [{
-      actor: 'alanappleton', // currentAccountName,
+      actor: currentAccountName,
       permission: 'active'
     }],
     data: {
-      // user: currentAccountName,
-      // r0: q1radio1,
-      // r1: q1radio2,
-      // r2: q1radio3,
-      // r3: q2slider,
-      // r4: q3radio1,
-      // r5: q3radio2,
-      // r6: q3radio3,
-      // r7: q4slider,
-      // r8: q5select1,
-      // r9: q5select2,
-      // r10: q5select3,
-      // r11: q5select4,
-      // r12: q5select5,
-      // r13: q5select6
-      user: 'alanappleton', // currentAccountName,
-      r0: true, // q1radio1,
-      r1: false, // q1radio2,
-      r2: false, // q1radio3,
-      r3: 23, // q2slider,
-      r4: true, // q3radio1,
-      r5: false, // q3radio2,
-      r6: false, // q3radio3,
-      r7: 24, // q4slider,
-      r8: 3, // q5select1,
-      r9: 2, // q5select2,
-      r10: 1, // q5select3,
-      r11: 0, // q5select4,
-      r12: 0, // q5select5,
-      r13: 0 // q5select6
+      user: currentAccountName,
+      q1response: q1radio1,
+      q2response: q2slider1,
+      q3response: q3radio2,
+      q4response: q4slider2,
+      q5choice1: q5priority1,
+      q5choice2: q5priority2,
+      q5choice3: q5priority3
     }
   }]
   try {
@@ -77,7 +54,7 @@ export async function surveyAdd (data) {
 // voteAdd
 // Where called: vote.vue
 export async function voteAdd ({ state }, data) {
-  const { currentAccountName /*, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3 */ } = data
+  const { currentAccountName, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3 } = data
   console.log('### data =', data, 'APP_NAME', process.env.APP_NAME)
   const actions = [{
     account: process.env.APP_NAME,
@@ -87,8 +64,7 @@ export async function voteAdd ({ state }, data) {
       permission: 'active'
     }],
     data: {
-      name: currentAccountName
-      /*
+      name: currentAccountName,
       q1response: q1slider, // uint8_t
       q2response: q2slider, // uint8_t
       q3response: q3slider, // double
@@ -97,7 +73,6 @@ export async function voteAdd ({ state }, data) {
       q6choice1: q6choice1, // -"-
       q6choice2: q6choice2, // -"-
       q6choice3: q6choice3 // -"-
-      */
     }
   }]
   //
@@ -119,18 +94,20 @@ export async function voteAdd ({ state }, data) {
 }
 
 // ratify:
-export async function addRatifyResult ({ state }, accountName, ratifyvote) {
+export async function addRatifyResult ({ state }, data) {
+  const { currentAccountName, answer } = data
+  console.log('ratify data', data)
   try {
     const actions = [{
-      account: process.env.AIRCLAIM_CONTRACT,
+      account: process.env.APP_NAME,
       name: 'ratify',
       authorization: [{
-        actor: accountName,
+        actor: currentAccountName,
         permission: 'active'
       }],
       data: {
-        user: accountName,
-        ratify_vote: ratifyvote
+        user: currentAccountName,
+        ratify_vote: answer
       }
     }]
     const result = await ProtonSDK.sendTransaction(actions)
@@ -198,68 +175,7 @@ export async function getSystemTable (state) {
   }
   state.commit('setSystemTableAttrVal', val)
 }
-// TODO TEST below - remove
-// export async function actionFakeReceiver (state, data) {
-// const { currentAccountName, answertype, actionT } = data
-// const actions = [{
-// account: process.env.APP_NAME,
-// name: 'fakereceiver',
-// authorization: [{
-// actor: currentAccountName,
-// permission: 'active'
-// }],
-// data: {
-// username: currentAccountName,
-// answertype: answertype,
-// action: actionT
-// }
-// }]
-//
-// try {
-// const result = await ProtonSDK.sendTransaction(actions)
-// let responseMessage = result.processed.action_traces[0].console
-// if (!responseMessage) {
-// responseMessage = 'TESTING: Transaction Complete,'
-// }
-// Notify.create({
-// message: responseMessage,
-// color: 'positive'
-// })
-// return result
-// } catch (e) {
-// console.log(e)
-// return e
-// }
-// const result = await ProtonSDK.sendTransaction(actions)
-// return result
-// } catch (e) {
-// console.log(e)
-// }
-// export async function actionFakeReceiver (state, data) {
-// const { currentAccountName, answertype, actionT } = data
-// try {
-// const actions = [{
-// account: process.env.APP_NAME,
-// name: 'freceiver',
-// authorization: [{
-// actor: process.env.APP_NAME,
-// permission: 'active'
-// }],
-// data: {
-// username: currentAccountName,
-// answertype: answertype,
-// action: actionT
-// }
-// }]
-// const result = await ProtonSDK.sendTransaction(actions)
-// return result
-// } catch (e) {
-// console.log(e)
-// }
-// }
-//
-//
-// actionSurveyTest', 'actionVoteTest', 'actionRatifyTest
+
 //
 export async function actionRatifyTest ({ state }, data) {
   const { accountName, answertype } = data
@@ -293,62 +209,6 @@ export async function actionRatifyTest ({ state }, data) {
   }
 }
 
-// export async function onRegisterUser ({ state }, dataload) { // TEST
-// const { aaccountName, answer } = dataload
-// console.log('### accountName', aaccountName, ' ### answer', answer)
-// try {
-// const actions = [{
-// account: process.env.APP_NAME,
-// name: 'ratify',
-// authorization: [{
-// actor: aaccountName,
-// permission: 'active'
-// }],
-// data: {
-// accountName: aaccountName,
-// ratifyvote: answer
-// }
-// }]
-// const result = await ProtonSDK.sendTransaction(actions)
-// return result
-// } catch (e) {
-// console.log(e)
-// }
-// }
-// // //
-/* export async function actionOwnerChange ({ state }, data) {
-  const { currentAccountName, target } = data
-  console.log('@@@ data =', data)
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'ratify',
-    authorization: [{
-      actor: currentAccountName,
-      permission: 'active'
-    }],
-    data: {
-      accountName: currentAccountName,
-      ratifyvote: target
-    }
-  }]
-
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Ownership Change Successful'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
-    return result
-  } catch (e) {
-    console.log(e)
-    return e
-  }
-}
-*/
 export async function actionVote ({ state }, data) {
   const { currentAccountName, q1response, q2response, q3response } = data
   console.log('@@@ data =', data)

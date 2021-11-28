@@ -73,15 +73,15 @@
            <!-- end of modal dialog -->
            <div class="example ex1">
               <p><label class="radio greyux">
-               <input type="radio" id="1" value="1" name="group1" v-model="value_radio1"/>
+               <input type="radio" id="1" value="1" name="group1" v-model="submitData.q1radio1"/>
                <span>Growing (bull market)</span>
              </label></p>
              <p><label class="radio greyux">
-               <input type="radio" id="2" value="2" name="group1" v-model="value_radio1"/>
+               <input type="radio" id="2" value="2" name="group1" v-model="submitData.q1radio1"/>
                <span>Shrinking (bear market)</span>
              </label></p>
              <p><label class="radio greyux">
-               <input type="radio" id="3" value="3" name="group1" v-model="value_radio1"/>
+               <input type="radio" id="3" value="3" name="group1" v-model="submitData.q1radio1"/>
                <span>Neither (going sideways)</span>
              </label></p>
            </div>
@@ -92,13 +92,13 @@
            <div>
             <div class="q-pa-md">
               <q-slider
-                v-model="surveyData.q2slider"
+                v-model="submitData.q2slider1"
                 :min="1"
                 :max="48"
                 :step="1"
                 color="grey-6"
                 label
-                :label-value="'Months:' + surveyData.q2slider"
+                :label-value="'Months:' + submitData.q2slider1"
                 label-always
               ></q-slider>
               <div class="row">
@@ -108,7 +108,7 @@
                 <div class="col">
                   <div class="text-center">
                     <q-badge class="text-subtitle2" outline color="grey-8">
-                      Months: {{ surveyData.q2slider }}
+                      Months: {{ submitData.q2slider }}
                     </q-badge>
                   </div>
                 </div>
@@ -140,15 +140,15 @@
         <div>
           <div class="example ex1">
             <p><label class="radio greyux">
-              <input type="radio" value="radio-1" v-model="value_radio3" name="group2"/>
+              <input type="radio" value="1" v-model="submitData.q3radio2" name="group2"/>
               <span>Growing (bull market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="radio-2" v-model="value_radio3" name="group2"/>
+              <input type="radio" value="2" v-model="submitData.q3radio2" name="group2"/>
               <span>Shrinking (bear market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="radio-3" v-model="value_radio3" name="group2"/>
+              <input type="radio" value="3" v-model="submitData.q3radio2" name="group2"/>
               <span>Neither (going sideways)</span>
             </label></p>
           </div>
@@ -161,13 +161,13 @@
         <div> <!-- :max="mintest" -->
           <div class="q-pa-md">
             <q-slider
-              v-model="surveyData.q4slider"
+              v-model="submitData.q4slider2"
               :min="1"
               :max="48"
               :step="1"
               color="grey-6"
               label
-              :label-value="'Months:' + surveyData.q4slider"
+              :label-value="'Months:' + submitData.q4slider2"
               label-always
             ></q-slider>
             <div class="row">
@@ -177,7 +177,7 @@
               <div class="col">
                 <div class="text-center">
                   <q-badge class="text-subtitle2" outline color="grey-8">
-                    Months: {{ surveyData.q4slider }}
+                    Months: {{ submitData.q4slider2 }}
                   </q-badge>
                 </div>
               </div>
@@ -217,9 +217,9 @@
           <div>
             <div class="q-pa-md">
               <div class="q-gutter-y-md column" style="max-width: 350px">
-                <q-select clearable filled color="grey-6" v-model="selection1" :options="options" label="Select Priority 1"></q-select>
-                <q-select clearable filled color="grey-6" v-model="selection2" :options="options" label="Select Priority 2"></q-select>
-                <q-select clearable filled color="grey-6" v-model="selection3" :options="options" label="Select Priority 3"></q-select>
+                <q-select clearable filled color="grey-6" v-model="selector1" :options="options" label="Select Priority 1"></q-select>
+                <q-select clearable filled color="grey-6" v-model="selector2" :options="options" label="Select Priority 2"></q-select>
+                <q-select clearable filled color="grey-6" v-model="selector3" :options="options" label="Select Priority 3"></q-select>
               </div>
               <!-- -->
               <br>
@@ -252,26 +252,20 @@ export default {
     return {
       version: '',
       iteration: 0,
-      // surveyData are passed as this survey-result to the back-end.
-      surveyData: {
+      // submitData are passed as this survey-result to the back-end.
+      submitData: {
         currentAccountName: '',
-        q1radio1: false,
-        q1radio2: false,
-        q1radio3: false,
-        q2slider: 0,
-        q3radio1: false,
-        q3radio2: false,
-        q3radio3: false,
-        q4slider: 0,
-        q5select1: 0,
-        q5select2: 0,
-        q5select3: 0,
-        q5select4: 0,
-        q5select5: 0,
-        q5select6: 0
+        q1radio1: 0,
+        q2slider1: 0,
+        q3radio2: 0,
+        q4slider2: 0,
+        q5priority1: 0,
+        q5priority2: 0,
+        q5priority3: 0
       },
-      value_radio1: 1, // TODO - Must be mapped inside submit() into 'q1radio?' before send to back-end.
-      value_radio3: 1, // TODO - -- "" -- 'q3radio?' (where '?' replace appropriate number)
+      selector1: 0,
+      selector2: 0,
+      selector3: 0,
       // selectors:
       options: [
         {
@@ -300,11 +294,6 @@ export default {
         }
       ],
       // The below are working variables required by UX items.
-      // Selection on question Q5: TODO Must be mapped inside submit() to q5select1 - q5select6 before send to backend.
-      // This below contains selection results from Q6
-      selection1: 0, // to selected item q5select? should be assigned 3 points
-      selection2: 0, // should be assigned 2 points
-      selection3: 0, // should be assigned 1 point, other not selected have value 0.
       bar2: false,
       // radio buttons: // TODO Verify initial setup for radio buttons:
       radio: 2,
@@ -329,49 +318,28 @@ export default {
   methods: {
     ...mapActions('svr', ['surveyAdd']),
     submit () { // Export survey results to back-end.
-      // Mapping of form data into format required by the backend:
-      if (this.value_radio1 === 1) {
-        this.surveyData.q1radio1 = true
-      } else if (this.value_radio1 === 2) {
-        this.surveyData.q1radio2 = true
-      } else { this.surveyData.q1radio3 = true }
-      //
-      if (this.value_radio3 === 1) {
-        this.surveyData.q3radio1 = true
-      } else if (this.value_radio3 === 2) {
-        this.surveyData.q3radio2 = true
-      } else { this.surveyData.q3radio3 = true }
-      const selector = [this.selection1.value, this.selection2.value, this.selection3.value]
-      // "Javascript does not have variable variables (such as $$varname in php) so this really is the only answer."
-      let points = 3
-      for (const x in selector) {
-        console.log('selector=', selector[x])
-        if (selector[x] === '1') { this.surveyData.q5select1 = points }
-        if (selector[x] === '2') { this.surveyData.q5select2 = points }
-        if (selector[x] === '3') { this.surveyData.q5select3 = points }
-        if (selector[x] === '4') { this.surveyData.q5select4 = points }
-        if (selector[x] === '5') { this.surveyData.q5select5 = points }
-        if (selector[x] === '6') { this.surveyData.q5select6 = points }
-        points = points - 1
-      }
-      // const self = this
-      this.surveyData.currentAccountName = this.accountName
-      console.log('Survey Data = ', this.surveyData)
-      this.surveyAdd(this.surveyData) // Submit to back-end to sum with global results // TODO
-      // .then(response => { // TODO receiving feedback message from back-end,
-      // self.resetForm() // TODO Is this necessary? Yes.
-      notifyAlert('success', 'Survey Submitted Successfully.')
+      this.submitData.q5priority1 = this.selector1.value
+      this.submitData.q5priority2 = this.selector2.value
+      this.submitData.q5priority3 = this.selector3.value
+      console.log(' #@$ submitData Survey = ', this.submitData)
+      // const self = this TODO uncomment for resetForm()
+      this.submitData.currentAccountName = this.accountName
+      console.log('Survey Data = ', this.submitData)
+      this.surveyAdd(this.submitData) // Submit to back-end to sum with global results
+      // self.resetForm() // TODO uncomment if form reset is required
+      notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.
-      this.$router.push('/congs')
+      this.$router.push('/congs') // congratulations page
     },
     resetForm () {
-      this.surveyData = {
-        // TODO consider later??
+      this.submitData = {
+        // TODO is it needed?
       }
     }
   } // end of methods
 }
 </script>
+
 <style scoped>
 .grey6 {
   background-color: #3B4752;
@@ -431,7 +399,7 @@ text-color: #FFFFFF;
   background-color: #f4f5f4;
 }
 .dial1 {
-  color: #a3a3a3;
+color: #a3a3a3;
 }
 .dial2 {
   color: #999999;

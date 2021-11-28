@@ -139,7 +139,7 @@
       <q-card-section>
         <div class="text-h5 text-center">Accept this vote?</div>
         <div class="q-pa-md text-center">
-          <div> The ratification vote is to ensure whatever ipsum sophghia lokren ala ma kokota whatever again?</div><br>
+          <div> The ratification vote is to ensure whatever ipsum sophghia lokjren ala ma kokota whatever again?</div><br>
           <div class="q-gutter-sm">
             <q-btn
               size="30px"
@@ -184,6 +184,10 @@ export default {
       P3: 'FGH',
       version: '',
       iteration: 0,
+      submitData: {
+        currentAccountName: '',
+        answer: null
+      },
       expiration_timer: '2 days 10 hours 30 min', // TODO !!!
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
@@ -209,7 +213,10 @@ export default {
       // Should we prevent another voting, even if ratify is active?
       // I assume only one ratify attempt allowed.
       console.log('### Ratify results:', self.accountName, answer)
-      addRatifyResult(self.accountName, answer)
+      this.submitData.answer = answer
+      this.submitData.currentAccountName = this.accountName
+      console.log('@Ratify submitData=', this.currentAccountName, this.submitData)
+      addRatifyResult(this.submitData)
       this.$router.push('/congs')
     },
     ver () {

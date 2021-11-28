@@ -47,13 +47,13 @@
       </q-card-section>
         <div class="q-pa-md">
           <q-slider
-            v-model="voteData.q1slider"
+            v-model="submitData.q1slider"
             :min="1"
             :max="100"
             :step="1"
             color="grey-6"
             label
-            :label-value="voteData.q1slider + ' percent'"
+            :label-value="submitData.q1slider + ' percent'"
             label-always
           ></q-slider>
           <div class="row text-subtitle2 text-black text-left" >
@@ -63,7 +63,7 @@
             <div class="col">
               <div class="text-center">
                 <q-badge class="text-subtitle2" outline color="grey-8">
-                  {{ voteData.q1slider }} percent
+                  {{ submitData.q1slider }} percent
                 </q-badge>
               </div>
             </div>
@@ -91,13 +91,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="voteData.q2slider"
+          v-model="submitData.q2slider"
           :min="6"
           :max="30"
           :step="1"
           color="grey-6"
           label
-          :label-value="voteData.q2slider + ' percent'"
+          :label-value="submitData.q2slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -107,7 +107,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ voteData.q2slider }} percent
+                {{ submitData.q2slider }} percent
               </q-badge>
             </div>
           </div>
@@ -136,13 +136,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="voteData.q3slider"
+          v-model="submitData.q3slider"
           :min="6"
           :max="30"
           :step="1"
           color="grey-6"
           label
-          :label-value="voteData.q3slider + ' percent'"
+          :label-value="submitData.q3slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -152,7 +152,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ voteData.q3slider }} percent
+                {{ submitData.q3slider }} percent
               </q-badge>
             </div>
           </div>
@@ -182,7 +182,7 @@
         <div>
           <div class="example ex1">
             <p><label class="radio greyux">
-              <!-- Note: value_radio1 and value_radio2 will be translated to one voteData.q4radio
+              <!-- Note: value_radio1 and value_radio2 will be translated to one submitData.q4radio
               before submitting to the back-end. TODO -->
               <input type="radio" id="1" value="1" name="group1" v-model="value_radio1"/>
               <span>Burned</span>
@@ -213,13 +213,13 @@
       </q-card-section>
       <div class="q-pa-md">
         <q-slider
-          v-model="voteData.q5slider"
+          v-model="submitData.q5slider"
           :min="0"
           :max="50"
           :step="1"
           color="grey-6"
           label
-          :label-value="voteData.q5slider + ' percent'"
+          :label-value="submitData.q5slider + ' percent'"
           label-always
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
@@ -229,7 +229,7 @@
           <div class="col">
             <div class="text-center">
               <q-badge class="text-subtitle2" outline color="grey-8">
-                {{ voteData.q5slider }} percent
+                {{ submitData.q5slider }} percent
               </q-badge>
             </div>
           </div>
@@ -333,12 +333,12 @@ export default {
       iteration: 0,
       expiration_timer: '2 days 10 hours 30 min',
       // Data passed as a result to the back-end as a result of voting.
-      voteData: {
-        accountName: '',
+      submitData: {
+        currentAccountName: '',
         q1slider: 0,
-        q2slider: 6, // Must start from 6.
-        q3slider: 6, // Must start from 6.
-        q4radio: 1,
+        q2slider: 6, // Must start from 6. // TODO
+        q3slider: 6, // Must start from 6. // TODO
+        q4radio: '', // string
         q5slider: 0,
         q6choice1: 0, // Return number of selected option for each selector.
         q6choice2: 0,
@@ -349,8 +349,7 @@ export default {
       radio2: 1,
       group1: 2,
       group2: 2,
-      value_radio1: '', // keep it - used to create voteData.q4radio
-      value_radio2: '', // keep it - used to create voteData.q4radio
+      value_radio1: '', // keep it - used to create submitData.q4radio
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -361,20 +360,20 @@ export default {
   methods: {
     ...mapActions('svr', ['voteAdd']),
     submit () { // VOTE
-      // Export Q1 vote results to back-end.
-      // Mapping of form data into format required by the backend:
-      if (this.value_radio1 === 1) {
-        this.voteData.q1radio1 = 'BURN'
-      } else if (this.value_radio1 === 2) {
-        this.voteData.q1radio2 = 'POOL'
+      // Export Q1 vote results to back-end as a string.
+      console.log('value_radio1', this.value_radio1)
+      if (this.value_radio1 === '1') {
+        this.submitData.q4radio1 = 'BURN'
+      } else if (this.value_radio1 === '2') {
+        this.submitData.q4radio1 = 'POOL'
       }
-      this.voteData.q6choice1 = this.selection1.value
-      this.voteData.q6choice2 = this.selection2.value
-      this.voteData.q6choice3 = this.selection3.value
+      this.submitData.q6choice1 = this.selection1.value
+      this.submitData.q6choice2 = this.selection2.value
+      this.submitData.q6choice3 = this.selection3.value
       // const self = this
-      this.voteData.currentAccountName = this.accountName
-      console.log('Vote Data = ', this.voteData)
-      this.voteAdd(this.voteData) // Submit to back-end to sum with global results
+      this.submitData.currentAccountName = this.accountName
+      console.log('@#$ Vote submitData = ', this.submitData)
+      this.voteAdd(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
       notifyAlert('success', 'Vote Submitted Successfully.')
@@ -382,7 +381,7 @@ export default {
       this.$router.push('/congs') // Congratulation page
     },
     resetForm () {
-      this.voteData = {
+      this.submitData = {
         // TODO function to consider?
       }
     }
