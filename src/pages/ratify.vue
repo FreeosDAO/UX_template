@@ -162,7 +162,7 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
-import { addRatifyResult } from 'src/store/svr/actions'
+// import { addRatifyResult } from 'src/store/svr/actions'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -186,7 +186,7 @@ export default {
       iteration: 0,
       submitData: {
         currentAccountName: '',
-        answer: null
+        answer: false
       },
       expiration_timer: '2 days 10 hours 30 min', // TODO !!!
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
@@ -214,9 +214,9 @@ export default {
       // I assume only one ratify attempt allowed.
       console.log('### Ratify results:', self.accountName, answer)
       this.submitData.answer = answer
-      this.submitData.currentAccountName = this.accountName
-      console.log('@Ratify submitData=', this.currentAccountName, this.submitData)
-      addRatifyResult(this.submitData)
+      this.submitData.currentAccountName = self.accountName
+      console.log('@Ratify submitData=', self.currentAccountName, ' submitData=', this.submitData)
+      this.addRatifyResult(this.submitData)
       this.$router.push('/congs')
     },
     ver () {

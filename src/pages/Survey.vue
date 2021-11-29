@@ -316,7 +316,7 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
-    ...mapActions('svr', ['surveyAdd']),
+    ...mapActions('svr', ['addSurveyResult']),
     submit () { // Export survey results to back-end.
       this.submitData.q5priority1 = this.selector1.value
       this.submitData.q5priority2 = this.selector2.value
@@ -325,7 +325,7 @@ export default {
       // const self = this TODO uncomment for resetForm()
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
-      this.surveyAdd(this.submitData) // Submit to back-end to sum with global results
+      this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
       notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.

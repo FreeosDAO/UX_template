@@ -5,9 +5,12 @@ import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
 // import { RpcError } from 'eosjs'
 // ---
-// surveyAdd
+// addSurveyResult
+// called: void freeosgov::survey(name user, uint8_t q1response,
+// uint8_t q2response, uint8_t q3response, uint8_t q4response, uint8_t q5choice1, uint8_t q5choice2, uint8_t q5choice3) {
+//
 // Where called: survey.vue
-export async function surveyAdd ({ state }, data) {
+export async function addSurveyResult ({ state }, data) {
   const
     {
       currentAccountName, q1radio1, q2slider1, q3radio2, q4slider2,
@@ -20,7 +23,7 @@ export async function surveyAdd ({ state }, data) {
       actor: currentAccountName,
       permission: 'active'
     }],
-    data: {
+    data: { // TODO sliders should be double TODO
       user: currentAccountName,
       q1response: q1radio1,
       q2response: q2slider1,
@@ -48,12 +51,12 @@ export async function surveyAdd ({ state }, data) {
   }
 }
 // VOTE
-// void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response,
-// double q3response, string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
+// calls: void freeosgov::vote(name user, uint8_t q1response, uint8_t q2response, double q3response,
+// string q4response, uint8_t q5response, uint8_t q6choice1, uint8_t q6choice2, uint8_t q6choice3)
 //
-// voteAdd
+// a d d V o t e R e s u l t s -------
 // Where called: vote.vue
-export async function voteAdd ({ state }, data) {
+export async function addVoteResult ({ state }, data) {
   const { currentAccountName, q1slider, q2slider, q3slider, q4radio, q5slider, q6choice1, q6choice2, q6choice3 } = data
   console.log('### data =', data, 'APP_NAME', process.env.APP_NAME)
   const actions = [{
@@ -63,8 +66,8 @@ export async function voteAdd ({ state }, data) {
       actor: currentAccountName,
       permission: 'active'
     }],
-    data: {
-      name: currentAccountName,
+    data: { // TODO Sliders should be double TODO
+      user: currentAccountName,
       q1response: q1slider, // uint8_t
       q2response: q2slider, // uint8_t
       q3response: q3slider, // double
@@ -96,7 +99,7 @@ export async function voteAdd ({ state }, data) {
 // ratify:
 export async function addRatifyResult ({ state }, data) {
   const { currentAccountName, answer } = data
-  console.log('ratify data', data)
+  console.log(' ----- ratify data ----- ', data)
   try {
     const actions = [{
       account: process.env.APP_NAME,
@@ -177,37 +180,37 @@ export async function getSystemTable (state) {
 }
 
 //
-export async function actionRatifyTest ({ state }, data) {
-  const { accountName, answertype } = data
-  console.log(' data: ', data, 'env: ', process.env.APP_NAME, answertype, accountName)
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'verify',
-    authorization: [{
-      actor: accountName,
-      permission: 'active'
-    }],
-    data: {
-      // name: accountName,
-      // ratifyvote: (false).toString()
-    }
-  }]
-
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Ratify Transmission successful'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
-    return result
-  } catch (e) {
-    return e
-  }
-}
+// export async function actionRatifyTest ({ state }, data) {
+// const { accountName, answertype } = data
+// console.log(' data: ', data, 'env: ', process.env.APP_NAME, answertype, accountName)
+// const actions = [{
+// account: process.env.APP_NAME,
+// name: 'verify',
+// authorization: [{
+// actor: accountName,
+// permission: 'active'
+// }],
+// data: {
+// user: accountName,
+// ratify_vote: (false).toString()
+// }
+// }]
+//
+// try {
+// const result = await ProtonSDK.sendTransaction(actions)
+// let responseMessage = result.processed.action_traces[0].console
+// if (!responseMessage) {
+// responseMessage = 'Ratify Transmission successful'
+// }
+// Notify.create({
+// message: responseMessage,
+// color: 'positive'
+// })
+// return result
+// } catch (e) {
+// return e
+// }
+// }
 
 export async function actionVote ({ state }, data) {
   const { currentAccountName, q1response, q2response, q3response } = data
@@ -220,7 +223,7 @@ export async function actionVote ({ state }, data) {
       permission: 'active'
     }],
     data: {
-      accountName: currentAccountName,
+      user: currentAccountName,
       q1response: q1response,
       q2response: q2response,
       q3response: q3response

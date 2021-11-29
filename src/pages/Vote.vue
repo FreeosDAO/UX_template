@@ -358,7 +358,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('svr', ['voteAdd']),
+    ...mapActions('svr', ['addVoteResult']),
     submit () { // VOTE
       // Export Q1 vote results to back-end as a string.
       console.log('value_radio1', this.value_radio1)
@@ -373,7 +373,7 @@ export default {
       // const self = this
       this.submitData.currentAccountName = this.accountName
       console.log('@#$ Vote submitData = ', this.submitData)
-      this.voteAdd(this.submitData) // Submit to back-end to sum with global results
+      this.addVoteResult(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
       notifyAlert('success', 'Vote Submitted Successfully.')
