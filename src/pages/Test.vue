@@ -38,6 +38,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { actionRatifyTest } from 'src/store/svr/actions'
 // import { actionOwnerChange } from 'src/store/svr/actions'
 // import { onRegisterUser } from 'src/store/svr/actions'
 // import { actionRatifyTest } from 'src/store/svr/actions'
@@ -99,6 +100,7 @@ export default {
       console.log('@@@ account =', this.submitData.currentAccountName)
       console.log('@@@ submitData =', this.submitData)
       this.actionVote(this.submitData)
+      actionRatifyTest(this.submitData)
       // .then(response => {
       // console.log('That is OK:', response.statusCode)
       // })

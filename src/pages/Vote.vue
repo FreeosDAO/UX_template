@@ -345,10 +345,7 @@ export default {
         q6choice3: 0
       },
       // radio buttons:
-      radio: 2,
-      radio2: 1,
       group1: 2,
-      group2: 2,
       value_radio1: '', // keep it - used to create submitData.q4radio
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
@@ -363,9 +360,9 @@ export default {
       // Export Q1 vote results to back-end as a string.
       console.log('value_radio1', this.value_radio1)
       if (this.value_radio1 === '1') {
-        this.submitData.q4radio1 = 'BURN'
+        this.submitData.q4radio = 'BURN'
       } else if (this.value_radio1 === '2') {
-        this.submitData.q4radio1 = 'POOL'
+        this.submitData.q4radio = 'POOL'
       }
       this.submitData.q6choice1 = this.selection1.value
       this.submitData.q6choice2 = this.selection2.value

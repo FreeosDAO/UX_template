@@ -73,15 +73,15 @@
            <!-- end of modal dialog -->
            <div class="example ex1">
               <p><label class="radio greyux">
-               <input type="radio" id="1" value="1" name="group1" v-model="submitData.q1radio1"/>
+               <input type="radio" id="1" value="1" name="group1" v-model="value_radio1"/>
                <span>Growing (bull market)</span>
              </label></p>
              <p><label class="radio greyux">
-               <input type="radio" id="2" value="2" name="group1" v-model="submitData.q1radio1"/>
+               <input type="radio" id="2" value="2" name="group1" v-model="value_radio1"/>
                <span>Shrinking (bear market)</span>
              </label></p>
              <p><label class="radio greyux">
-               <input type="radio" id="3" value="3" name="group1" v-model="submitData.q1radio1"/>
+               <input type="radio" id="3" value="3" name="group1" v-model="value_radio1"/>
                <span>Neither (going sideways)</span>
              </label></p>
            </div>
@@ -140,15 +140,15 @@
         <div>
           <div class="example ex1">
             <p><label class="radio greyux">
-              <input type="radio" value="1" v-model="submitData.q3radio2" name="group2"/>
+              <input type="radio" id="4" value=1 name="group2" v-model="value_radio2" />
               <span>Growing (bull market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="2" v-model="submitData.q3radio2" name="group2"/>
+              <input type="radio" id="5" value=2 name="group2" v-model="value_radio2"/>
               <span>Shrinking (bear market)</span>
             </label></p>
             <p><label class="radio greyux">
-              <input type="radio" value="3" v-model="submitData.q3radio2" name="group2"/>
+              <input type="radio" id="6" value=3 name="group2" v-model="value_radio2"/>
               <span>Neither (going sideways)</span>
             </label></p>
           </div>
@@ -244,7 +244,7 @@
 </template>
 
 <script>
-import notifyAlert from 'src/services/notify-alert'
+// import notifyAlert from 'src/services/notify-alert'
 import { mapGetters, mapState, mapActions } from 'vuex'
 export default {
   name: 'Survey',
@@ -252,16 +252,18 @@ export default {
     return {
       version: '',
       iteration: 0,
+      value_radio1: '',
+      value_radio2: '',
       // submitData are passed as this survey-result to the back-end.
       submitData: {
         currentAccountName: '',
         q1radio1: 0,
         q2slider1: 0,
         q3radio2: 0,
-        q4slider2: 0,
-        q5priority1: 0,
-        q5priority2: 0,
-        q5priority3: 0
+        q4slider2: 0 // ,
+        // q5priority1: 0,
+        // q5priority2: 0,
+        // q5priority3: 0
       },
       selector1: 0,
       selector2: 0,
@@ -296,11 +298,9 @@ export default {
       // The below are working variables required by UX items.
       bar2: false,
       // radio buttons: // TODO Verify initial setup for radio buttons:
-      radio: 2,
-      radio2: 1,
       group1: 2,
       group2: 2,
-      mintest: 30,
+      mintest: 30, // testing operations on slider TODO remove
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -321,13 +321,36 @@ export default {
       this.submitData.q5priority1 = this.selector1.value
       this.submitData.q5priority2 = this.selector2.value
       this.submitData.q5priority3 = this.selector3.value
+      // this.submitData.q1radio1 = parseInt(this.radio1)
+      // this.submitData.q3radio2 = parseInt(this.radio2)
+      console.log('value_radio1', this.value_radio1)
+      if (this.value_radio1 === '1') {
+        this.submitData.q1radio1 = 1
+      }
+      if (this.value_radio1 === '2') {
+        this.submitData.q1radio1 = 2
+      }
+      if (this.value_radio1 === '3') {
+        this.submitData.q1radio1 = 3
+      }
+      console.log('RADIO 1: value_radio1', this.value_radio1, this.submitData.q1radio1)
+      if (this.value_radio2 === '1') {
+        this.submitData.q3radio2 = 1
+      }
+      if (this.value_radio2 === '2') {
+        this.submitData.q3radio2 = 2
+      }
+      if (this.value_radio2 === '3') {
+        this.submitData.q3radio2 = 3
+      }
+      console.log('RADIO 2: value_radio2', this.value_radio2)
       console.log(' #@$ submitData Survey = ', this.submitData)
       // const self = this TODO uncomment for resetForm()
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
-      this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
+      this.addSurveyResult(this.AccountName /* this.submitData */) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
-      notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
+      // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs') // congratulations page
     },
