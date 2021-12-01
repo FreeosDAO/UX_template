@@ -1,5 +1,5 @@
 // S-V-R Sending results of single user interactions to back-end to summarize
-// import notifyAlert from 'src/services/notify-alert'
+import notifyAlert from 'src/services/notify-alert'
 import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
@@ -10,7 +10,9 @@ import { Notify } from 'quasar'
 // uint8_t q2response, uint8_t q3response, uint8_t q4response, uint8_t q5choice1, uint8_t q5choice2, uint8_t q5choice3) {
 //
 // Where called: survey.vue
+//
 export async function addSurveyResult ({ state }, currentAccountName) {
+  console.log('&&& acc name=', currentAccountName)
   // const
   // {
   // currentAccountName, q1radio1, q2slider1, q3radio2, q4slider2 // ,
@@ -37,6 +39,7 @@ export async function addSurveyResult ({ state }, currentAccountName) {
   }]
   try {
     const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
     let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Survey Data submission successful'
@@ -82,6 +85,7 @@ export async function addVoteResult ({ state }, data) {
   //
   try {
     const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
     // let responseMessage = result.processed.action_traces[0].console
     // if (!responseMessage) {
     // responseMessage = 'Vote Successful'
@@ -244,5 +248,31 @@ export async function actionVote ({ state }, data) {
   } catch (e) {
     console.log(e)
     // return e
+  }
+}
+
+export async function onSurveyTest ({ state }, accountName) { // TODO remove
+  // console.log('accountName:', accountName)
+  try {
+    const actions = [{
+      account: process.env.APP_NAME,
+      name: 'survey',
+      authorization: [{
+        actor: accountName,
+        permission: 'active'
+      }],
+      data: {
+        user: accountName
+      }
+    }]
+    const result = await ProtonSDK.sendTransaction(actions)
+    if (result.processed.receipt.status === 'executed') {
+      notifyAlert('success', result.processed.action_traces[0].console + 'success')
+    } else {
+      notifyAlert('err', 'The action could not be completed. Please try later')
+    }
+    return result
+  } catch (e) {
+    console.log(e)
   }
 }

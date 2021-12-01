@@ -38,7 +38,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { actionRatifyTest } from 'src/store/svr/actions'
+// import { actionRatifyTest } from 'src/store/svr/actions'
 // import { actionOwnerChange } from 'src/store/svr/actions'
 // import { onRegisterUser } from 'src/store/svr/actions'
 // import { actionRatifyTest } from 'src/store/svr/actions'
@@ -84,26 +84,22 @@ export default {
     })
   },
   methods: {
-    ...mapActions('svr', ['actionVote']), // 'actionOwnerChange']),
+    ...mapActions('svr', ['onSurveyTest']),
     submit () {
       // fill up data for simulation, normally this should happen in template section input form
-      this.submitData.q1response = 1 // uint8
-      this.submitData.q2response = 0 // uint8
-      this.submitData.q3response = 10.0 // double
-      this.submitData.q4response = 'BURN' // string
-      this.submitData.q5response = 1 // uint8
-      this.submitData.q6choice1 = 1 // uint8
-      this.submitData.q6choice2 = 2 // uint 8
-      this.submitData.q6choice3 = 6 // uint8
+      // this.submitData.q1response = 1 // uint8
+      // this.submitData.q2response = 0 // uint8
+      // this.submitData.q3response = 10.0 // double
+      // this.submitData.q4response = 'BURN' // string
+      // this.submitData.q5response = 1 // uint8
+      // this.submitData.q6choice1 = 1 // uint8
+      // this.submitData.q6choice2 = 2 // uint 8
+      // this.submitData.q6choice3 = 6 // uint8
       // const self = this
       this.submitData.currentAccountName = this.currentAccountName
-      console.log('@@@ account =', this.submitData.currentAccountName)
-      console.log('@@@ submitData =', this.submitData)
-      this.actionVote(this.submitData)
-      actionRatifyTest(this.submitData)
-      // .then(response => {
-      // console.log('That is OK:', response.statusCode)
-      // })
+      console.log('@@@ currentAccountName =', this.currentAccountName)
+      // console.log('@@@ submitData =', this.submitData)
+      this.onSurveyTest(this.currentAccountName) // TODO
     },
     todo () { // helper for converting time
       // const now = new Date()
@@ -118,15 +114,6 @@ export default {
       console.log('epoch', myEpoch) // TODO ... and this
       const diff = Math.floor(((currentT - myEpoch) / 604800) + 1)
       console.log('Iteration = ', diff)
-    },
-    fuk () { // backend connection TEST
-      // const self = this
-      // this.data_load.accountName = this.currentAccountName
-      // this.data_load.answer_type = true
-      // console.log('@ data_load', this.data_load)
-      // this.onRegisterUser(this.data_load)
-      // self.actionOwnerChange()
-      // console.log('@ data_load', this.data_load.accountName, '@ answertype', this.data_load.answer_type)
     }
   }
 }

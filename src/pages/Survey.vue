@@ -348,7 +348,8 @@ export default {
       // const self = this TODO uncomment for resetForm()
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
-      this.addSurveyResult(this.AccountName /* this.submitData */) // Submit to back-end to sum with global results
+      console.log('Account Name = ', this.accountName)
+      this.addSurveyResult(this.accountName /* this.submitData */) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
       // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.
