@@ -43,8 +43,12 @@
                       flat round bordered
                       class="mycard1 bg-grey-4"
                >
-                 <br>
-                 <div class="row">
+                 <div class="text-black q-pa-md text-center">
+                   <img width="35" src="~assets/tfreeos.png">
+                   <div>Freeos</div>
+                 </div>
+                 <div class="row justify-center">
+                   <div><i>Put some freedom in your pocket</i></div>
                  </div>
                </q-card>
              </div>
@@ -130,32 +134,5 @@ export default {
   padding: 3px;
   width: 380px;
   max-width: 400px;
-}
-.mycard2 {
-  background-color: #F4F5F4;
-  padding: 3px;
-  width: 380px;
-  max-width: 400px;
-  border-width: 3px;
-  border-color: #7a747a;
-}
-.mini {
-  size: 12px;
-}
-.mini1 {
-  size: 10px;
-}
-.mini8 {
-  size: 8px;
-}
-.input_box {
-  width: 75px;
-  height: 7vh;
-  border: 2px solid grey;
-}
-.box1 {
-  width: 5px;
-  height: 16vh;
-  border-right: 2px solid grey;
 }
 </style>

@@ -276,3 +276,69 @@ export async function onSurveyTest ({ state }, accountName) { // TODO remove
     console.log(e)
   }
 }
+/* Headers from Backend
+  [[eosio::action]] void reguser(name user);
+  [[eosio::action]] void reregister(name user);
+  bool is_user_verified(name user);
+ */
+// Registration:
+export async function addRegUser ({ state }, currentAccountName) {
+  console.log('&&& acc name=', currentAccountName)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'reguser',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: { // TODO sliders should be double TODO
+      user: currentAccountName
+    }
+  }]
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Registration successful'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
+export async function addReRegUser ({ state }, currentAccountName) {
+  console.log('&&& acc name=', currentAccountName)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'reregister',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: { // TODO sliders should be double TODO
+      user: currentAccountName
+    }
+  }]
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Re-registering successful'
+    }
+    Notify.create({
+      message: responseMessage,
+      color: 'positive'
+    })
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}

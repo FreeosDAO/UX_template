@@ -85,5 +85,12 @@ You agree that the original English text shall prevail in the case of a dispute.
 <ul>
 <li>By email: a@a.a</li>
 </ul>
+    <q-btn
+    >
+      Back to Page
+    </q-btn>
     </div>
 </template>
+<script>
+
+</script>
