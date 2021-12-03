@@ -82,7 +82,6 @@ export async function addVoteResult ({ state }, data) {
       q6choice3: q6choice3 // -"-
     }
   }]
-  //
   try {
     const result = await ProtonSDK.sendTransaction(actions)
     console.log('@@@ result=', result)
@@ -124,7 +123,6 @@ export async function addRatifyResult ({ state }, data) {
     console.log(e)
   }
 }
-
 // ---
 // svrs table
 // Where called: landing.vue
@@ -144,9 +142,29 @@ export async function getSvrsTable (state, name) {
   }
   state.commit('setSVRSTableAttrVal', val)
 }
-
 //
-// ---
+//
+// ----- g e t U s e r T a b l e -----
+//
+// called from MainLayout.vue
+export async function getUserTable (state, name) {
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: name,
+    table: 'user',
+    limit: 1000 // TODO
+  })
+  const val = {
+    key: 'UserData',
+    value: result.rows
+  }
+  state.commit('setUserTableAttrVal', val) // TODO not defined
+}
+//
+//
+// ----- g e t P a r a m e t e r s T a b l e -----
+//
 // parameters table (retrieve)
 // Where called: MainLayout.vue
 //

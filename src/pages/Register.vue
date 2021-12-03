@@ -7,30 +7,37 @@
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
           {{accountName}} &nbsp; &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
+          <q-btn dense flat round icon="menu" @click="drawerRight = !drawerRight" />
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
                   :style="{ backgroundColor: '#eee', color: 'blue'}">
             <q-list style="min-width: 100px">
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-circle"></q-icon></q-item-section>
                 <q-item-section>Home</q-item-section>
               </q-item>
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-circle"></q-icon></q-item-section>
                 <q-item-section>MyFreeos</q-item-section>
               </q-item>
               <q-separator></q-separator>
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-arrow-alt-circle-right"></q-icon></q-item-section>
                 <q-item-section>Mint</q-item-section>
               </q-item>
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-chevron-circle-down"></q-icon></q-item-section>
                 <q-item-section>Re-Register</q-item-section>
               </q-item>
               <q-separator></q-separator>
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-sign-out-alt"></q-icon></q-item-section>
                 <q-item-section>Sign-out</q-item-section>
               </q-item>
               <q-separator></q-separator>
               <q-item clickable>
+                <q-item-section><q-icon size='md' name="las la-info-circle"></q-icon></q-item-section>
                 <q-item-section>Help &amp; Feedback</q-item-section>
               </q-item>
             </q-list>
@@ -97,10 +104,13 @@
 
 <script>
 // import notifyAlert from 'src/services/notify-alert'
+// import {"las la-circle"} from '@quasar/extras/line-awesome'
+
 export default {
   name: 'Vote',
   data () {
     return {
+      drawerRight: false,
       points: '12,235',
       freetok: '38,000',
       price: '0.02145',
