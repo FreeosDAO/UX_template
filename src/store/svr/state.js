@@ -39,5 +39,5 @@ export default () => ({
   //
   iteration: 0, // current iteration counted 'by myself'
   // constants (eventually move to .env)
-  iterationSize: 3600 // TODO after testing switch back to normal size of iteration: 604800
+  iterationSize: 3600 // TODO after testing switch back to normal size of iteration: 604800 (read from env)
 })

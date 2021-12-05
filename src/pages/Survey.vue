@@ -92,13 +92,13 @@
            <div>
             <div class="q-pa-md">
               <q-slider
-                v-model="submitData.q2slider1"
+                v-model="submitData.q2slider"
                 :min="1"
                 :max="48"
                 :step="1"
                 color="grey-6"
                 label
-                :label-value="'Months:' + submitData.q2slider1"
+                :label-value="'Months:' + submitData.q2slider"
                 label-always
               ></q-slider>
               <div class="row">
@@ -161,13 +161,13 @@
         <div> <!-- :max="mintest" -->
           <div class="q-pa-md">
             <q-slider
-              v-model="submitData.q4slider2"
+              v-model="submitData.q4slider"
               :min="1"
               :max="48"
               :step="1"
               color="grey-6"
               label
-              :label-value="'Months:' + submitData.q4slider2"
+              :label-value="'Months:' + submitData.q4slider"
               label-always
             ></q-slider>
             <div class="row">
@@ -177,7 +177,7 @@
               <div class="col">
                 <div class="text-center">
                   <q-badge class="text-subtitle2" outline color="grey-8">
-                    Months: {{ submitData.q4slider2 }}
+                    Months: {{ submitData.q4slider }}
                   </q-badge>
                 </div>
               </div>
@@ -252,20 +252,20 @@ export default {
     return {
       version: '',
       iteration: 0,
-      value_radio1: '',
-      value_radio2: '',
+      value_radio1: 0, // control for 1st radio button
+      value_radio2: 0, // control for 2nd radio button
       // submitData are passed as this survey-result to the back-end.
       submitData: {
         currentAccountName: '',
-        q1radio1: 0,
-        q2slider1: 0,
-        q3radio2: 0,
-        q4slider2: 0 // ,
-        // q5priority1: 0,
-        // q5priority2: 0,
-        // q5priority3: 0
+        q1radio: 0,
+        q2slider: 0,
+        q3radio: 0,
+        q4slider: 0,
+        q5priority1: 0,
+        q5priority2: 0,
+        q5priority3: 0
       },
-      selector1: 0,
+      selector1: 0, // v-models for three selectors
       selector2: 0,
       selector3: 0,
       // selectors:
@@ -321,35 +321,18 @@ export default {
       this.submitData.q5priority1 = this.selector1.value
       this.submitData.q5priority2 = this.selector2.value
       this.submitData.q5priority3 = this.selector3.value
-      // this.submitData.q1radio1 = parseInt(this.radio1)
-      // this.submitData.q3radio2 = parseInt(this.radio2)
-      console.log('value_radio1', this.value_radio1)
-      if (this.value_radio1 === '1') {
-        this.submitData.q1radio1 = 1
-      }
-      if (this.value_radio1 === '2') {
-        this.submitData.q1radio1 = 2
-      }
-      if (this.value_radio1 === '3') {
-        this.submitData.q1radio1 = 3
-      }
-      console.log('RADIO 1: value_radio1', this.value_radio1, this.submitData.q1radio1)
-      if (this.value_radio2 === '1') {
-        this.submitData.q3radio2 = 1
-      }
-      if (this.value_radio2 === '2') {
-        this.submitData.q3radio2 = 2
-      }
-      if (this.value_radio2 === '3') {
-        this.submitData.q3radio2 = 3
-      }
-      console.log('RADIO 2: value_radio2', this.value_radio2)
+      console.log('(o)value_radio1', this.value_radio1)
+      console.log('(o)value_radio2', this.value_radio2)
+      this.submitData.q1radio = this.value_radio1
+      this.submitData.q3radio = this.value_radio2
+      console.log('RADIO 1: value_radio1', this.value_radio1, this.submitData.q1radio)
+      console.log('RADIO 2: value_radio2', this.value_radio2, this.submitData.q3radio)
       console.log(' #@$ submitData Survey = ', this.submitData)
       // const self = this TODO uncomment for resetForm()
+      console.log('Account Name = ', this.accountName)
       this.submitData.currentAccountName = this.accountName
       console.log('Survey Data = ', this.submitData)
-      console.log('Account Name = ', this.accountName)
-      this.addSurveyResult(this.accountName /* this.submitData */) // Submit to back-end to sum with global results
+      this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
       // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.

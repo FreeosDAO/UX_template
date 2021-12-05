@@ -174,8 +174,9 @@ export const setSystemTableAttrVal = function (state, payload) {
   const initUTC = myDate.getTime() / 1000.0
   state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)
-  // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // read directly from system
+  // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // NOT read directly from system
   // state.currentiteration = val[0].iteration // not correct now as iterations are shorter
-  // I count now iteration number by myself in system data processing section of
+  // NOTE I count now iteration number by myself in system data processing section of
   // the setSVRSTableAttrVal.
 }
+// TODO parameters table can be in any order

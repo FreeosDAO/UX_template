@@ -11,14 +11,18 @@ import { Notify } from 'quasar'
 //
 // Where called: survey.vue
 //
-export async function addSurveyResult ({ state }, currentAccountName) {
-  console.log('&&& acc name=', currentAccountName)
-  // const
-  // {
-  // currentAccountName, q1radio1, q2slider1, q3radio2, q4slider2 // ,
-  // q5priority1, q5priority2, q5priority3
-  // } = data
-  // console.log('### data =', data, 'APP_NAME', process.env.APP_NAME)
+export async function addSurveyResult ({ state }, data) {
+  const {
+    currentAccountName,
+    q1radio,
+    q2slider,
+    q3radio,
+    q4slider,
+    q5priority1,
+    q5priority2,
+    q5priority3
+  } = data
+  console.log('### data =', data, 'APP_NAME', process.env.APP_NAME)
   const actions = [{
     account: process.env.APP_NAME,
     name: 'survey',
@@ -27,14 +31,14 @@ export async function addSurveyResult ({ state }, currentAccountName) {
       permission: 'active'
     }],
     data: { // TODO sliders should be double TODO
-      user: currentAccountName
-      // q1response: q1radio1,
-      // q2response: q2slider1,
-      // q3response: q3radio2,
-      // q4response: q4slider2 // ,
-      // q5choice1: q5priority1,
-      // q5choice2: q5priority2,
-      // q5choice3: q5priority3
+      user: currentAccountName,
+      q1response: q1radio,
+      q2response: q2slider,
+      q3response: q3radio,
+      q4response: q4slider,
+      q5choice1: q5priority1,
+      q5choice2: q5priority2,
+      q5choice3: q5priority3
     }
   }]
   try {
