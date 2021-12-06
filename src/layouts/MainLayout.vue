@@ -224,8 +224,9 @@ export default {
     this.checkIfLoggedIn()
     this.version = process.env.V_STRING
     this.getSystemTable()
-    this.getParametersTable()
-    this.getUserTable(this.accountName)
+    this.getParametersTable() // TODO
+    console.log('NAME=', this.accountName)
+    this.getUserTable(this.accountName) // TODO
   }
   // mounted () {
   // this.getTable(this.accountName)

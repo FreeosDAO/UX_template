@@ -1,6 +1,6 @@
 // import notifyAlert from 'src/services/notify-alert'
 
-// S V R S ---
+// ===    s e t S V R S T a b l e A t t r V a l    ===
 export const setSVRSTableAttrVal = function (state, payload) {
   // - No need to store any parameters of svrs into Vuex.
   // - The parameters of svrs are used only to compute userStatus variables like:
@@ -153,7 +153,7 @@ export const setParamTableAttrVal = function (state, payload) {
   state.votestart = val[9].value
   console.log('*** PARAMETERS payload:', JSON.stringify(val)) // test
   // TODO Unpack slider ranges for SVR displays here
-  // console.log(' ratifyend = ', val[1].value) // test
+  console.log(' ratifyend = ', val[1].value) // test
 }
 
 // S Y S T E M // TODO NOT TOUCH
@@ -161,8 +161,8 @@ export const setParamTableAttrVal = function (state, payload) {
 // // in computed()
 // Input Backend (freeosgov): system table
 // Output (to Vuex):
-// - initUTC - init time in seconds (converted from 'init' of system table).
-// - iteration (current iteration build up from already existing data) // Not used now
+// - initUTC - init time in seconds (achieved from 'init' of system table).
+// - iteration (current iteration build up from already existing data) // TODO Not use system now!
 //
 export const setSystemTableAttrVal = function (state, payload) {
   // const attr = payload.key
@@ -179,4 +179,20 @@ export const setSystemTableAttrVal = function (state, payload) {
   // NOTE I count now iteration number by myself in system data processing section of
   // the setSVRSTableAttrVal.
 }
+
 // TODO parameters table can be in any order
+// U S E R --- TODO NOT TOUCH ------
+export const setUserTableAttrVal = function (state, payload) {
+  // Called from LayoutMain.vue
+  const val = payload.value
+  console.log('*** USER payload:', JSON.stringify(val)) // test
+  // state.stake = val[0].value
+  // state.account_type = val[1].value
+  // state.registered_iteration = val[2].value
+  // state.staked_iteration = val[3].value
+  // state.votes = val[4].value
+  // state.issuances = val[5].value
+  // state.last_issuances = val[6].value
+  // state.total_issuance_amount = val[7].value
+  // console.log('*** USER payload:', JSON.stringify(val)) // test
+}

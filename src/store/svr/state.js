@@ -37,7 +37,16 @@ export default () => ({
   voterange5s: 0,
   voterange5e: 0,
   //
-  iteration: 0, // current iteration counted 'by myself'
+  // user table (registration)
+  stake: 0,
+  account_type: null,
+  registered_iteration: null,
+  staked_iteration: null,
+  votes: 0,
+  issuances: 0,
+  last_issuance: 0,
+  total_issuance_ammount: 0,
+  iteration: 0, // current iteration counted 'by myself' // TODO change later to MyIteration
   // constants (eventually move to .env)
-  iterationSize: 3600 // TODO after testing switch back to normal size of iteration: 604800 (read from env)
+  iterationSize: 3600 // TODO after testing switch back to normal size of iteration: 604800 (read from env) - not yet ready
 })

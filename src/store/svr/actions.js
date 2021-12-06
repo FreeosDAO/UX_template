@@ -1,5 +1,5 @@
 // S-V-R Sending results of single user interactions to back-end to summarize
-import notifyAlert from 'src/services/notify-alert'
+// import notifyAlert from 'src/services/notify-alert'
 import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
@@ -147,32 +147,13 @@ export async function getSvrsTable (state, name) {
   state.commit('setSVRSTableAttrVal', val)
 }
 //
-//
-// ----- g e t U s e r T a b l e -----
-//
-// called from MainLayout.vue
-export async function getUserTable (state, name) {
-  const result = await connect({
-    json: true,
-    code: process.env.APP_NAME,
-    scope: name,
-    table: 'user',
-    limit: 1000 // TODO
-  })
-  const val = {
-    key: 'UserData',
-    value: result.rows
-  }
-  state.commit('setUserTableAttrVal', val) // TODO not defined
-}
-//
-//
 // ----- g e t P a r a m e t e r s T a b l e -----
 //
 // parameters table (retrieve)
 // Where called: MainLayout.vue
 //
 export async function getParametersTable (state) {
+  console.log('getParameters', process.env.APP_NAME)
   const result = await connect({
     json: true,
     code: process.env.APP_NAME,
@@ -189,15 +170,15 @@ export async function getParametersTable (state) {
 
 //
 // ---
-// system table (retrieve)
+// === g e t S y s t e m T a b l e ===
 // Where called: MainLayout.vue
 export async function getSystemTable (state) {
   const result = await connect({
     json: true,
     code: process.env.APP_NAME,
     scope: process.env.APP_NAME,
-    table: 'system'
-    // limit: 1
+    table: 'system',
+    limit: 1
   })
   const val = {
     key: 'SystemData',
@@ -207,6 +188,7 @@ export async function getSystemTable (state) {
 }
 
 //
+/*
 export async function actionRatifyTest ({ state }, data) {
   const { accountName, answertype } = data
   console.log(' data: ', data, 'env: ', process.env.APP_NAME, answertype, accountName)
@@ -237,7 +219,9 @@ export async function actionRatifyTest ({ state }, data) {
     return e
   }
 }
-
+*/
+//
+/*
 export async function actionVote ({ state }, data) {
   const { currentAccountName, q1response, q2response, q3response } = data
   console.log('@@@ data =', data)
@@ -272,7 +256,8 @@ export async function actionVote ({ state }, data) {
     // return e
   }
 }
-
+*/
+/*
 export async function onSurveyTest ({ state }, accountName) { // TODO remove
   // console.log('accountName:', accountName)
   try {
@@ -298,12 +283,19 @@ export async function onSurveyTest ({ state }, accountName) { // TODO remove
     console.log(e)
   }
 }
+*/
+
+// R E G I S T R A T I O N
+//
+
+//
 /* Headers from Backend
   [[eosio::action]] void reguser(name user);
   [[eosio::action]] void reregister(name user);
   bool is_user_verified(name user);
  */
-// Registration:
+
+// === a d d R e g U s e r ===
 export async function addRegUser ({ state }, currentAccountName) {
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
@@ -334,6 +326,8 @@ export async function addRegUser ({ state }, currentAccountName) {
     return e
   }
 }
+
+// === a d d R e R e g U s e r ===
 export async function addReRegUser ({ state }, currentAccountName) {
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
@@ -363,4 +357,22 @@ export async function addReRegUser ({ state }, currentAccountName) {
     console.log(e)
     return e
   }
+}
+
+// === g e t U s e r T a b l e ===
+// called from MainLayout.vue
+export async function getUserTable (state, name) {
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: 'alanappleton',
+    table: 'users',
+    limit: 1
+  })
+  const val = {
+    key: 'UserData',
+    value: result.rows
+  }
+  console.log(' ## getUserTable', result)
+  state.commit('setUserTableAttrVal', val)
 }
