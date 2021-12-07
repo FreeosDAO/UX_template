@@ -71,32 +71,6 @@
                </div>
                </div>
                 <!-- go home -->
-                 <q-card-section class="text-h6">
-                   <div class="q-gutter-sm row justify-center">
-                     <q-btn
-                      dense
-                      no-caps
-                      size="25px"
-                      align="center"
-                      @click="gohome()"
-                      class="full-width q-px-xl q-py-xs center"
-                      color="grey-6"
-                      label="Register with Freeos"
-                     >
-                     </q-btn><br>
-                     <q-btn
-                       flat
-                       no-caps
-                       size="25px"
-                       align="center"
-                       @click="gohome()"
-                       class="full-width q-px-xl q-py-xs center"
-                       color="grey-6"
-                       label="Sign In"
-                     >
-                     </q-btn>
-                   </div>
-                 </q-card-section>
              </q-card-section>
     </q-card>
   </div>
@@ -111,7 +85,7 @@ export default {
   data () {
     return {
       drawerRight: false,
-      points: '12,235',
+      points: '12,235', // TODO read that data from centralized place in Vuex
       freetok: '38,000',
       price: '0.02145',
       price_trend: '0.0025',
@@ -123,9 +97,6 @@ export default {
     }
   },
   methods: {
-    gohome () {
-      // tt
-    }
   }
 }
 </script>

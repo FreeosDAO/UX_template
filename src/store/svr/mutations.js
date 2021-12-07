@@ -176,23 +176,38 @@ export const setSystemTableAttrVal = function (state, payload) {
   console.log('init in UTC sec.', initUTC)
   // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // NOT read directly from system
   // state.currentiteration = val[0].iteration // not correct now as iterations are shorter
-  // NOTE I count now iteration number by myself in system data processing section of
-  // the setSVRSTableAttrVal.
+  // NOTE I count now iteration number by myself in system data processing section of the setSVRSTableAttrVal.
 }
 
-// TODO parameters table can be in any order
+// TODO 'parameters' table rows can be in any order
 // U S E R --- TODO NOT TOUCH ------
 export const setUserTableAttrVal = function (state, payload) {
   // Called from LayoutMain.vue
+  // if (payload != null) {
   const val = payload.value
-  console.log('*** USER payload:', JSON.stringify(val)) // test
+  console.log('*** USERS payload:', JSON.stringify(val)) // test
   // state.stake = val[0].value
-  // state.account_type = val[1].value
-  // state.registered_iteration = val[2].value
-  // state.staked_iteration = val[3].value
-  // state.votes = val[4].value
-  // state.issuances = val[5].value
-  // state.last_issuances = val[6].value
-  // state.total_issuance_amount = val[7].value
-  // console.log('*** USER payload:', JSON.stringify(val)) // test
+  console.log('*** USERS stake:', val[0].stake) // test
+  console.log('*** USERS account_type:', val[0].account_type) // test
+  console.log('*** USERS registered_iteration:', val[0].registered_iteration) // test
+  console.log('*** USERS staked_iteration:', val[0].staked_iteration) // test
+  console.log('*** USERS votes:', val[0].votes) // test
+  console.log('*** USERS issuances:', val[0].issuances) // test
+  console.log('*** USERS last_issuance:', val[0].last_issuance) // test
+  console.log('*** USERS total_issuance_amount:', val[0].total_issuance_amount) // test
+  state.stake = val[0].stake
+  state.account_type = val[0].account_type
+  state.registered_iteration = val[0].registered_iteration
+  state.staked_iteration = val[0].staked_iteration
+  state.votes = val[0].votes
+  state.issuances = val[0].issuances
+  state.last_issuances = val[0].last_issuances
+  state.total_issuance_amount = val[0].total_issuance_ammount
+  // } else {
+  //
+  // }
+}
+
+export const setIsRegOpen = (state, isRegOpen) => {
+  state.isRegOpen = isRegOpen
 }

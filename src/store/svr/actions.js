@@ -1,8 +1,8 @@
 // S-V-R Sending results of single user interactions to back-end to summarize
-// import notifyAlert from 'src/services/notify-alert'
 import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
+import notifyAlert from 'src/services/notify-alert'
 // import { RpcError } from 'eosjs'
 // ---
 // addSurveyResult
@@ -362,17 +362,32 @@ export async function addReRegUser ({ state }, currentAccountName) {
 // === g e t U s e r T a b l e ===
 // called from MainLayout.vue
 export async function getUserTable (state, name) {
-  const result = await connect({
-    json: true,
-    code: process.env.APP_NAME,
-    scope: 'alanappleton',
-    table: 'users',
-    limit: 1
-  })
-  const val = {
-    key: 'UserData',
-    value: result.rows
+  try {
+    const result = await connect({
+      json: true,
+      code: process.env.APP_NAME,
+      scope: name,
+      table: 'users',
+      limit: 1
+    })
+    const val = {
+      key: 'UserData',
+      value: result.rows
+    }
+    console.log(' ## getUserTable', result)
+    state.commit('setUserTableAttrVal', val)
+  } catch (e) {
+    console.log('E=', e)
+    if (e.message.startsWith('Cannot read properties')) {
+      notifyAlert('err', 'User not Registered.')
+      // Set 'on' the (pop-up) 'Registration's window trigger on Vuex:
+      this.commit('setIsRegOpen', true)
+    }
   }
-  console.log(' ## getUserTable', result)
-  state.commit('setUserTableAttrVal', val)
+}
+
+export async function setUserData (state, name) {
+// TODO write user data to users table on backend
+
+  this.commit('setIsRegOpen', false)
 }

@@ -189,7 +189,7 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
-    ...mapActions('svr', ['getParametersTable', 'getSystemTable', 'getUserTable']),
+    ...mapActions('svr', ['getParametersTable', 'getSystemTable']),
     onSigninFinish (event) {
       if (event.isFinished) {
         this.isShowDrawerButton = true
@@ -225,8 +225,6 @@ export default {
     this.version = process.env.V_STRING
     this.getSystemTable()
     this.getParametersTable() // TODO
-    console.log('NAME=', this.accountName)
-    this.getUserTable(this.accountName) // TODO
   }
   // mounted () {
   // this.getTable(this.accountName)

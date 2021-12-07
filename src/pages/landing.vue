@@ -117,16 +117,59 @@
       </q-card>
       </div>
     <!-- </q-card> -->
+    <q-dialog v-model="regpopup">  <!-- Note: v-model operate on copy of isRegOpen -->
+      <q-card>
+        <q-separator></q-separator>
+        <section>
+        <regtag></regtag>
+        </section>
+        <q-separator></q-separator>
+        <q-card-section class="text-h6">
+          <div class="q-gutter-sm row justify-center">
+            <q-btn
+              dense
+              no-caps
+              size="25px"
+              align="center"
+              @click="gohome()"
+              class="full-width q-px-xl q-py-xs center"
+              color="grey-6"
+              label="Register with Freeos"
+            >
+            </q-btn><br>
+            <q-btn
+              flat
+              no-caps
+              size="25px"
+              align="center"
+              @click="gohome()"
+              class="full-width q-px-xl q-py-xs center"
+              color="grey-6"
+              label="Sign In"
+            >
+            </q-btn>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Decline" color="primary" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+import Register from 'pages/Register'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
+  components: {
+    regtag: Register
+  },
   data () {
     return {
+      regpopup: false, // Variable is copy of isRegOpen from store.
       interval: null,
       isWaiting: false,
       points: '82345.65',
@@ -171,6 +214,7 @@ export default {
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
+      isRegOpen: state => state.svr.isRegOpen,
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration,
@@ -193,7 +237,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('svr', ['getSvrsTable', 'getParametersTable']),
+    ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
+    ...mapActions('svr', ['setUserData']),
+    gohome () {
+      // set trigger in Vuex
+      this.setUserData(this.accountName)
+      this.regpopup = false // Forcely remove registration pop-up
+      // TODO write registration data to backend 'users' table.
+    },
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
     },
@@ -249,7 +300,11 @@ export default {
     }
   },
   created () { // TODO add auto refresh
+    this.regpopup = this.isRegOpen
+    console.log('isRegOpen=', this.regpopup)
     this.getSvrsTable(this.accountName)
+    const run000 = this.getUserTable(this.accountName)
+    console.log('*** RETURN', run000)
   }
 }
 </script>
