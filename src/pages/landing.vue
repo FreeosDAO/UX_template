@@ -57,7 +57,7 @@
                style="position: absolute;
           top:100px; center:0px; ">
           <div > &nbsp;{{this.landing_title[mode]}}</div>
-         </q-btn>
+        </q-btn>
         <q-btn v-else size="20px" @click="submit()" no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:100px; center:0px; ">
@@ -116,7 +116,7 @@
         ><div class="mini1">Claimed</div></q-btn>
       </q-card>
       </div>
-    <!-- </q-card> -->
+    <!-- </q-card> REGISTER POP-UP -->
     <q-dialog v-model="regpopup">  <!-- Note: v-model operate on copy of isRegOpen -->
       <q-card>
         <q-separator></q-separator>
@@ -169,6 +169,7 @@ export default {
   },
   data () {
     return {
+      modeNow: false, // Main button calling S-V-R is
       regpopup: false, // Variable is copy of isRegOpen from store.
       interval: null,
       isWaiting: false,
@@ -231,10 +232,10 @@ export default {
       console.log('Iteration = ', diff)
       return this.diff
       // state.iteration = diff // active iteration number
-    },
-    modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
-      return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
-    }
+    } // ,
+    // modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
+    // return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
+    // } // TODO function probably is not longer necessary. Actually alternative is used.
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
@@ -296,6 +297,7 @@ export default {
           break
         default: // Waiting modes are {0, 2, 4, or 5}
           // Nothing to do - see function modeNow(mode) in this file
+          this.modeNow = true
       }
     }
   },
