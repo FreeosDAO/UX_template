@@ -21,8 +21,11 @@
       <div class="text-h2" style="opacity:.4">
       </div>
       <q-btn @click="todo ()">test</q-btn>
-      <q-btn class="q-ma-lg" color="orange" no-caps @click="submit()" label="Make Change"/>
-      // <q-btn @click="fuk ()">connect test</q-btn>
+      <q-btn
+        @click="PushTest()"
+        style="color: #FF0080"
+        label="Push User Clean"
+      ></q-btn>
       <q-btn
         class="q-mt-xl"
         color="white"
@@ -37,7 +40,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+// import { clearuser } from 'src/store/svr/mutations'
 // import { actionRatifyTest } from 'src/store/svr/actions'
 // import { actionOwnerChange } from 'src/store/svr/actions'
 // import { onRegisterUser } from 'src/store/svr/actions'
@@ -84,22 +88,9 @@ export default {
     })
   },
   methods: {
-    ...mapActions('svr', ['onSurveyTest']),
-    submit () {
-      // fill up data for simulation, normally this should happen in template section input form
-      // this.submitData.q1response = 1 // uint8
-      // this.submitData.q2response = 0 // uint8
-      // this.submitData.q3response = 10.0 // double
-      // this.submitData.q4response = 'BURN' // string
-      // this.submitData.q5response = 1 // uint8
-      // this.submitData.q6choice1 = 1 // uint8
-      // this.submitData.q6choice2 = 2 // uint 8
-      // this.submitData.q6choice3 = 6 // uint8
-      // const self = this
-      this.submitData.currentAccountName = this.currentAccountName
-      console.log('@@@ currentAccountName =', this.currentAccountName)
-      // console.log('@@@ submitData =', this.submitData)
-      this.onSurveyTest(this.currentAccountName) // TODO
+    ...mapMutations('svr', ['clearuser']),
+    PushTest () {
+      this.clearuser()
     },
     todo () { // helper for converting time
       // const now = new Date()

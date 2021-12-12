@@ -111,7 +111,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
   console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
-    ' SV_OK:', SV_OK, ' R_OK:', R_OK) // todo UNDER TESTING
+    ' SV_OK:', SV_OK, ' R_OK:', R_OK)
   console.log('isSurveyActive: ', isSurveyActive)
   console.log('isVoteActive: ', isVoteActive)
   console.log('isRatifyActive: ', isRatifyActive)
@@ -137,6 +137,52 @@ export const setSVRSTableAttrVal = function (state, payload) {
     if (R_OK) { state.user_mode = 5 } // Wait for New Iteration
   }
   console.log(' final user_mode = ', state.user_mode)
+  // TODO PUSH TEST - a whole section should be removed later
+  // TODO
+  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
+    ' thisIteration=', thisIteration)
+  let tnothing = false
+  let tsurveyOK = false
+  let tvoteOK = false
+  let tSVOK = false
+  let tROK = false
+  // // nothing - all three false
+  if ((state.Test.surveyDone === false) && (state.Test.voteDone === false) && (state.Test.ratifyDone === false)) { tnothing = true }
+  if ((state.Test.surveyDone === true) && (state.Test.voteDone === false) && (state.Test.ratifyDone === false)) { tsurveyOK = true }
+  if ((state.Test.voteDone === true) && (state.Test.ratifyDone === false)) { tvoteOK = true } // S-any, V-true, R-false
+  if ((state.Test.surveyDone === true) && (state.Test.voteDone === true) && (state.Test.ratifyDone === false)) { tSVOK = true }
+  if (state.Test.ratifyDone === true) { tROK = true } // S, V - any value, but R-true
+  console.log('tnothing:', tnothing, ' tsurveyOK:', tsurveyOK, ' tvoteOK:', tvoteOK,
+    ' tSVOK:', tSVOK, ' tROK:', tROK) // todo UNDER TESTING
+  console.log('tisSurveyActive: ', isSurveyActive)
+  console.log('tisVoteActive: ', isVoteActive)
+  console.log('tisRatifyActive: ', isRatifyActive)
+  if (isSurveyActive) {
+    // state.user_mode = 0 means system inactive
+    if (tnothing) { state.tuser_mode = 1 } // Survey Open
+    if (tsurveyOK) { state.tuser_mode = 2 } // Wait for Vote // S-true, V,R - N/A
+  }
+  console.log('t-115', isVoteActive, tnothing)
+  let tusermode = 0
+  if (isVoteActive) {
+    if (tnothing) {
+      tusermode = 3
+      console.log('t-Vote NOW')
+    } // Vote Open/Start Vote Now
+    if (tsurveyOK) { tusermode = 3 } // Vote Open/Start Vote Now
+    if (tSVOK) { tusermode = 4 } // Wait for Ratify
+  }
+  if (isRatifyActive) {
+    if (tnothing) { tusermode = 5 } // Wait for New Iteration
+    if (tsurveyOK) { tusermode = 6 } // Ratify Open
+    if (tvoteOK) { tusermode = 6 } // Ratify Open
+    if (tSVOK) { tusermode = 6 } // Ratify Open // extras
+    if (tROK) { tusermode = 5 } // Wait for New Iteration
+  }
+  console.log(' t-final user_mode = ', state.tuser_mode)
+  if (state.tusermodeOn) { state.user_mode = tusermode }
+  // TODO
+  // TODO PUSH TEST - end of remove section
 }
 
 // P A R A M E T E R S --- TODO NOT TOUCH ------
@@ -210,4 +256,10 @@ export const setUserTableAttrVal = function (state, payload) {
 
 export const setIsRegOpen = (state, isRegOpen) => {
   state.isRegOpen = isRegOpen
+}
+
+export const clearuser = function (state) { // TODO PUSH TEST to remove
+  state.Test.surveyDone = false
+  state.Test.voteDone = false
+  state.Test.ratiftyDone = false
 }

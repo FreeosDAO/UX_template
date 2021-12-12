@@ -287,6 +287,13 @@
           label="Submit"
         ></q-btn>
       </q-card-section>
+      <q-btn
+        @click="PushTest()"
+        no-caps
+        flat
+        style="color: #FF0080"
+        label="PushTest"
+      ></q-btn>
     </q-card>
     <!-- end of 'Next vote' section -->
   <!-- end -->
@@ -381,7 +388,11 @@ export default {
       this.submitData = {
         // TODO function to consider?
       }
-    }
+    },
+    // TODO mark vote as done - PUSH TEST to remove
+    PushTest () {
+      this.voteuser()
+    },
   }, // end of methods
   computed: { // TODO consider is necessary?
     ...mapState({

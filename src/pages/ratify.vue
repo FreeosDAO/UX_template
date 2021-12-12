@@ -155,6 +155,13 @@
                  color="grey-6" label="No"></q-btn>
           </div>
         </div>
+        <q-btn
+          @click="PushTest()"
+          no-caps
+          flat
+          style="color: #FF0080"
+          label="PushTest"
+        ></q-btn>
       </q-card-section>
     </q-card>
   </div>
@@ -218,6 +225,9 @@ export default {
       console.log('@Ratify submitData=', self.currentAccountName, ' submitData=', this.submitData)
       this.addRatifyResult(this.submitData)
       this.$router.push('/congs')
+    },
+    PushTest () {
+      // TODO mark vote as done - PUSH TEST to remove
     },
     ver () {
       this.version = process.env.V_STRING
