@@ -80,6 +80,8 @@
 // import notifyAlert from 'src/services/notify-alert'
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
 
+import { mapState } from 'vuex'
+
 export default {
   name: 'Vote',
   data () {
@@ -95,6 +97,12 @@ export default {
       right: false,
       freeby: '23433.12'
     }
+  },
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName
+
+    })
   },
   methods: {
   }

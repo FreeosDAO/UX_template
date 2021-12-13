@@ -346,7 +346,8 @@ export default {
       this.$router.push('/congs') // congratulations page
     },
     PushTest () {
-      // TODO mark vote as done - PUSH TEST to remove
+      // TODO mark vote as done - PUSH TEST to remove (don't forget on the ratify)
+      this.surveyuser()
     },
     resetForm () {
       this.submitData = {

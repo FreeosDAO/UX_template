@@ -360,7 +360,9 @@ export async function addReRegUser ({ state }, currentAccountName) {
 }
 
 // === g e t U s e r T a b l e ===
-// called from MainLayout.vue
+// Is called by landing.vue
+// Read all the data from table for a given user (scope)
+// Additionally, set-up the
 export async function getUserTable (state, name) {
   try {
     const result = await connect({
@@ -379,15 +381,19 @@ export async function getUserTable (state, name) {
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
-      notifyAlert('err', 'User not Registered.')
+      notifyAlert('err', 'E: User not Registered.')
       // Set 'on' the (pop-up) 'Registration's window trigger on Vuex:
-      this.commit('setIsRegOpen', true)
+      state.commit('setRegPopUp', true) // The Register Pop-up is open.
+    } else { // The user is already registered - no Register pop-up window visible.
+      // todo
+      notifyAlert('success', 'User Is Registered.')
+      state.commit('setRegPopUp', false) // The Register Pop-up is closed.
     }
   }
 }
 
 export async function setUserData (state, name) {
-// TODO write user data to users table on backend
-
-  this.commit('setIsRegOpen', false)
+// TODO write user data to users table on the backend
+  state.commit('setRegPopUp', false)
+  // this.commit('setIsRegOpen', false)
 }

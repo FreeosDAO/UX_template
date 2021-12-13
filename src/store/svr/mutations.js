@@ -254,12 +254,25 @@ export const setUserTableAttrVal = function (state, payload) {
   // }
 }
 
-export const setIsRegOpen = (state, isRegOpen) => {
-  state.isRegOpen = isRegOpen
+export const setRegPopUp = function (state, payload) {
+  state.isRegOpen = payload
+  console.log('=> isRegOpen=', state.isRegOpen)
 }
 
 export const clearuser = function (state) { // TODO PUSH TEST to remove
   state.Test.surveyDone = false
   state.Test.voteDone = false
   state.Test.ratiftyDone = false
+}
+
+export const voteuser = function (state) { // TODO PUSH TEST to remove
+  state.Test.voteDone = true
+}
+
+export const ratifyuser = function (state) { // TODO PUSH TEST to remove
+  state.Test.ratifyDone = true
+}
+
+export const surveyuser = function (state) { // TODO PUSH TEST to remove
+  state.Test.surveyDone = true
 }

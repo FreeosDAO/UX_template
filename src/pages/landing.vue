@@ -117,7 +117,7 @@
       </q-card>
       </div>
     <!-- </q-card> REGISTER POP-UP -->
-    <q-dialog v-model="regpopup">  <!-- Note: v-model operate on copy of isRegOpen -->
+    <q-dialog v-model="status">  <!-- Note: v-model operate on copy of isRegOpen -->
       <q-card>
         <q-separator></q-separator>
         <section>
@@ -151,7 +151,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="Decline" color="primary" v-close-popup></q-btn>
+          <q-btn flat label="Decline" color="primary" @click="status.set(false)" v-close-popup></q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -170,7 +170,7 @@ export default {
   data () {
     return {
       modeNow: false, // Main button calling S-V-R is
-      regpopup: false, // Variable is copy of isRegOpen from store.
+      regpopup: null, // Variable is copy of isRegOpen from store. todo - read directly
       interval: null,
       isWaiting: false,
       points: '82345.65',
@@ -218,11 +218,19 @@ export default {
       isRegOpen: state => state.svr.isRegOpen,
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
-      iteration: state => state.svr.currentiteration,
+      iteration: state => state.svr.currentiteration, // TODO !
       // surveyDone: state => state.svr.surveyDone, // TODO ??
       iterationSize: state => state.svr.iterationSize,
       ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
+    status: { // serve v-model for pop-up
+      get () {
+        return this.$store.state.svr.isRegOpen
+      },
+      set (value) { // true or false - actually not used TODO
+        this.$store.commit('updateStatus', value)
+      }
+    },
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used, this computation was made in svr/mutations.js
       // Note that getTime() returns milliseconds, not plain seconds:
@@ -235,15 +243,15 @@ export default {
     } // ,
     // modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
     // return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
-    // } // TODO function probably is not longer necessary. Actually alternative is used.
+    // } // TODO function probably is not longer necessary. Actually its alternative is used.
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
     ...mapActions('svr', ['setUserData']),
-    gohome () {
+    gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
-      this.setUserData(this.accountName)
-      this.regpopup = false // Forcely remove registration pop-up
+      this.setUserData(this.accountName) // NOTE: Write to Backend - Register this User. This is not getUserTable!
+      // TODO ??? this.regpopup = false // Forcely remove registration pop-up
       // TODO write registration data to backend 'users' table.
     },
     ver () { // TODO can be removed
@@ -305,8 +313,8 @@ export default {
     this.regpopup = this.isRegOpen
     console.log('isRegOpen=', this.regpopup)
     this.getSvrsTable(this.accountName)
-    const run000 = this.getUserTable(this.accountName)
-    console.log('*** RETURN', run000)
+    this.getUserTable(this.accountName)
+    console.log('==> state.isRegOpen=', this.isRegOpen)
   }
 }
 </script>

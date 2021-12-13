@@ -392,7 +392,7 @@ export default {
     // TODO mark vote as done - PUSH TEST to remove
     PushTest () {
       this.voteuser()
-    },
+    }
   }, // end of methods
   computed: { // TODO consider is necessary?
     ...mapState({

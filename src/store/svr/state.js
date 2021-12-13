@@ -44,7 +44,7 @@ export default () => ({
   voterange5e: 0,
   //
   // user table (registration)
-  isRegOpen: true, // is Registration pop-up window visible?
+  isRegOpen: null, // Is Registration pop-up open? (default:  false = no) // TODO experiment with null
   stake: 0,
   account_type: null,
   registered_iteration: null,
