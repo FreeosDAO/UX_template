@@ -297,6 +297,8 @@ export async function onSurveyTest ({ state }, accountName) { // TODO remove
 
 // === a d d R e g U s e r ===
 export async function addRegUser ({ state }, currentAccountName) {
+  // Write user data to users table on the backend
+  state.commit('setRegPopUp', false) // Hide pop-up window if any.
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
     account: process.env.APP_NAME,
@@ -305,7 +307,7 @@ export async function addRegUser ({ state }, currentAccountName) {
       actor: currentAccountName,
       permission: 'active'
     }],
-    data: { // TODO sliders should be double TODO
+    data: {
       user: currentAccountName
     }
   }]
@@ -393,7 +395,8 @@ export async function getUserTable (state, name) {
 }
 
 export async function setUserData (state, name) {
-// TODO write user data to users table on the backend
+  // TODO write user data to users table on the backend
   state.commit('setRegPopUp', false)
+
   // this.commit('setIsRegOpen', false)
 }

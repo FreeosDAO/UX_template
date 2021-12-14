@@ -239,13 +239,6 @@
           label="Submit"
         ></q-btn>
       </q-card-section>
-      <q-btn
-        @click="PushTest()"
-        no-caps
-        flat
-        style="color: #FF0080"
-        label="PushTest"
-      ></q-btn>
     </q-card>
 </div>
 </template>
@@ -344,10 +337,6 @@ export default {
       // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs') // congratulations page
-    },
-    PushTest () {
-      // TODO mark vote as done - PUSH TEST to remove (don't forget on the ratify)
-      this.surveyuser()
     },
     resetForm () {
       this.submitData = {

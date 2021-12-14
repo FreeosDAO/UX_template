@@ -1,16 +1,11 @@
 // import notifyAlert from 'src/services/notify-alert'
 
-// ===    s e t S V R S T a b l e A t t r V a l    ===
+// ===    set SVRS Table Attr Val    ===
 export const setSVRSTableAttrVal = function (state, payload) {
-  // - No need to store any parameters of svrs into Vuex.
+  // - No need to store any parameters of SVRS into Vuex.
   // - The parameters of svrs are used only to compute userStatus variables like:
   // surveyDone, voteDone, and ratifyDone, then only 'mode' is passed to landing.vue
   // through Vuex.
-  //
-  // Deal with parameters (LOGIC for PARAMETERS)
-  console.log('*** PARAMETERS processing') // test
-  // console.log('paramname.lockfactor', val[0].value) // not used here yet
-  // state.userlifespan = val[6].value // not used
   //
   let isSurveyActive = false
   let isVoteActive = false
@@ -40,8 +35,6 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('mu.40: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
   // end of parameters processing
   //
-  // === === ===
-  //
   // SYSTEM data processing
   //
   const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
@@ -49,9 +42,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   state.iteration = diff // active iteration number
   console.log('iteration:', diff)
   //
-  // === === ===
-  //
-  // SVRS processing - Main Body
+  // SVRS processing
   //
   // const attr = payload.key
   const val = payload.value
@@ -62,6 +53,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let voteDone = false
   let ratifyDone = false
   const survey1 = val[0].survey1
+  console.log('val[0]survey1', val[0].survey1)
   const survey2 = val[0].survey2
   const survey3 = val[0].survey3
   const survey4 = val[0].survey4
@@ -130,85 +122,44 @@ export const setSVRSTableAttrVal = function (state, payload) {
     if (SV_OK) { state.user_mode = 4 } // Wait for Ratify
   }
   if (isRatifyActive) {
-    if (nothing) { state.user_mode = 5 } // Wait for New Iteration
-    if (surveyOK) { state.user_mode = 6 } // Ratify Open
-    if (voteOK) { state.user_mode = 6 } // Ratify Open
-    if (SV_OK) { state.user_mode = 6 } // Ratify Open // extras
-    if (R_OK) { state.user_mode = 5 } // Wait for New Iteration
+    if (nothing) { state.user_mode = 6 } // Wait for New Iteration
+    if (surveyOK) { state.user_mode = 5 } // Ratify Open
+    if (voteOK) { state.user_mode = 5 } // Ratify Open
+    if (SV_OK) { state.user_mode = 5 } // Ratify Open // extras
+    if (R_OK) { state.user_mode = 6 } // Wait for New Iteration
   }
   console.log(' final user_mode = ', state.user_mode)
-  // TODO PUSH TEST - a whole section should be removed later
-  // TODO
-  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
-    ' thisIteration=', thisIteration)
-  let tnothing = false
-  let tsurveyOK = false
-  let tvoteOK = false
-  let tSVOK = false
-  let tROK = false
-  // // nothing - all three false
-  if ((state.Test.surveyDone === false) && (state.Test.voteDone === false) && (state.Test.ratifyDone === false)) { tnothing = true }
-  if ((state.Test.surveyDone === true) && (state.Test.voteDone === false) && (state.Test.ratifyDone === false)) { tsurveyOK = true }
-  if ((state.Test.voteDone === true) && (state.Test.ratifyDone === false)) { tvoteOK = true } // S-any, V-true, R-false
-  if ((state.Test.surveyDone === true) && (state.Test.voteDone === true) && (state.Test.ratifyDone === false)) { tSVOK = true }
-  if (state.Test.ratifyDone === true) { tROK = true } // S, V - any value, but R-true
-  console.log('tnothing:', tnothing, ' tsurveyOK:', tsurveyOK, ' tvoteOK:', tvoteOK,
-    ' tSVOK:', tSVOK, ' tROK:', tROK) // todo UNDER TESTING
-  console.log('tisSurveyActive: ', isSurveyActive)
-  console.log('tisVoteActive: ', isVoteActive)
-  console.log('tisRatifyActive: ', isRatifyActive)
-  if (isSurveyActive) {
-    // state.user_mode = 0 means system inactive
-    if (tnothing) { state.tuser_mode = 1 } // Survey Open
-    if (tsurveyOK) { state.tuser_mode = 2 } // Wait for Vote // S-true, V,R - N/A
-  }
-  console.log('t-115', isVoteActive, tnothing)
-  let tusermode = 0
-  if (isVoteActive) {
-    if (tnothing) {
-      tusermode = 3
-      console.log('t-Vote NOW')
-    } // Vote Open/Start Vote Now
-    if (tsurveyOK) { tusermode = 3 } // Vote Open/Start Vote Now
-    if (tSVOK) { tusermode = 4 } // Wait for Ratify
-  }
-  if (isRatifyActive) {
-    if (tnothing) { tusermode = 5 } // Wait for New Iteration
-    if (tsurveyOK) { tusermode = 6 } // Ratify Open
-    if (tvoteOK) { tusermode = 6 } // Ratify Open
-    if (tSVOK) { tusermode = 6 } // Ratify Open // extras
-    if (tROK) { tusermode = 5 } // Wait for New Iteration
-  }
-  console.log(' t-final user_mode = ', state.tuser_mode)
-  if (state.tusermodeOn) { state.user_mode = tusermode }
-  // TODO
-  // TODO PUSH TEST - end of remove section
 }
 
+// === === === === === === === === === === === === === === === === === === === === ===
 // P A R A M E T E R S --- TODO NOT TOUCH ------
 export const setParamTableAttrVal = function (state, payload) {
   // Called from LayoutMain.vue
   // Parameters read are stored in Vuex, then used by SVRS.
   //
   const val = payload.value
+  state.lockfactor = val[0].value
   state.ratifyend = val[1].value
   state.ratifystart = val[2].value
   state.surveyend = val[3].value
   state.surveystart = val[5].value
+  state.userlifespan = val[6].value
   state.voteend = val[7].value
   state.votestart = val[9].value
   console.log('*** PARAMETERS payload:', JSON.stringify(val)) // test
-  // TODO Unpack slider ranges for SVR displays here
-  console.log(' ratifyend = ', val[1].value) // test
+  // TODO Unpack slider ranges for SVR displays here:
+  // TODO
+  // TODO NOTE: 'parameters' table rows can be in any order
 }
 
+// === === === === === === === === === === === === === === === === === === === === ===
 // S Y S T E M // TODO NOT TOUCH
 // Function setSystemTableAttrVal called from getSystemTable called from LayoutMain.vue
 // // in computed()
 // Input Backend (freeosgov): system table
 // Output (to Vuex):
 // - initUTC - init time in seconds (achieved from 'init' of system table).
-// - iteration (current iteration build up from already existing data) // TODO Not use system now!
+// - iteration (current iteration build up from already existing data) // TODO Not use system iteration now!
 //
 export const setSystemTableAttrVal = function (state, payload) {
   // const attr = payload.key
@@ -221,26 +172,24 @@ export const setSystemTableAttrVal = function (state, payload) {
   state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)
   // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // NOT read directly from system
-  // state.currentiteration = val[0].iteration // not correct now as iterations are shorter
+  // state.currentiteration = val[0].iteration // not correct
   // NOTE I count now iteration number by myself in system data processing section of the setSVRSTableAttrVal.
 }
 
-// TODO 'parameters' table rows can be in any order
+// === === === === === === === === === === === === === === === === === === === === ===
 // U S E R --- TODO NOT TOUCH ------
-export const setUserTableAttrVal = function (state, payload) {
-  // Called from LayoutMain.vue
-  // if (payload != null) {
+export const setUserTableAttrVal = function (state, payload) { // Unpack users table values to Vuex
+  // Called from landing.vue
   const val = payload.value
   console.log('*** USERS payload:', JSON.stringify(val)) // test
-  // state.stake = val[0].value
-  console.log('*** USERS stake:', val[0].stake) // test
-  console.log('*** USERS account_type:', val[0].account_type) // test
-  console.log('*** USERS registered_iteration:', val[0].registered_iteration) // test
-  console.log('*** USERS staked_iteration:', val[0].staked_iteration) // test
-  console.log('*** USERS votes:', val[0].votes) // test
-  console.log('*** USERS issuances:', val[0].issuances) // test
-  console.log('*** USERS last_issuance:', val[0].last_issuance) // test
-  console.log('*** USERS total_issuance_amount:', val[0].total_issuance_amount) // test
+  // console.log('*** USERS stake:', val[0].stake) // test
+  // console.log('*** USERS account_type:', val[0].account_type) // test
+  // console.log('*** USERS registered_iteration:', val[0].registered_iteration) // test
+  // console.log('*** USERS staked_iteration:', val[0].staked_iteration) // test
+  // console.log('*** USERS votes:', val[0].votes) // test
+  // console.log('*** USERS issuances:', val[0].issuances) // test
+  // console.log('*** USERS last_issuance:', val[0].last_issuance) // test
+  // console.log('*** USERS total_issuance_amount:', val[0].total_issuance_amount) // test
   state.stake = val[0].stake
   state.account_type = val[0].account_type
   state.registered_iteration = val[0].registered_iteration
@@ -249,30 +198,9 @@ export const setUserTableAttrVal = function (state, payload) {
   state.issuances = val[0].issuances
   state.last_issuances = val[0].last_issuances
   state.total_issuance_amount = val[0].total_issuance_ammount
-  // } else {
-  //
-  // }
 }
 
-export const setRegPopUp = function (state, payload) {
-  state.isRegOpen = payload
-  console.log('=> isRegOpen=', state.isRegOpen)
-}
-
-export const clearuser = function (state) { // TODO PUSH TEST to remove
-  state.Test.surveyDone = false
-  state.Test.voteDone = false
-  state.Test.ratiftyDone = false
-}
-
-export const voteuser = function (state) { // TODO PUSH TEST to remove
-  state.Test.voteDone = true
-}
-
-export const ratifyuser = function (state) { // TODO PUSH TEST to remove
-  state.Test.ratifyDone = true
-}
-
-export const surveyuser = function (state) { // TODO PUSH TEST to remove
-  state.Test.surveyDone = true
-}
+// export const setRegPopUp = function (state, payload) { // TODO Is it used??
+// state.isRegOpen = payload
+// console.log('=> isRegOpen=', state.isRegOpen)
+// }

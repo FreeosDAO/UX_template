@@ -14,20 +14,6 @@ export default () => ({
   voteend: 0,
   voteranges: '',
   votestart: 0,
-  Test: { // TODO: Used only for 'PUSH' test, otherwise not used.
-    surveyDone: false,
-    voteDone: false,
-    ratifyDone: false
-  },
-  tusermodeOn: true, // TODO PUSH Mode on/off PUSH TEST TODO remove
-  //
-  // SVRSInfo: { // TODO Seems to be not longer necessary
-  // SVRSData: []
-  // },
-  // SystemInfo: { // TODO Seems to be not longer necessary
-  // SystemData: []
-  // },// TODO end
-  //
   // converted ranges for Survey slides
   surveyrange1s: 0,
   surveyrange1e: 0,

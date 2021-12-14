@@ -161,6 +161,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import Register from 'pages/Register'
+// import { addRegUser } from 'src/store/svr/actions'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
@@ -170,7 +171,7 @@ export default {
   data () {
     return {
       modeNow: false, // Main button calling S-V-R is
-      regpopup: null, // Variable is copy of isRegOpen from store. todo - read directly
+      // regpopup: null, // Variable is copy of isRegOpen from store. todo - consider delete
       interval: null,
       isWaiting: false,
       points: '82345.65',
@@ -184,31 +185,33 @@ export default {
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
         ' quis nostrud exercitation ullamco laboris nisi ut aliquip' +
         ' ex ea commodo consequat.',
-      landing_text: [ // on the Button
+      landing_text: [ // The text displayed on the Button.
+        // Displayed text is pointed by 'this.mode'
         'System Inactive',
         'Start Survey Now',
         'Wait for Vote',
         'Start Vote Now',
         'Wait for Ratify',
-        'Wait for New Iteration',
-        'Start Ratify Now'],
-      landing_title: [
+        'Start Ratify Now',
+        'Wait for New Iteration'
+      ],
+      landing_title: [ // Displayed text is pointed by 'this.mode'.
         'System Inactive',
         'Survey Open',
         'Wait for Vote',
         'Vote Open',
         'Wait for Ratify',
-        'Wait for New Iteration',
-        'Ratify Open'
+        'Ratify Open',
+        'Wait for New Iteration'
       ],
-      timerMessage: [
+      timerMessage: [ // Displayed text is pointed by 'this.mode'.
         'System Inactive',
         'Survey Closing in',
         'Vote Opens in',
         'Vote Closing in',
         'Ratify Opens in',
-        'Next Iteration in',
-        'Ratify Closing in'
+        'Ratify Closing in',
+        'Next Iteration in'
       ]
     }
   },
@@ -223,12 +226,12 @@ export default {
       iterationSize: state => state.svr.iterationSize,
       ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
-    status: { // serve v-model for pop-up
+    status: { // serve v-model for the Register pop-up window
       get () {
         return this.$store.state.svr.isRegOpen
       },
-      set (value) { // true or false - actually not used TODO
-        this.$store.commit('updateStatus', value)
+      set (value) { // true or false - TODO set actually not used
+        this.$store.commit('updateStatus', value) // TODO set not used
       }
     },
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
@@ -247,10 +250,10 @@ export default {
   },
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
-    ...mapActions('svr', ['setUserData']),
+    ...mapActions('svr', ['addRegUser']),
     gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
-      this.setUserData(this.accountName) // NOTE: Write to Backend - Register this User. This is not getUserTable!
+      this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. This is not getUserTable!
       // TODO ??? this.regpopup = false // Forcely remove registration pop-up
       // TODO write registration data to backend 'users' table.
     },
@@ -300,10 +303,10 @@ export default {
         case 3: // Go to Vote
           this.$router.push('/vote')
           break
-        case 6: // Go to Ratify
+        case 5: // Go to Ratify
           this.$router.push('/ratify')
           break
-        default: // Waiting modes are {0, 2, 4, or 5}
+        default: // Waiting modes are {0, 2, 4, or 6}. Press Buttons are inactive for it.
           // Nothing to do - see function modeNow(mode) in this file
           this.modeNow = true
       }
