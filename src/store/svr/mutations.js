@@ -200,7 +200,7 @@ export const setUserTableAttrVal = function (state, payload) { // Unpack users t
   state.total_issuance_amount = val[0].total_issuance_ammount
 }
 
-// export const setRegPopUp = function (state, payload) { // TODO Is it used??
-// state.isRegOpen = payload
-// console.log('=> isRegOpen=', state.isRegOpen)
-// }
+export const setRegPopUp = function (state, payload) { // DO NOT TOUCH!
+  state.isRegOpen = payload
+  console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
+}

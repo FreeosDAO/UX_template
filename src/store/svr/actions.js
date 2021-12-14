@@ -136,7 +136,7 @@ export async function getSvrsTable (state, name) {
   const result = await connect({
     json: true,
     code: process.env.APP_NAME,
-    scope: name,
+    scope: name, // Note: Depends on Scope. Data are specific for a given user.
     table: 'svrs',
     limit: 12
   })
@@ -187,104 +187,6 @@ export async function getSystemTable (state) {
   state.commit('setSystemTableAttrVal', val)
 }
 
-//
-/*
-export async function actionRatifyTest ({ state }, data) {
-  const { accountName, answertype } = data
-  console.log(' data: ', data, 'env: ', process.env.APP_NAME, answertype, accountName)
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'verify',
-    authorization: [{
-      actor: accountName,
-      permission: 'active'
-    }],
-    data: {
-      user: accountName,
-      ratify_vote: answertype
-    }
-  }]
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    let responseMessage = result.processed.action_traces[0].console
-    if (!responseMessage) {
-      responseMessage = 'Ratify Transmission successful'
-    }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
-    return result
-  } catch (e) {
-    return e
-  }
-}
-*/
-//
-/*
-export async function actionVote ({ state }, data) {
-  const { currentAccountName, q1response, q2response, q3response } = data
-  console.log('@@@ data =', data)
-  const actions = [{
-    account: process.env.APP_NAME,
-    name: 'vote',
-    authorization: [{
-      actor: currentAccountName,
-      permission: 'active'
-    }],
-    data: {
-      user: currentAccountName,
-      q1response: q1response,
-      q2response: q2response,
-      q3response: q3response
-    }
-  }]
-
-  try {
-    const result = await ProtonSDK.sendTransaction(actions)
-    // let responseMessage = result.processed.action_traces[0].console
-    // if (!responseMessage) {
-    // responseMessage = 'Vote Update Successful'
-    // }
-    // Notify.create({
-    // message: responseMessage,
-    // color: 'positive'
-    // })
-    return result
-  } catch (e) {
-    console.log(e)
-    // return e
-  }
-}
-*/
-/*
-export async function onSurveyTest ({ state }, accountName) { // TODO remove
-  // console.log('accountName:', accountName)
-  try {
-    const actions = [{
-      account: process.env.APP_NAME,
-      name: 'survey',
-      authorization: [{
-        actor: accountName,
-        permission: 'active'
-      }],
-      data: {
-        user: accountName
-      }
-    }]
-    const result = await ProtonSDK.sendTransaction(actions)
-    if (result.processed.receipt.status === 'executed') {
-      notifyAlert('success', result.processed.action_traces[0].console + 'success')
-    } else {
-      notifyAlert('err', 'The action could not be completed. Please try later')
-    }
-    return result
-  } catch (e) {
-    console.log(e)
-  }
-}
-*/
-
 // R E G I S T R A T I O N
 //
 
@@ -298,7 +200,6 @@ export async function onSurveyTest ({ state }, accountName) { // TODO remove
 // === a d d R e g U s e r ===
 export async function addRegUser ({ state }, currentAccountName) {
   // Write user data to users table on the backend
-  state.commit('setRegPopUp', false) // Hide pop-up window if any.
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
     account: process.env.APP_NAME,
@@ -317,11 +218,12 @@ export async function addRegUser ({ state }, currentAccountName) {
     let responseMessage = result.processed.action_traces[0].console
     if (!responseMessage) {
       responseMessage = 'Registration successful'
+      state.commit('setRegPopUp', false) // Remove pop-up window if any.
+      Notify.create({
+        message: responseMessage,
+        color: 'positive'
+      })
     }
-    Notify.create({
-      message: responseMessage,
-      color: 'positive'
-    })
     return result
   } catch (e) {
     console.log(e)
@@ -387,16 +289,14 @@ export async function getUserTable (state, name) {
       // Set 'on' the (pop-up) 'Registration's window trigger on Vuex:
       state.commit('setRegPopUp', true) // The Register Pop-up is open.
     } else { // The user is already registered - no Register pop-up window visible.
-      // todo
       notifyAlert('success', 'User Is Registered.')
       state.commit('setRegPopUp', false) // The Register Pop-up is closed.
     }
   }
 }
 
-export async function setUserData (state, name) {
-  // TODO write user data to users table on the backend
-  state.commit('setRegPopUp', false)
-
-  // this.commit('setIsRegOpen', false)
-}
+// export async function setUserData (state, name) {
+// TODO write user data to users table on the backend
+// state.commit('setRegPopUp', false)
+// this.commit('setIsRegOpen', false)
+// }

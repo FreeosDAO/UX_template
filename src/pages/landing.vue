@@ -5,7 +5,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}} ratifyend {{ratifyend}}
+          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}}
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
@@ -222,23 +222,22 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration, // TODO !
-      // surveyDone: state => state.svr.surveyDone, // TODO ??
-      iterationSize: state => state.svr.iterationSize,
-      ratifyend: state => state.svr.ratifyend // TODO remove test
+      iterationSize: state => state.svr.iterationSize
+      // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     status: { // serve v-model for the Register pop-up window
       get () {
         return this.$store.state.svr.isRegOpen
       },
-      set (value) { // true or false - TODO set actually not used
-        this.$store.commit('updateStatus', value) // TODO set not used
+      set (value) { // true or false
+        this.$store.commit('svr/setRegPopUp', value)
       }
     },
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     iterationNow: function () { // Actually not used, this computation was made in svr/mutations.js
       // Note that getTime() returns milliseconds, not plain seconds:
       const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-      const diff = Math.floor(((currentTimeSec - this.init_time) / this.iterationSize) + 1) // TODO myEpoch take from Vuex
+      const diff = Math.floor(((currentTimeSec - this.init_time) / this.iterationSize) + 1)
       // console.log('Correct UTC timestamp ' + currentTimeSec)
       console.log('Iteration = ', diff)
       return this.diff
@@ -254,7 +253,6 @@ export default {
     gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
       this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. This is not getUserTable!
-      // TODO ??? this.regpopup = false // Forcely remove registration pop-up
       // TODO write registration data to backend 'users' table.
     },
     ver () { // TODO can be removed
@@ -317,7 +315,7 @@ export default {
     console.log('isRegOpen=', this.regpopup)
     this.getSvrsTable(this.accountName)
     this.getUserTable(this.accountName)
-    console.log('==> state.isRegOpen=', this.isRegOpen)
+    console.log('=x=> state.isRegOpen=', this.isRegOpen)
   }
 }
 </script>
