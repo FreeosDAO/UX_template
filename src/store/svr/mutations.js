@@ -12,6 +12,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let isRatifyActive = false
   const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
+  state.timerOffset = currentoffset // Update timer in Vuex
   console.log(' currentT = ', currentT)
   console.log(' init_time_seconds = ', state.initUTC)
   console.log(' currentoffset = ', currentoffset)
@@ -49,7 +50,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('*** SVRS payload (landing)', JSON.stringify(val)) // test
   // state.SVRSInfo[attr] = val
   //
-  let surveyDone = false
+  let surveyDone = false // Keep it (whatever you think :) )
   let voteDone = false
   let ratifyDone = false
   const survey1 = val[0].survey1
@@ -109,24 +110,52 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('isRatifyActive: ', isRatifyActive)
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
-    if (nothing) { state.user_mode = 1 } // Survey Open
-    if (surveyOK) { state.user_mode = 2 } // Wait for Vote // S-true, V,R - N/A
+    if (nothing) {
+      state.user_mode = 1
+      state.timer = surveyend - currentoffset // survey timer in seconds TODO add format function before export
+    } // Survey Open
+    if (surveyOK) {
+      state.user_mode = 2
+      state.timer = surveyend - currentoffset // survey timer in seconds TODO add format function before export
+    } // Wait for Vote // Required Conditions: S-true, V,R - N/A
   }
-  console.log('115', isVoteActive, nothing)
+  console.log('119', isVoteActive, nothing)
   if (isVoteActive) {
     if (nothing) {
       state.user_mode = 3
+      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
       console.log('Vote NOW')
     } // Vote Open/Start Vote Now
-    if (surveyOK) { state.user_mode = 3 } // Vote Open/Start Vote Now
-    if (SV_OK) { state.user_mode = 4 } // Wait for Ratify
+    if (surveyOK) {
+      state.user_mode = 3
+      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
+    } // Vote Open/Start Vote Now
+    if (SV_OK) {
+      state.user_mode = 4
+      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
+    } // Wait for Ratify
   }
   if (isRatifyActive) {
-    if (nothing) { state.user_mode = 6 } // Wait for New Iteration
-    if (surveyOK) { state.user_mode = 5 } // Ratify Open
-    if (voteOK) { state.user_mode = 5 } // Ratify Open
-    if (SV_OK) { state.user_mode = 5 } // Ratify Open // extras
-    if (R_OK) { state.user_mode = 6 } // Wait for New Iteration
+    if (nothing) {
+      state.user_mode = 6
+      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+    } // Wait for New Iteration
+    if (surveyOK) {
+      state.user_mode = 5
+      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+    } // Ratify Open
+    if (voteOK) {
+      state.user_mode = 5
+      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+    } // Ratify Open
+    if (SV_OK) {
+      state.user_mode = 5
+      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+    } // Ratify Open // extras
+    if (R_OK) {
+      state.user_mode = 6
+      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+    } // Wait for New Iteration
   }
   console.log(' final user_mode = ', state.user_mode)
 }

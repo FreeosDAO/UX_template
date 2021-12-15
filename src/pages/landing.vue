@@ -47,8 +47,8 @@
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
         <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
-        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{this.countdown_timer}}</div>
-        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{this.countdown_timer}}</div>
+        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{this.timer}}</div>
+        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{this.timer}}</div>
         <!-- <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div> -->
           <div><br></div>
         </q-card-section>
@@ -174,6 +174,7 @@ export default {
       // regpopup: null, // Variable is copy of isRegOpen from store. todo - consider delete
       interval: null,
       isWaiting: false,
+      timer: 0,
       points: '82345.65',
       freetok: '43555.93',
       fprice: '0.3564434333',
@@ -222,10 +223,15 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       iteration: state => state.svr.currentiteration, // TODO !
-      iterationSize: state => state.svr.iterationSize
+      iterationSize: state => state.svr.iterationSize,
+      // Used for timer only:
+      offtimer: state => state.svr.timerOffset,
+      surveybase: state => state.svr.surveyend,
+      votebase: state => state.svr.voteend,
+      ratifybase: state => state.svr.ratifyend
       // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
-    status: { // serve v-model for the Register pop-up window
+    status: { // serve for v-model for the Register pop-up window
       get () {
         return this.$store.state.svr.isRegOpen
       },
@@ -245,8 +251,8 @@ export default {
     } // ,
     // modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
     // return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
-    // } // TODO function probably is not longer necessary. Actually its alternative is used.
-  },
+    // } // TODO 'modeNow' function probably is not longer necessary. Actually its alternative is used.
+  }, // End of 'computed' section.
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
     ...mapActions('svr', ['addRegUser']),
@@ -293,29 +299,62 @@ export default {
     },
     // TODO add alerts
     submit () { // When pressed button the function interpret selected mode
+      // TODO NOTE: This is called only when button is pressed!!!
       console.log('time_init_point=', this.init_time)
-      switch (this.mode) { // Jump to pre-determined page when button pushed.
+      switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')
+          this.timer = this.surveyend - this.offtimer // 'this.offtimer' is 'currentoffset' from Vuex.
+          console.log('Survey timer =', this.timer)
           break
         case 3: // Go to Vote
           this.$router.push('/vote')
+          this.timer = this.voteend - this.offtimer
+          console.log('Vote timer =', this.timer)
           break
         case 5: // Go to Ratify
           this.$router.push('/ratify')
+          this.timer = this.ratifyend - this.offtimer
+          console.log('Ratify timer =', this.timer)
           break
         default: // Waiting modes are {0, 2, 4, or 6}. Press Buttons are inactive for it.
           // Nothing to do - see function modeNow(mode) in this file
+          this.timer = this.ratifyend - this.offtimer // ratifyend is also the end of current iteration
+          console.log('Iteration timer =', this.timer)
           this.modeNow = true
       }
     }
   },
   created () { // TODO add auto refresh
-    this.regpopup = this.isRegOpen
-    console.log('isRegOpen=', this.regpopup)
-    this.getSvrsTable(this.accountName)
-    this.getUserTable(this.accountName)
-    console.log('=x=> state.isRegOpen=', this.isRegOpen)
+    this.setIntervalId = setInterval(() => {
+      this.regpopup = this.isRegOpen
+      console.log('isRegOpen=', this.regpopup)
+      this.getSvrsTable(this.accountName)
+      this.getUserTable(this.accountName)
+      console.log('=x=> state.isRegOpen=', this.isRegOpen)
+      switch (this.mode) { // Jump to pre-determined page when the button is pushed.
+        case 1: // survey
+          this.timer = this.surveyend - this.offtimer // 'this.offtimer' is 'currentoffset' from Vuex.
+          console.log('<==>Survey timer =', this.timer)
+          break
+        case 3: // Vote
+          this.timer = this.voteend - this.offtimer
+          console.log('<==>Vote timer =', this.timer)
+          break
+        case 5: // Ratify
+          this.timer = this.ratifyend - this.offtimer
+          console.log('<==>Ratify timer =', this.timer)
+          break
+        default: // Waiting modes are {0, 2, 4, or 6}. Press Buttons are inactive for it.
+          // Nothing to do - see function modeNow(mode) in this file
+          this.timer = this.ratifyend - this.offtimer // ratifyend is also the end of current iteration
+          console.log('Iteration timer =', this.timer)
+      }
+    }, 100000) // call each 100 sec
+    document.addEventListener('beforeunload', this.handler)
+  },
+  beforeDestroy () {
+    clearInterval(this.setIntervalId)
   }
 }
 </script>
