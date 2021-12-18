@@ -26,7 +26,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('mu.30: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
   if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { isSurveyActive = true } // We are in Survey period.
   if ((votestart <= currentoffset) && (currentoffset <= voteend)) { isVoteActive = true } // -- "" --  Vote period.
-  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true }
+  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true } // Ratify period
   console.log('mu.33: surveystart=', surveystart, ' currentoffset=', currentoffset,
     ' surveyend=', surveyend)
   console.log('mu.33: votestart=', votestart, ' currentoffset=', currentoffset,
@@ -50,7 +50,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('*** SVRS payload (landing)', JSON.stringify(val)) // test
   // state.SVRSInfo[attr] = val
   //
-  let surveyDone = false // Keep it (whatever you think :) )
+  let surveyDone = false // Keep it as it is (whatever you think :) )
   let voteDone = false
   let ratifyDone = false
   const survey1 = val[0].survey1
@@ -123,38 +123,38 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if (isVoteActive) {
     if (nothing) {
       state.user_mode = 3
-      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
+      state.timer = voteend - currentoffset // vote timer in seconds
       console.log('Vote NOW')
     } // Vote Open/Start Vote Now
     if (surveyOK) {
       state.user_mode = 3
-      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
+      state.timer = voteend - currentoffset // vote timer in seconds
     } // Vote Open/Start Vote Now
     if (SV_OK) {
       state.user_mode = 4
-      state.timer = voteend - currentoffset // vote timer in seconds TODO add format function before export
+      state.timer = voteend - currentoffset // vote timer in seconds
     } // Wait for Ratify
   }
   if (isRatifyActive) {
     if (nothing) {
       state.user_mode = 6
-      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+      state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
     if (surveyOK) {
       state.user_mode = 5
-      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+      state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
     if (voteOK) {
       state.user_mode = 5
-      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+      state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
     if (SV_OK) {
       state.user_mode = 5
-      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+      state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open // extras
     if (R_OK) {
       state.user_mode = 6
-      state.timer = ratifyend - currentoffset // ratify timer in seconds TODO add format function before export
+      state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
   }
   console.log(' final user_mode = ', state.user_mode)
@@ -162,20 +162,23 @@ export const setSVRSTableAttrVal = function (state, payload) {
 
 // === === === === === === === === === === === === === === === === === === === === ===
 // P A R A M E T E R S --- TODO NOT TOUCH ------
-export const setParamTableAttrVal = function (state, payload) {
+export const setParamTableAttrVal = function (state, payload) { // TODO Note: This may be sorted out.
+  // Note I am reading only 10 rows from the backend's parameters table, even if there is more.
   // Called from LayoutMain.vue
   // Parameters read are stored in Vuex, then used by SVRS.
   //
-  const val = payload.value
-  state.lockfactor = val[0].value
-  state.ratifyend = val[1].value
-  state.ratifystart = val[2].value
-  state.surveyend = val[3].value
-  state.surveystart = val[5].value
-  state.userlifespan = val[6].value
-  state.voteend = val[7].value
-  state.votestart = val[9].value
-  console.log('*** PARAMETERS payload:', JSON.stringify(val)) // test
+  // const val = payload.value
+  for (let i = this.payload.length - 1; i > 0; i--) { // Read from backend in any order.
+    if (payload[i].parameters === 'lockfactor') { state.lockfactor = payload[i].value }
+    if (payload[i].parameters === 'ratifyend') { state.ratifyend = payload[i].value }
+    if (payload[i].parameters === 'ratifystart') { state.ratifystart = payload[i].value }
+    if (payload[i].parameters === 'surveyend') { state.durveyend = payload[i].value }
+    if (payload[i].parameters === 'surveystart') { state.surveystart = payload[i].value }
+    if (payload[i].parameters === 'userlifespan') { state.userlifespan = payload[i].value }
+    if (payload[i].parameters === 'voteend') { state.voteend = payload[i].value }
+    if (payload[i].parameters === 'votestart') { state.votestart = payload[i].value }
+  }
+  console.log('*** PARAMETERS payload:', JSON.stringify(payload)) // test
   // TODO Unpack slider ranges for SVR displays here:
   // TODO
   // TODO NOTE: 'parameters' table rows can be in any order

@@ -308,6 +308,9 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
+  created () {
+    this.randomize() // randomize display for question 5.
+  },
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
@@ -337,6 +340,14 @@ export default {
       // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
       // Set up user_mode in Vuex to enable further landing page actions.
       this.$router.push('/congs') // congratulations page
+    },
+    randomize () {
+      for (let i = this.options.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * i)
+        const temp = this.options[i]
+        this.$set(this.options, i, this.options[randomIndex])
+        this.$set(this.options, randomIndex, temp)
+      }
     },
     resetForm () {
       this.submitData = {
