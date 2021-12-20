@@ -48,8 +48,8 @@
         <div class="q-pa-md">
           <q-slider
             v-model="submitData.q1slider"
-            :min="1"
-            :max="100"
+            :min=voterange1s
+            :max=voterange1e
             :step="1"
             color="grey-6"
             label
@@ -58,7 +58,7 @@
           ></q-slider>
           <div class="row text-subtitle2 text-black text-left" >
             <div class="col">
-              0%
+              {{voterange1s}}%
             </div>
             <div class="col">
               <div class="text-center">
@@ -68,7 +68,7 @@
               </div>
             </div>
             <div class="col text-right">
-              100%
+              {{voterange1e}}%
             </div>
           </div>
         </div>
@@ -92,8 +92,8 @@
       <div class="q-pa-md">
         <q-slider
           v-model="submitData.q2slider"
-          :min="6"
-          :max="30"
+          :min=voterange2s
+          :max=voterange2e
           :step="1"
           color="grey-6"
           label
@@ -102,7 +102,7 @@
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
-            6%
+            {{voterange2s}}%
           </div>
           <div class="col">
             <div class="text-center">
@@ -112,7 +112,7 @@
             </div>
           </div>
           <div class="col text-right">
-            30%
+            {{voterange2e}}%
           </div>
         </div>
       </div>
@@ -134,12 +134,12 @@
         <div class="text-left"> Q3: What price should the Locking Threshold be this week? </div>
         <br><p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
       </q-card-section>
-      <div class="q-pa-md">
+      <div class="q-pa-md"> <!-- TODO USE CONST from backend ?? -->
         <q-slider
           v-model="submitData.q3slider"
-          :min="6"
-          :max="30"
-          :step="1"
+          :min=voterange3s
+          :max=voterange3e
+          :step= "0.0167"
           color="grey-6"
           label
           :label-value="submitData.q3slider + ' percent'"
@@ -147,7 +147,7 @@
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
-            6%
+            {{voterange3s}}%
           </div>
           <div class="col">
             <div class="text-center">
@@ -157,7 +157,7 @@
             </div>
           </div>
           <div class="col text-right">
-            30%
+            {{voterange3e}}%
           </div>
         </div>
       </div>
@@ -214,8 +214,8 @@
       <div class="q-pa-md">
         <q-slider
           v-model="submitData.q5slider"
-          :min="0"
-          :max="50"
+          :min=voterange5s
+          :max=voterange5e
           :step="1"
           color="grey-6"
           label
@@ -224,7 +224,7 @@
         ></q-slider>
         <div class="row text-subtitle2 text-black text-left" >
           <div class="col">
-            0%
+            {{voterange5s}}%
           </div>
           <div class="col">
             <div class="text-center">
@@ -234,7 +234,7 @@
             </div>
           </div>
           <div class="col text-right">
-            50%
+            {{voterange5e}}%
           </div>
         </div>
       </div>
@@ -396,7 +396,16 @@ export default {
   }, // end of methods
   computed: { // TODO consider is necessary?
     ...mapState({
-      accountName: state => state.account.accountName
+      accountName: state => state.account.accountName,
+      // Sliders parametrization
+      voterange1s: state => state.svr.voterange1s,
+      voterange1e: state => state.svr.voterange1e,
+      voterange2s: state => state.svr.voterange2s,
+      voterange2e: state => state.svr.voterange2e,
+      voterange3s: state => state.svr.voterange3s,
+      voterange3e: state => state.svr.voterange3e,
+      voterange5s: state => state.svr.voterange5s,
+      voterange5e: state => state.svr.voterange5e
     })
   }
 }

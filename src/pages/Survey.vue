@@ -93,8 +93,8 @@
             <div class="q-pa-md">
               <q-slider
                 v-model="submitData.q2slider"
-                :min="1"
-                :max="48"
+                :min=surveyrange1s
+                :max=surveyrange1e
                 :step="1"
                 color="grey-6"
                 label
@@ -102,8 +102,8 @@
                 label-always
               ></q-slider>
               <div class="row">
-                <div class="col">
-                   1
+                <div class="col text-left">
+                  {{surveyrange1s}}
                 </div>
                 <div class="col">
                   <div class="text-center">
@@ -113,7 +113,7 @@
                   </div>
                 </div>
                 <div class="col text-right">
-                  48
+                  {{surveyrange1e}}
                 </div>
               </div>
             </div>
@@ -162,8 +162,8 @@
           <div class="q-pa-md">
             <q-slider
               v-model="submitData.q4slider"
-              :min="1"
-              :max="48"
+              :min=surveyrange2s
+              :max=surveyrange2e
               :step="1"
               color="grey-6"
               label
@@ -171,8 +171,8 @@
               label-always
             ></q-slider>
             <div class="row">
-              <div class="col">
-                1
+              <div class="col text-left">
+                {{surveyrange2s}}
               </div>
               <div class="col">
                 <div class="text-center">
@@ -182,7 +182,7 @@
                 </div>
               </div>
               <div class="col text-right">
-                48
+                {{surveyrange2e}}
               </div>
             </div>
           </div>
@@ -206,12 +206,12 @@
           <div class="q-pa-md text-left">
             <div> Q5: Select the three most priorities for this week. <br>
               Ordered, weighted vote for:<br></div><br>
-            - Growing the participants <br>
-            - Stabilising the price<br>
-            - Raising the locking threshold<br>
-            - Burning FREEOS<br>
-            - Pooling FREEOS in a Liquidity Pool<br>
-            - Growing the Reserve Pool (to prepare for future price drops/economic crashes)
+            - {{this.options[0].label}}<br>
+            - {{this.options[1].label}}<br>
+            - {{this.options[2].label}}<br>
+            - {{this.options[3].label}}<br>
+            - {{this.options[4].label}}<br>
+            - {{this.options[5].label}}<br>
           </div>
           <p>&nbsp; &nbsp; Need more info? &nbsp;  <q-icon size="sm" class="text-grey-6" name="info"></q-icon></p>
           <div>
@@ -308,13 +308,24 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
+  filters: { // extract sliders parameters for survey.
+    q1slidermin: function (string) { return string.substring(0, 15) },
+    q1slidermax: function (string) { return string.substring(0, 15) },
+    q2slidermin: function (string) { return string.substring(0, 15) },
+    q2slidermax: function (string) { return string.substring(0, 15) }
+  }, // filters end
   created () {
     this.randomize() // randomize display for question 5.
   },
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
-      mode: state => state.account.user_mode
+      mode: state => state.account.user_mode,
+      // surveyranges: state => state.svr.surveyranges,
+      surveyrange1s: state => state.svr.surveyrange1s, // Sliders parametrization
+      surveyrange1e: state => state.svr.surveyrange1e,
+      surveyrange2s: state => state.svr.surveyrange2s,
+      surveyrange2e: state => state.svr.surveyrange2e
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },

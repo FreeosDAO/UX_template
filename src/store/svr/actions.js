@@ -159,12 +159,14 @@ export async function getParametersTable (state) {
     code: process.env.APP_NAME,
     scope: process.env.APP_NAME,
     table: 'parameters',
-    limit: 10
+    limit: process.env.PARAM_NUMBER // Number of parameters in backend parameters table
   })
   const val = {
     key: 'ParamData',
     value: result.rows
   }
+  console.log('val.value==', val.value[1].paramname)
+  console.log('val.paramname==', val.value[1].value)
   state.commit('setParamTableAttrVal', val)
 }
 

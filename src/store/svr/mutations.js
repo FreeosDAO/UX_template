@@ -39,7 +39,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // SYSTEM data processing
   //
   const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-  const diff = Math.floor(((currentTimeSec - state.initUTC) / state.iterationSize) + 1) // TODO myEpoch take from Vuex
+  const diff = Math.floor(((currentTimeSec - state.initUTC) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
   console.log('iteration:', diff)
   //
@@ -112,11 +112,11 @@ export const setSVRSTableAttrVal = function (state, payload) {
     // state.user_mode = 0 means system inactive
     if (nothing) {
       state.user_mode = 1
-      state.timer = surveyend - currentoffset // survey timer in seconds TODO add format function before export
+      state.timer = surveyend - currentoffset // survey timer in seconds
     } // Survey Open
     if (surveyOK) {
       state.user_mode = 2
-      state.timer = surveyend - currentoffset // survey timer in seconds TODO add format function before export
+      state.timer = surveyend - currentoffset // survey timer in seconds
     } // Wait for Vote // Required Conditions: S-true, V,R - N/A
   }
   console.log('119', isVoteActive, nothing)
@@ -162,26 +162,43 @@ export const setSVRSTableAttrVal = function (state, payload) {
 
 // === === === === === === === === === === === === === === === === === === === === ===
 // P A R A M E T E R S --- TODO NOT TOUCH ------
-export const setParamTableAttrVal = function (state, payload) { // TODO Note: This may be sorted out.
+export const setParamTableAttrVal = function (state, val) { // TODO Note: This may be sorted out.
   // Note I am reading only 10 rows from the backend's parameters table, even if there is more.
   // Called from LayoutMain.vue
   // Parameters read are stored in Vuex, then used by SVRS.
   //
-  // const val = payload.value
-  for (let i = this.payload.length - 1; i > 0; i--) { // Read from backend in any order.
-    if (payload[i].parameters === 'lockfactor') { state.lockfactor = payload[i].value }
-    if (payload[i].parameters === 'ratifyend') { state.ratifyend = payload[i].value }
-    if (payload[i].parameters === 'ratifystart') { state.ratifystart = payload[i].value }
-    if (payload[i].parameters === 'surveyend') { state.durveyend = payload[i].value }
-    if (payload[i].parameters === 'surveystart') { state.surveystart = payload[i].value }
-    if (payload[i].parameters === 'userlifespan') { state.userlifespan = payload[i].value }
-    if (payload[i].parameters === 'voteend') { state.voteend = payload[i].value }
-    if (payload[i].parameters === 'votestart') { state.votestart = payload[i].value }
+  console.log('++val.value==', val.value[1].value)
+  console.log('++val.paramname==', val.value[1].paramname)
+  for (let i = 9; i >= 0; i--) { // Read from backend in any order.
+    // console.log(' i=', i)
+    // NOTE: Actually, 'parameters' table rows can be in any order
+    if (val.value[i].paramname === 'lockfactor') { state.lockfactor = val.value[i].value }
+    if (val.value[i].paramname === 'ratifyend') { state.ratifyend = val.value[i].value }
+    if (val.value[i].paramname === 'ratifystart') { state.ratifystart = val.value[i].value }
+    if (val.value[i].paramname === 'surveyend') { state.surveyend = val.value[i].value }
+    if (val.value[i].paramname === 'surveystart') { state.surveystart = val.value[i].value }
+    if (val.value[i].paramname === 'userlifespan') { state.userlifespan = val.value[i].value }
+    if (val.value[i].paramname === 'voteend') { state.voteend = val.value[i].value }
+    if (val.value[i].paramname === 'votestart') { state.votestart = val.value[i].value }
+    if (val.value[i].paramname === 'surveyranges') { state.surveyranges = val.value[i].value }
+    if (val.value[i].paramname === 'voteranges') { state.voteranges = val.value[i].value }
   }
-  console.log('*** PARAMETERS payload:', JSON.stringify(payload)) // test
+  // state.voterange3s = process.env.HARD_EXCHANGE_RATE_FLOOR // parametrize question 3 slider
+  state.voterange3e = state.lockfactor * state.current_price // TODO define current_price source!
+  // console.log('*** PARAMETERS payload:', JSON.stringify(payload)) // test
+  console.log('= state.lockfactor = ', state.lockfactor)
+  console.log('= state.ratifyend = ', state.ratifyend)
+  console.log('= state.ratifystart = ', state.ratifystart)
+  console.log('= state.surveyend = ', state.surveyend)
+  console.log('= state.surveystart = ', state.surveystart)
+  console.log('= state.userlifespan = ', state.userlifespan)
+  console.log('= state.voteend = ', state.voteend)
+  console.log('= state.votestart = ', state.votestart)
+  console.log('= state.surveyranges = ', state.surveyranges)
+  console.log('= state.voteranges = ', state.voteranges)
+
   // TODO Unpack slider ranges for SVR displays here:
-  // TODO
-  // TODO NOTE: 'parameters' table rows can be in any order
+  //
 }
 
 // === === === === === === === === === === === === === === === === === === === === ===
