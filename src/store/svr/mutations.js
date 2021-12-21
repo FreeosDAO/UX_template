@@ -13,9 +13,9 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
   state.timerOffset = currentoffset // Update timer in Vuex
-  console.log(' currentT = ', currentT)
+  console.log(' current_Time = ', currentT)
   console.log(' init_time_seconds = ', state.initUTC)
-  console.log(' currentoffset = ', currentoffset)
+  console.log(' current_offset = ', currentoffset)
   const ratifyend = state.ratifyend
   const ratifystart = state.ratifystart
   const surveyend = state.surveyend
@@ -39,9 +39,9 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // SYSTEM data processing
   //
   const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-  const diff = Math.floor(((currentTimeSec - state.initUTC) / state.iterationSize) + 1)
+  const diff = Math.floor(((currentTimeSec - state.initUTC - (12 * 3600)) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
-  console.log('iteration:', diff)
+  console.log('Counted ITERATION:', diff)
   //
   // SVRS processing
   //

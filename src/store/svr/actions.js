@@ -170,6 +170,27 @@ export async function getParametersTable (state) {
   state.commit('setParamTableAttrVal', val)
 }
 
+// === === === TODO
+// Call in MaynLayout
+export async function getExchangeTable (state) {
+  console.log('getParameters', process.env.APP_NAME)
+  const result = await connect({
+    json: true,
+    code: process.env.APP_NAME,
+    scope: process.env.APP_NAME,
+    table: 'exchangerate',
+    limit: 1
+  })
+  const val = {
+    key: 'ExchangeData',
+    value: result.rows
+  }
+  console.log('EXCHANGE.currentprice ==', val.value[0].currentprice)
+  console.log('EXCHANGE.targetprice ==', val.value[0].targetprice)
+  // state.commit('setExchangeTableAttrVal', val)
+}
+
+// === === ===
 //
 // ---
 // === g e t S y s t e m T a b l e ===

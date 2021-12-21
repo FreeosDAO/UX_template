@@ -239,10 +239,10 @@ export default {
       }
     },
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
-    iterationNow: function () { // Actually not used, this computation was made in svr/mutations.js
+    iterationNow: function () { // todo Actually not used, this computation was made in svr/mutations.js
       // Note that getTime() returns milliseconds, not plain seconds:
       const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-      const diff = Math.floor(((currentTimeSec - this.init_time) / this.iterationSize) + 1)
+      const diff = Math.floor(((currentTimeSec - this.init_time - (12 * 3600)) / this.iterationSize) + 1)
       // console.log('Correct UTC timestamp ' + currentTimeSec)
       console.log('Iteration = ', diff)
       return this.diff
@@ -268,7 +268,7 @@ export default {
       this.selectedItemLabel1 = menuItem.label
     },
 
-    allTimers () { // TODO rewrite
+    allTimers () { // TODO example / seems to be not used
       this.expires = (this.expires_at * 1000) // normalize UTC formats
       // http://jsfiddle.net/JamesFM/bxEJd/
       const timestamp = Date.now()
@@ -298,7 +298,7 @@ export default {
     },
     // TODO add alerts
     submit () { // When pressed button the function interpret selected mode
-      // TODO NOTE: This is called only when button is pressed!!!
+      // NOTE: This is called only when button is pressed!!!
       console.log('time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey

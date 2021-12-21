@@ -47,6 +47,7 @@
 <script>
 // import WalletLoginDialog from 'components/accountManagement/WalletLoginDialog'
 import { mapState, mapActions, mapGetters } from 'vuex'
+// import { getExchangerateTable, getExchangeTable } from 'src/store/svr/actions'
 // import { getSystemTable } from 'src/store/svr/actions'
 
 const menuList = [
@@ -183,7 +184,7 @@ export default {
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
   methods: {
-    ...mapActions('svr', ['getParametersTable', 'getSystemTable']),
+    ...mapActions('svr', ['getParametersTable', 'getSystemTable', 'getExchangeTable']),
     onSigninFinish (event) {
       if (event.isFinished) {
         this.isShowDrawerButton = true
@@ -218,7 +219,8 @@ export default {
     this.checkIfLoggedIn()
     this.version = process.env.V_STRING
     this.getSystemTable()
-    this.getParametersTable() // TODO
+    this.getParametersTable()
+    this.getExchangeTable()
   }
   // mounted () {
   // this.getTable(this.accountName)
