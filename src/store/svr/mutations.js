@@ -7,15 +7,51 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // surveyDone, voteDone, and ratifyDone, then only 'mode' is passed to landing.vue
   // through Vuex.
   //
+  const now = new Date()
+  // TODO test -------------------
+  let str1 = now.toISOString() // time string in GMT TODO change to seconds
+  console.log('time string =', str1)
+  str1 = str1.substr(0, 23)
+  console.log('time string', str1)
+  const replaced1 = str1.replace('T', ', ')
+  const myDate1 = new Date(replaced1)
+  const initUTC1 = myDate1.getTime() / 1000.0
+  console.log('current in UTC sec.', initUTC1)
+  // const GMTtime = ((date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getUTCFullYear() + ' ' +
+  // date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds() + ' GMT')
+  // console.log(' GMT time =', GMTtime)
+  //
+  const startDate = '2021-09-15T00:00:00.000'
+  const endDate = str1
+  const start = new Date(startDate).getTime()
+  const end = new Date(endDate).getTime()
+  const milliseconds = Math.abs(end - start).toString()
+  const seconds = parseInt(milliseconds / 1000)
+  const minutes = parseInt(seconds / 60)
+  const hours = parseInt(minutes / 60)
+  const days = parseInt(hours / 24)
+  const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
+  console.log(time)
+  // const now = new Date()
+  const utcMilllisecondsSinceEpoch = now.getTime()
+  const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
+  console.log('NOW now = ' + utcSecondsSinceEpoch)
+  //
+  // TODO test --------------------------
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
-  const currentT = Math.floor((new Date()).getTime() / 1000) // Current time in sec (msec cut off).
+  const currentTime = new Date()
+  const n = currentTime.getTimezoneOffset() // Returns UTC Offset in Minutes
+  const currentT = Math.floor((currentTime.getTime() / 1000)) // Current time in sec (msec cut off).
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
   state.timerOffset = currentoffset // Update timer in Vuex
   console.log(' current_Time = ', currentT)
+  console.log('Time Zone =', n)
   console.log(' init_time_seconds = ', state.initUTC)
   console.log(' current_offset = ', currentoffset)
+
+  console.log('My Time=', Math.floor(now.getTime() / 1000))
   const ratifyend = state.ratifyend
   const ratifystart = state.ratifystart
   const surveyend = state.surveyend
@@ -27,19 +63,17 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { isSurveyActive = true } // We are in Survey period.
   if ((votestart <= currentoffset) && (currentoffset <= voteend)) { isVoteActive = true } // -- "" --  Vote period.
   if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true } // Ratify period
-  console.log('mu.33: surveystart=', surveystart, ' currentoffset=', currentoffset,
-    ' surveyend=', surveyend)
-  console.log('mu.33: votestart=', votestart, ' currentoffset=', currentoffset,
-    ' voteend=', voteend)
-  console.log('mu.33: ratifystart=', ratifystart, ' currentoffset=', currentoffset,
-    ' ratifyend=', ratifyend)
-  console.log('mu.40: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
+  // console.log('mu.33: surveystart=', surveystart, ' currentoffset=', currentoffset, ' surveyend=', surveyend)
+  // console.log('mu.33: votestart=', votestart, ' currentoffset=', currentoffset, ' voteend=', voteend)
+  // console.log('mu.33: ratifystart=', ratifystart, ' currentoffset=', currentoffset, ' ratifyend=', ratifyend)
+  // console.log('mu.40: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
+  //
   // end of parameters processing
   //
   // SYSTEM data processing
   //
-  const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-  const diff = Math.floor(((currentTimeSec - state.initUTC - (12 * 3600)) / state.iterationSize) + 1)
+  // const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
+  const diff = Math.floor(((currentT - state.initUTC - (12 * 3600)) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
   console.log('Counted ITERATION:', diff)
   //
@@ -50,7 +84,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('*** SVRS payload (landing)', JSON.stringify(val)) // test
   // state.SVRSInfo[attr] = val
   //
-  let surveyDone = false // Keep it as it is (whatever you think :) )
+  let surveyDone = false // Keep it as it is (whatever do you think :) )
   let voteDone = false
   let ratifyDone = false
   const survey1 = val[0].survey1
@@ -105,9 +139,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
   console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
     ' SV_OK:', SV_OK, ' R_OK:', R_OK)
-  console.log('isSurveyActive: ', isSurveyActive)
-  console.log('isVoteActive: ', isVoteActive)
-  console.log('isRatifyActive: ', isRatifyActive)
+  console.log('SystemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
     if (nothing) {
@@ -119,12 +151,12 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.timer = surveyend - currentoffset // survey timer in seconds
     } // Wait for Vote // Required Conditions: S-true, V,R - N/A
   }
-  console.log('119', isVoteActive, nothing)
+  // console.log('119', isVoteActive, nothing)
   if (isVoteActive) {
     if (nothing) {
       state.user_mode = 3
       state.timer = voteend - currentoffset // vote timer in seconds
-      console.log('Vote NOW')
+      // console.log('Vote NOW')
     } // Vote Open/Start Vote Now
     if (surveyOK) {
       state.user_mode = 3
@@ -157,7 +189,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
   }
-  console.log(' final user_mode = ', state.user_mode)
+  console.log(' => final user_mode => ', state.user_mode)
 }
 
 // === === === === === === === === === === === === === === === === === === === === ===
@@ -167,8 +199,8 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
   // Called from LayoutMain.vue
   // Parameters read are stored in Vuex, then used by SVRS.
   //
-  console.log('++val.value==', val.value[1].value)
-  console.log('++val.paramname==', val.value[1].paramname)
+  // console.log('++val.value==', val.value[1].value)
+  // console.log('++val.paramname==', val.value[1].paramname)
   for (let i = 9; i >= 0; i--) { // Read from backend in any order.
     // console.log(' i=', i)
     // NOTE: Actually, 'parameters' table rows can be in any order
@@ -220,6 +252,7 @@ export const setSystemTableAttrVal = function (state, payload) {
   const initUTC = myDate.getTime() / 1000.0
   state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)
+
   // console.log('(* direct system.iteration = ', val[0].iteration, ' *) ') // NOT read directly from system
   // state.currentiteration = val[0].iteration // not correct
   // NOTE I count now iteration number by myself in system data processing section of the setSVRSTableAttrVal.

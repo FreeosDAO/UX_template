@@ -108,6 +108,7 @@ export default {
     }
   }
 }
+// https://stackoverflow.com/questions/39973087/javascript-date-object-without-time-zone
 </script>
 <style>
 table, th, td {

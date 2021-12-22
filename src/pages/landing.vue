@@ -317,12 +317,13 @@ export default {
     }
   },
   created () { // auto refresh of selected backend tables and screen timer.
-    // TODO proposed place for this.getUserTable() to be read once. See TODO comment below.
+    // this.getSvrsTable(this.accountName)
+    // this.getUserTable(this.accountName)
     this.setIntervalId = setInterval(() => {
       this.regpopup = this.isRegOpen
       console.log('isRegOpen=', this.regpopup)
       this.getSvrsTable(this.accountName)
-      this.getUserTable(this.accountName) // TODO consider reading only first time to verify user entry status.
+      this.getUserTable(this.accountName)
       console.log('=x=> state.isRegOpen=', this.isRegOpen)
     }, 60000) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)
