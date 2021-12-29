@@ -238,16 +238,16 @@ export default {
         this.$store.commit('svr/setRegPopUp', value)
       }
     },
-    ...mapGetters('account', ['isAuthenticated', 'connecting']),
-    iterationNow: function () { // todo Actually not used, this computation was made in svr/mutations.js
-      // Note that getTime() returns milliseconds, not plain seconds:
-      const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-      const diff = Math.floor(((currentTimeSec - this.init_time - (12 * 3600)) / this.iterationSize) + 1)
-      // console.log('Correct UTC timestamp ' + currentTimeSec)
-      console.log('Iteration = ', diff)
-      return this.diff
-      // state.iteration = diff // active iteration number
-    } // ,
+    ...mapGetters('account', ['isAuthenticated', 'connecting'])
+    // iterationNow: function () { // todo Actually not used, this computation was made in svr/mutations.js
+    // // Note that getTime() returns milliseconds, not plain seconds:
+    // const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
+    // const diff = Math.floor(((currentTimeSec - this.init_time /* -(12 * 3600) */) / this.iterationSize) + 1)
+    // // console.log('Correct UTC timestamp ' + currentTimeSec)
+    // // console.log('Iteration = ', diff)
+    // return this.diff
+    // // state.iteration = diff // active iteration number
+    // } // ,
     // modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
     // return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
     // } // TODO 'modeNow' function probably is not longer necessary. Actually its alternative is used.
@@ -257,7 +257,7 @@ export default {
     ...mapActions('svr', ['addRegUser']),
     gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
-      this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. This is not getUserTable!
+      this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
       // TODO write registration data to backend 'users' table.
     },
     ver () { // TODO can be removed
@@ -278,7 +278,7 @@ export default {
         this.expiration_timer = (this.expires - timestamp) / 60000 // display in minutes
         this.expiration_timer = this.expiration_timer.toFixed(2)
       }
-      console.log('timestamp:', this.expires, timestamp)
+      console.log('281-timestamp:', this.expires, timestamp)
     },
     secondsToHms (a) { // TODO rewrite
       a = Number(a)
@@ -299,7 +299,7 @@ export default {
     // TODO add alerts
     submit () { // When pressed button the function interpret selected mode
       // NOTE: This is called only when button is pressed!!!
-      console.log('time_init_point=', this.init_time)
+      console.log('302-time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')
@@ -321,10 +321,10 @@ export default {
     // this.getUserTable(this.accountName)
     this.setIntervalId = setInterval(() => {
       this.regpopup = this.isRegOpen
-      console.log('isRegOpen=', this.regpopup)
+      console.log('324-isRegOpen=', this.regpopup)
       this.getSvrsTable(this.accountName)
       this.getUserTable(this.accountName)
-      console.log('=x=> state.isRegOpen=', this.isRegOpen)
+      console.log('325-state.isRegOpen=', this.isRegOpen)
     }, 60000) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)
   },

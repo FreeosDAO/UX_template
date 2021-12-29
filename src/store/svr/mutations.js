@@ -7,82 +7,80 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // surveyDone, voteDone, and ratifyDone, then only 'mode' is passed to landing.vue
   // through Vuex.
   //
-  const now = new Date()
-  // TODO test --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-  let str1 = now.toISOString() // TODO change to seconds, try with GMT+00.00 !
-  console.log('ISO time string =', str1)
-  str1 = str1.substr(0, 23)
-  console.log('ISO time string', str1)
-  const replaced1 = str1.replace('T', ', ')
-  const myDate1 = new Date(replaced1)
-  const initUTC1 = myDate1.getTime() / 1000.0
-  console.log('current in UTC sec. (from ISO):', initUTC1)
-  console.log('Date now =', now)
-
-  const str = '2021-09-15T00:00:00.000 GMT+00:00'
-  const replaced = str.replace('T', ', ')
-  const myDate = new Date(replaced)
-  const initUTC = myDate.getTime() / 1000.0
-  state.initUTC = initUTC // init point in UTC seconds
-  console.log('Basic =>init in UTC sec.', initUTC)
-  //
-  // Only the following count completely timestamps correctly TODO LOOKS OK AS GMT UTC
-  console.log('ALL=',
-    (new Date()).getTime() / 1000,
-    new Date().valueOf() / 1000,
-    (new Date() - new Date().getTimezoneOffset() * 60 * 1000) / 1000)
-  // ===
-  // const GMTtime = ((date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getUTCFullYear() + ' ' +
-  // date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds() + ' GMT')
-  // console.log(' GMT time =', GMTtime)
-  // ===
-  // The following compare start and end dates
-  // const startDate = '2021-09-15T00:00:00.000 GMT+00:00'
-  // const endDate = str1
-  // const start = new Date(startDate).getTime()
-  // const end = new Date(endDate).getTime()
-  // const milliseconds = Math.abs(end - start).toString()
-  // const seconds = parseInt(milliseconds / 1000)
-  // const minutes = parseInt(seconds / 60)
-  // const hours = parseInt(minutes / 60)
-  // const days = parseInt(hours / 24)
-  // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
-  // The same with better Math:
-  // let seconds = Math.round(Math.abs(end - start) / 1000) // We'll round away millisecond differences.
-  // const days = Math.floor(seconds / 86400)
-  // seconds -= days * 86400
-  // const hours = Math.floor(seconds / 3600)
-  // seconds -= hours * 3600
-  // const minutes = Math.floor(seconds / 60)
-  // seconds -= minutes * 60
-  // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
-  // console.log(time)
-  // End of the Example comparison
-  // ===
-  // One more example of timestamp not verified
-  // var currTimestamp = Date.now(), //1482905176396
-  // utcDateString = (new Date(currTimestamp)).toUTCString(); //"Wed, 28 Dec 2016 06:06:50 GMT"
-  // new Date(utcDateString).getTime(); //This will give you UTC Timestamp in JavaScript
-  // ===
-  // Tom's
   // const now = new Date()
-  // const utcMilllisecondsSinceEpoch = now.getTime()
-  // const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
-  // console.log('NOWnow = ' + utcSecondsSinceEpoch)
-  // ===
-  // new Date(dateString).getTime() / 1000
-  const getUnixTimeUtc = (dateString = new Date()) => Math.round(new Date(dateString).getTime() / 1000)
-  console.log('getUnixTimeUtc=', getUnixTimeUtc)
-  const utc = new Date(new Date().toUTCString()).getTime()
-  console.log(' utc=', utc)
-  // https://www.epochconverter.com/
-  // TODO test --- --- --- --- --- --- --- --- ---
+  // // TODO test --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+  // let str1 = now.toISOString() // TODO change to seconds, try with GMT+00.00 !
+  // console.log('ISO time string =', str1)
+  // str1 = str1.substr(0, 23)
+  // console.log('ISO time string', str1)
+  // const replaced1 = str1.replace('T', ', ')
+  // const myDate1 = new Date(replaced1)
+  // const initUTC1 = myDate1.getTime() / 1000.0
+  // console.log('current in UTC sec. (from ISO):', initUTC1)
+  // console.log('Date now =', now)
+  //
+  // const str = '2021-09-15T00:00:00.000 GMT+00:00'
+  // const replaced = str.replace('T', ', ')
+  // const myDate = new Date(replaced)
+  // const initUTC = myDate.getTime() / 1000.0
+  // state.initUTC = initUTC // init point in UTC seconds
+  // console.log('Basic =>init in UTC sec.', initUTC)
+  // //
+  // // Only the following count completely timestamps correctly TODO LOOKS OK AS GMT UTC
+  // console.log('ALL=',
+  // (new Date()).getTime() / 1000,
+  // new Date().valueOf() / 1000,
+  // (new Date() - new Date().getTimezoneOffset() * 60 * 1000) / 1000)
+  // // ===
+  // // const GMTtime = ((date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getUTCFullYear() + ' ' +
+  // // date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds() + ' GMT')
+  // // console.log(' GMT time =', GMTtime)
+  // // ===
+  // // The following compare start and end dates
+  // // const startDate = '2021-09-15T00:00:00.000 GMT+00:00'
+  // // const endDate = str1
+  // // const start = new Date(startDate).getTime()
+  // // const end = new Date(endDate).getTime()
+  // // const milliseconds = Math.abs(end - start).toString()
+  // // const seconds = parseInt(milliseconds / 1000)
+  // // const minutes = parseInt(seconds / 60)
+  // // const hours = parseInt(minutes / 60)
+  // // const days = parseInt(hours / 24)
+  // // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
+  // // The same with better Math:
+  // // let seconds = Math.round(Math.abs(end - start) / 1000) // We'll round away millisecond differences.
+  // // const days = Math.floor(seconds / 86400)
+  // // seconds -= days * 86400
+  // // const hours = Math.floor(seconds / 3600)
+  // // seconds -= hours * 3600
+  // // const minutes = Math.floor(seconds / 60)
+  // // seconds -= minutes * 60
+  // // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
+  // // console.log(time)
+  // // End of the Example comparison
+  // // ===
+  // // One more example of timestamp not verified
+  // // var currTimestamp = Date.now(), //1482905176396
+  // // utcDateString = (new Date(currTimestamp)).toUTCString(); //"Wed, 28 Dec 2016 06:06:50 GMT"
+  // // new Date(utcDateString).getTime(); //This will give you UTC Timestamp in JavaScript
+  // // ===
+  // // Tom's
+  // // const now = new Date()
+  // // const utcMilllisecondsSinceEpoch = now.getTime()
+  // // const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
+  // // console.log('NOWnow = ' + utcSecondsSinceEpoch)
+  // // ===
+  // // new Date(dateString).getTime() / 1000
+  // // const getUnixTimeUtc = (dateString = new Date()) => Math.round(new Date(dateString).getTime() / 1000)
+  // // console.log('getUnixTimeUtc=', getUnixTimeUtc)
+  // // const utc = new Date(new Date().toUTCString()).getTime()
+  // // console.log(' utc=', utc)
+  // // https://www.epochconverter.com/
+  // // TODO test --- --- --- --- --- --- --- --- ---
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
-  const currentTime = new Date()
-  // const n = currentTime.getTimezoneOffset() // Returns UTC Offset in Minutes
-  const currentT = Math.floor((currentTime.getTime() / 1000)) // Current time in sec (msec cut off).
+  const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
   state.timerOffset = currentoffset // Update timer in Vuex
   console.log(' current_Time = ', currentT)
@@ -90,7 +88,8 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log(' init_time_seconds = ', state.initUTC)
   console.log(' current_offset = ', currentoffset)
   // const now = new Date()
-  console.log('My Time=', Math.floor(now.getTime() / 1000)) // TODO Seems to be the best one. TODO LOOKS OK AS GMT UTC
+  // console.log('My Time=', Math.floor(now.getTime() / 1000)) // TODO Seems to be the best one. TODO LOOKS OK AS GMT UTC
+  // TODO this timer is not implemented for counting of the iteration TODO TODO !!! === === === === === === === === ===
   const ratifyend = state.ratifyend
   const ratifystart = state.ratifystart
   const surveyend = state.surveyend
@@ -112,7 +111,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // SYSTEM data processing
   //
   // const currentTimeSec = Math.floor((new Date()).getTime() / 1000) // ?? delete
-  const diff = Math.floor(((currentT - state.initUTC - (12 * 3600)) / state.iterationSize) + 1)
+  const diff = Math.floor(((currentT - state.initUTC) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
   console.log('Counted ITERATION:', diff)
   //
