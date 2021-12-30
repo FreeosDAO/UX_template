@@ -1,8 +1,12 @@
 <template>
-  <div class="q-gutter-y-md q-mx-auto centered" style="max-width: 400px">
+  <div class="q-mx-auto" style="max-width: 400px">
     <!-- Title/Intro Section -->
+    <div class="text-md-center">
+      <img width="40" src="~assets/tfreeos.png"> &nbsp;
+    </div>
     <q-card flat bordered class="mycard">
       <!-- Main Q-card -->
+      <!--
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
           {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}}
@@ -36,13 +40,11 @@
           </q-menu>
         </q-btn>
       </q-toolbar>
+      -->
       <!-- Drawer -->
       <!-- -->
     </q-card>
-      <!---->
-      <div class="text-black q-pa-md text-center">
-       <img width="35" src="~assets/tfreeos.png"> &nbsp;
-      </div>
+      <!-- -->
       <div class="row justify-center" style="position:relative;">
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>

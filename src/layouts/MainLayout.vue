@@ -37,8 +37,8 @@
         </q-list>
       </q-scroll-area>
     </q-drawer>
-
     <q-page-container>
+      <topFrame />
       <router-view />
     </q-page-container>
 
@@ -47,10 +47,16 @@
 <script>
 // import WalletLoginDialog from 'components/accountManagement/WalletLoginDialog'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import topFrame from '../pages/topFrame.vue'
 // import { getExchangerateTable, getExchangeTable } from 'src/store/svr/actions'
 // import { getSystemTable } from 'src/store/svr/actions'
 
 const menuList = [
+  {
+    icon: '',
+    label: 'Test Support:',
+    separator: true
+  },
   {
     icon: 'get_app',
     label: 'Claim',
@@ -92,6 +98,12 @@ const menuList = [
     label: 'Transfer',
     separator: true,
     route: '/tran'
+  },
+  {
+    icon: 'get_app',
+    label: 'Register',
+    separator: true,
+    route: '/regi'
   },
   {
     icon: 'get_app',
@@ -149,6 +161,12 @@ const menuList = [
   },
   {
     icon: 'get_app',
+    label: 'topFrame',
+    separator: true,
+    route: '/topfr'
+  },
+  {
+    icon: 'get_app',
     label: 'Ratification',
     separator: true,
     route: '/ratify'
@@ -167,6 +185,9 @@ const menuList = [
   }
 ]
 export default {
+  components: {
+    topFrame
+  },
   data () {
     return {
       version: '',

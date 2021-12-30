@@ -1,6 +1,6 @@
 <template>
   <!-- Vote.vue -->
-  <div class="q-gutter-y-md q-mx-auto" style="max-width: 550px">
+  <div class="q-gutter-y-md q-mx-auto" style="max-width: 400px">
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
       <q-card-section>

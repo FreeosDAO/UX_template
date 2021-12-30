@@ -15,8 +15,9 @@ const routes = [
       { path: '/mint', component: () => import('pages/Mintconv.vue') },
       { path: '/goal', component: () => import('pages/Goalsreward.vue') },
       { path: '/tran', component: () => import('pages/Transfer.vue') },
-      // { path: '/register', component: () => import('pages/Register.vue') }, // not used
+      { path: '/regi', component: () => import('pages/Register.vue') },
       { path: '/terms', component: () => import('pages/terms.vue') },
+      { path: '/topfr', component: () => import('pages/topFrame.vue') },
       { path: '/claim', component: () => import('pages/Claim.vue') }
     ]
   },

@@ -1,6 +1,6 @@
 <template>
   <!-- Survey.vue -->
-  <div class="q-gutter-y-md q-mx-auto" style="max-width: 550px">
+  <div class="q-gutter-y-md q-mx-auto" style="max-width: 400px"> <!-- was 550px -->
   <q-card flat bordered class="mycard">
     <q-card-section>
       <div class="text-h5 text-center">This Weeks Survey</div>
