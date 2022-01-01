@@ -6,43 +6,7 @@
     </div>
     <q-card flat bordered class="mycard">
       <!-- Main Q-card -->
-      <!--
-      <q-toolbar>
-        <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp;Iter:{{iteration}} mode: {{mode}}
-        </q-toolbar-title>
-        <q-btn dense flat round icon="menu">
-          <q-menu anchor="bottom left" self="top right"
-            :style="{ backgroundColor: '#eee', color: 'blue'}">
-            <q-list style="min-width: 100px">
-              <q-item clickable>
-                <q-item-section>Home</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>MyFreeos</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section>Mint</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Re-Register</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section>Sign-out</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section>Help &amp; Feedback</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </q-toolbar>
-      -->
       <!-- Drawer -->
-      <!-- -->
     </q-card>
       <!-- -->
       <div class="row justify-center" style="position:relative;">
@@ -55,7 +19,7 @@
           <div><br></div>
         </q-card-section>
       </q-card>
-        <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+        <!-- <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:100px; center:0px; ">
           <div > &nbsp;{{this.landing_title[mode]}}</div>
@@ -64,13 +28,13 @@
                style="position: absolute;
           top:100px; center:0px; ">
           <div> &nbsp;{{this.landing_text[mode]}}</div>
-        </q-btn>
+        </q-btn> -->
       </div>
       <!-- Central Card -->
-      <div class="row justify-center" >
+      <div class="row justify-center">
       <q-card
         flat round bordered
-        style="position: absolute; top:370px; center:0px;"
+        style="position: absolute; top:290px; center:0px;"
         class="mycard1 bg-grey-4">
         <br>
         <div class="row">
@@ -95,6 +59,16 @@
           </div>
         </div>
       </q-card>
+        <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+               style="position: absolute;
+          top:250px; center:0px; ">
+          <div > &nbsp;{{this.landing_title[mode]}}</div>
+        </q-btn>
+        <q-btn v-else size="20px" @click="submit()" no-caps class="bg-grey-6 text-white text-body1"
+               style="position: absolute;
+          top:250px; center:0px; ">
+          <div> &nbsp;{{this.landing_text[mode]}}</div>
+        </q-btn>
       </div>
       <!-- <q-card-section>
          <div style="height: 350px" class="bg-grey-6"></div>
@@ -269,6 +243,9 @@ export default {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel1 = menuItem.label
     },
+    doit () {
+      // serving for mint page TODO
+    },
 
     allTimers () { // TODO example / seems to be not used
       this.expires = (this.expires_at * 1000) // normalize UTC formats
@@ -301,7 +278,7 @@ export default {
     // TODO add alerts
     submit () { // When pressed button the function interpret selected mode
       // NOTE: This is called only when button is pressed!!!
-      console.log('302-time_init_point=', this.init_time)
+      console.log('281-time_init_point=', this.init_time) // TODO showing wrongly 1631620800
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')
@@ -322,7 +299,7 @@ export default {
     // this.getSvrsTable(this.accountName)
     // this.getUserTable(this.accountName)
     this.setIntervalId = setInterval(() => {
-      this.regpopup = this.isRegOpen
+      this.regpopup = this.isRegOpen // registration popup state
       console.log('324-isRegOpen=', this.regpopup)
       this.getSvrsTable(this.accountName)
       this.getUserTable(this.accountName)

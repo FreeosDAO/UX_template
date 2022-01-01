@@ -4,7 +4,7 @@
   <q-card flat bordered class="mycard">
     <q-card-section>
       <div class="text-h5 text-center">This Weeks Survey</div>
-      <div class="text-subtitle2 text-center">Survey iteration &nbsp; {{iteration}}</div>
+      <!-- <div class="text-subtitle2 text-center">Survey iteration &nbsp; {{iteration}}</div> TODO ask is needed? -->
     </q-card-section>
     <!--  -->
     <q-card flat class="mycard1">
@@ -325,7 +325,11 @@ export default {
       surveyrange1s: state => state.svr.surveyrange1s, // Sliders parametrization
       surveyrange1e: state => state.svr.surveyrange1e,
       surveyrange2s: state => state.svr.surveyrange2s,
-      surveyrange2e: state => state.svr.surveyrange2e
+      surveyrange2e: state => state.svr.surveyrange2e,
+      inittime: state => state.svr.initUTC,
+      iterationSize: state => state.svr.iterationSize,
+      surveyend: state => state.svr.surveyend,
+      surveystart: state => state.svr.surveystart
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
@@ -360,6 +364,27 @@ export default {
         this.$set(this.options, randomIndex, temp)
       }
     },
+    privatetimer () {
+      let isSurveyActive = false
+      const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
+      const currentoffset = (currentT - this.inittime) % this.iterationSize
+      // state.timerOffset = currentoffset // Update timer in Vuex
+      // console.log(' current_Time = ', currentT)
+      // console.log('Time Zone =', n)
+      // console.log(' init_time_seconds = ', this.inittime)
+      // console.log(' current_offset = ', currentoffset)
+      // const now = new Date()
+      // console.log('My Time=', Math.floor(now.getTime() / 1000))
+      // set userStatus:
+      if ((this.surveystart <= currentoffset) && (currentoffset <= this.surveyend)) {
+        isSurveyActive = true
+      } else {
+        isSurveyActive = false
+      }
+      console.log('survey.379: isSurveyActive?=', isSurveyActive)
+      return isSurveyActive
+    },
+    // ===
     resetForm () {
       this.submitData = {
         // TODO is it needed?

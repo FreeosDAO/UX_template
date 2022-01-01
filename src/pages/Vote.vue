@@ -6,8 +6,8 @@
       <q-card-section>
         <div class="text-h5 text-center">This Weeks Vote</div>
         <div class="text-subtitle1 text-center">Yours vote runs the economy</div>
-        <div class="text-subtitle2 text-center">Voting iteration &nbsp; {{iteration}}</div>
-        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div>
+        <!-- <div class="text-subtitle2 text-center">Voting iteration &nbsp; {{iteration}}</div> TODO ask is needed ? -->
+        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div> <!-- TODO timer -->
       </q-card-section>
       <q-card flat class="mycard1">
         <q-card-section>

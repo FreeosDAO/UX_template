@@ -19,14 +19,14 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // console.log('current in UTC sec. (from ISO):', initUTC1)
   // console.log('Date now =', now)
   //
-  // const str = '2021-09-15T00:00:00.000 GMT+00:00'
-  // const replaced = str.replace('T', ', ')
-  // const myDate = new Date(replaced)
-  // const initUTC = myDate.getTime() / 1000.0
-  // state.initUTC = initUTC // init point in UTC seconds
-  // console.log('Basic =>init in UTC sec.', initUTC)
+  const str = '2021-09-15T00:00:00.000 GMT+00:00' // TODO ADD GMT
+  const replaced = str.replace('T', ', ')
+  const myDate = new Date(replaced)
+  const initUTC = myDate.getTime() / 1000.0
+  state.initUTC = initUTC // init point in UTC seconds
+  console.log('Basic =>init in UTC sec.', initUTC)
   // //
-  // // Only the following count completely timestamps correctly TODO LOOKS OK AS GMT UTC
+  // // Only the following count completely timestamps correctly
   // console.log('ALL=',
   // (new Date()).getTime() / 1000,
   // new Date().valueOf() / 1000,
@@ -286,7 +286,8 @@ export const setSystemTableAttrVal = function (state, payload) {
   console.log('*** SYSTEM Table Payload', JSON.stringify(val))
   const str = val[0].init
   const replaced = str.replace('T', ', ')
-  const myDate = new Date(replaced)
+  // ' GMT+00:00' TODO add it! after 'replaced' not before!
+  const myDate = new Date(replaced + ' GMT+00:00')
   const initUTC = myDate.getTime() / 1000.0
   state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)

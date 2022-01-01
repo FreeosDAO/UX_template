@@ -1,6 +1,9 @@
 <template>
   <!-- Vote.vue This project contain now new page topFrame.vue which creates new page organization,
-  to last working version, return to version from 30/12/2021 -->
+  to last working version, return to version from 30/12/2021
+   The purpose of this file is to pre-fetch some initial data from the backend, to avoid update gaps, when switching from survey to voting and next to ratify
+  Note that automatic update not reading data at first moment but after 60 sec, then after each 60 sec. again (this time also will be shorten after
+  adding initial reading in this page) -->
   <div class="q-mx-auto" style="max-width: 400px">
     <!-- Title/Intro Section -->
     <!-- <q-card flat bordered class="mycard"> -->
@@ -49,6 +52,9 @@
 </template>
 
 <script>
+// This page displays top short toolbar, in the background pre-fetch some initial data for the rest of the pages to avoid data update glitches.
+// and timing problems when transmitting to and from Vuex.
+// This page also allows remove top short menu from all other pages and place it on centralized position here.
 // import notifyAlert from 'src/services/notify-alert'
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
 // import landing from './landing.vue'
