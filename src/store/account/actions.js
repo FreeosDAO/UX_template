@@ -99,7 +99,3 @@ export const setpath = function ({ commit }, pathe) {
 // export function setMode (state, mode) {
 // state.commit('SET_USER_MODE', mode)
 // }
-
-export function setUserMode ({ commit }, active) { // TODO
-  commit('setUserModeAct', active)
-}

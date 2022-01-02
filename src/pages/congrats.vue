@@ -36,8 +36,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'congrats',
   data () {
@@ -51,19 +50,32 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  computed: {
-    ...mapState({
-      mode: state => state.account.user_mode
-    })
-  },
+  // computed: {
+  // ...mapState({
+  // mode: state => state.account.user_mode
+  // })
+  // },
   methods: {
     ...mapActions('account', ['setUserMode']),
+    ...mapActions('svr', ['getSvrsTable']),
     handleClick () {
       /* TODO Note: If user will change page using back/forward on browser,
       * nothing happen as landing (home) page updates the switching context anyway
       */
       this.$router.push('/land') // back to home page anyway
     }
+  },
+  created () { // auto refresh of selected backend tables and screen timer.
+    // this.getSvrsTable(this.accountName)
+    this.getSvrsTable(this.accountName)
+    console.log('Congrats Page mounted:')
+    this.setIntervalId = setInterval(() => {
+      this.getSvrsTable(this.accountName)
+    }, 60000) // call each 60 sec.
+    document.addEventListener('beforeunload', this.handler)
+  },
+  beforeDestroy () {
+    clearInterval(this.setIntervalId)
   }
 }
 </script>

@@ -32,7 +32,3 @@ export const setPath = function (state, pathe) {
 // export const SET_USER_MODE = function (state, mode) {
 // state.user_mode = mode
 // }
-
-export const setUserModeAct = (state, activevalue) => {
-  state.user_mode = activevalue
-}

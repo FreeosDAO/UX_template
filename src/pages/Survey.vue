@@ -4,6 +4,7 @@
   <q-card flat bordered class="mycard">
     <q-card-section>
       <div class="text-h5 text-center">This Weeks Survey</div>
+      <div class="text-subtitle2 text-center"> Closing in: &nbsp;{{secondsToDHms(this.displaytimer)}}</div>
       <!-- <div class="text-subtitle2 text-center">Survey iteration &nbsp; {{iteration}}</div> TODO ask is needed? -->
     </q-card-section>
     <!--  -->
@@ -252,6 +253,8 @@ export default {
     return {
       version: '',
       iteration: 0,
+      displaytimer: 0, // local timer
+      greetcode: 0, // greetings code passed to congratulations page :)
       value_radio1: 0, // control for 1st radio button
       value_radio2: 0, // control for 2nd radio button
       // submitData are passed as this survey-result to the back-end.
@@ -300,7 +303,7 @@ export default {
       // radio buttons: // TODO Verify initial setup for radio buttons:
       group1: 2,
       group2: 2,
-      mintest: 30, // testing operations on slider TODO remove
+      // mintest: 30, // TODO it was used to verify parameters passing to sliders
       lorem: 'Lorem ipsum dolor sit amet, consectetur' +
         ' adipiscing elit, sed do eiusmod tempor incididunt ' +
         'ut labore et dolore magna aliqua. Ut enim ad minim veniam,' +
@@ -314,9 +317,9 @@ export default {
     q2slidermin: function (string) { return string.substring(0, 15) },
     q2slidermax: function (string) { return string.substring(0, 15) }
   }, // filters end
-  created () {
-    this.randomize() // randomize display for question 5.
-  },
+  // created () {
+  // this.randomize() // randomize display for question 5.
+  // },
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
@@ -352,9 +355,9 @@ export default {
       console.log('Survey Data = ', this.submitData)
       this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
-      // notifyAlert('success', 'Survey Submitted Successfully.') // TODO so optimistic - remove from here left in actions
-      // Set up user_mode in Vuex to enable further landing page actions.
-      this.$router.push('/congs') // congratulations page
+      // notifyAlert('success', 'Survey Submitted.') // TODO so optimistic - remove from here but left in actions
+      this.greetcode = 1 // means survey completed :)
+      this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
     },
     randomize () {
       for (let i = this.options.length - 1; i > 0; i--) {
@@ -364,24 +367,36 @@ export default {
         this.$set(this.options, randomIndex, temp)
       }
     },
-    privatetimer () {
+    // Efficiency Note: This should be made in the future as a globally accessible function (in mixins or plugins)
+    secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
+      a = Number(a)
+      const d = Math.floor(a / 86400)
+      const h = Math.floor(a % 86400 / 3600)
+      const m = Math.floor(a % 3600 / 60)
+      const dDisplay = d > 0 ? d + (h === 1 ? ' day, ' : ' days, ') : ''
+      const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : ''
+      const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
+      return dDisplay + hDisplay + mDisplay
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+      // toTime(seconds) {
+      // var date = new Date(null);
+      // date.setSeconds(seconds);
+      // return date.toISOString().substr(11, 8);
+      // }
+    },
+    localtimer () {
+      // Set up on data the variable: LTimer, (function return isSurveyActive),
       let isSurveyActive = false
-      const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
-      const currentoffset = (currentT - this.inittime) % this.iterationSize
-      // state.timerOffset = currentoffset // Update timer in Vuex
-      // console.log(' current_Time = ', currentT)
-      // console.log('Time Zone =', n)
-      // console.log(' init_time_seconds = ', this.inittime)
-      // console.log(' current_offset = ', currentoffset)
-      // const now = new Date()
-      // console.log('My Time=', Math.floor(now.getTime() / 1000))
-      // set userStatus:
+      const LTimer = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
+      const currentoffset = (LTimer - this.inittime) % this.iterationSize
       if ((this.surveystart <= currentoffset) && (currentoffset <= this.surveyend)) {
         isSurveyActive = true
       } else {
         isSurveyActive = false
       }
-      console.log('survey.379: isSurveyActive?=', isSurveyActive)
+      console.log('survey.line394: isSurveyActive (?) = ', isSurveyActive)
+      console.log('survey.line395: currentoffset (?) = ', currentoffset)
+      this.displaytimer = this.surveyend - currentoffset
       return isSurveyActive
     },
     // ===
@@ -390,7 +405,24 @@ export default {
         // TODO is it needed?
       }
     }
-  } // end of methods
+  }, // end of methods
+  created () { // auto refresh of selected backend tables and screen timer.
+    // this.getSvrsTable(this.accountName)
+    // this.getUserTable(this.accountName)
+    this.randomize() // randomize display for question 5.
+    this.setIntervalId = setInterval(() => {
+      // todo call local timer
+      if (!this.localtimer()) {
+        this.greetcode = 0 // means exit due to survey timeout :(
+        clearInterval(this.setIntervalId)
+        this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+      } // emergency exit :)
+    }, 60000) // call each 60 sec.
+    document.addEventListener('beforeunload', this.handler)
+  },
+  beforeDestroy () {
+    clearInterval(this.setIntervalId)
+  }
 }
 </script>
 

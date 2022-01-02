@@ -1,82 +1,28 @@
+/* Table of Content
+setSVRSTableAttrVal - svrs - 12
+setParamTableAttrVal - parameters - 180
+setSystemTableAttrVal - system - 225
+setUserTableAttrVal - user - 245
+setExchangeTableAttrVal - exchange - TODO not defined !!!
+setRegPopUp - end
+*/
+// ===
 // import notifyAlert from 'src/services/notify-alert'
 
 // ===    set SVRS Table Attr Val    ===
 export const setSVRSTableAttrVal = function (state, payload) {
-  // - No need to store any parameters of SVRS into Vuex.
-  // - The parameters of svrs are used only to compute userStatus variables like:
-  // surveyDone, voteDone, and ratifyDone, then only 'mode' is passed to landing.vue
-  // through Vuex.
   //
-  // const now = new Date()
-  // // TODO test --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-  // let str1 = now.toISOString() // TODO change to seconds, try with GMT+00.00 !
-  // console.log('ISO time string =', str1)
-  // str1 = str1.substr(0, 23)
-  // console.log('ISO time string', str1)
-  // const replaced1 = str1.replace('T', ', ')
-  // const myDate1 = new Date(replaced1)
-  // const initUTC1 = myDate1.getTime() / 1000.0
-  // console.log('current in UTC sec. (from ISO):', initUTC1)
-  // console.log('Date now =', now)
-  //
-  const str = '2021-09-15T00:00:00.000 GMT+00:00' // TODO ADD GMT
-  const replaced = str.replace('T', ', ')
-  const myDate = new Date(replaced)
-  const initUTC = myDate.getTime() / 1000.0
-  state.initUTC = initUTC // init point in UTC seconds
-  console.log('Basic =>init in UTC sec.', initUTC)
+  // TODO TEST
+  // sample:
+  // const str = '2021-09-15T00:00:00.000 GMT+00:00' // TODO ADD GMT
+  // const replaced = str.replace('T', ', ')
+  // const myDate = new Date(replaced)
+  // const initUTC = myDate.getTime() / 1000.0
+  // state.initUTC = initUTC // init point in UTC seconds
+  // console.log('Basic =>init in UTC sec.', initUTC)
   // //
-  // // Only the following count completely timestamps correctly
-  // console.log('ALL=',
-  // (new Date()).getTime() / 1000,
-  // new Date().valueOf() / 1000,
-  // (new Date() - new Date().getTimezoneOffset() * 60 * 1000) / 1000)
-  // // ===
-  // // const GMTtime = ((date.getUTCMonth() + 1) + '/' + date.getUTCDate() + '/' + date.getUTCFullYear() + ' ' +
-  // // date.getUTCHours() + ':' + date.getUTCMinutes() + ':' + date.getUTCSeconds() + ' GMT')
-  // // console.log(' GMT time =', GMTtime)
-  // // ===
-  // // The following compare start and end dates
-  // // const startDate = '2021-09-15T00:00:00.000 GMT+00:00'
-  // // const endDate = str1
-  // // const start = new Date(startDate).getTime()
-  // // const end = new Date(endDate).getTime()
-  // // const milliseconds = Math.abs(end - start).toString()
-  // // const seconds = parseInt(milliseconds / 1000)
-  // // const minutes = parseInt(seconds / 60)
-  // // const hours = parseInt(minutes / 60)
-  // // const days = parseInt(hours / 24)
-  // // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
-  // // The same with better Math:
-  // // let seconds = Math.round(Math.abs(end - start) / 1000) // We'll round away millisecond differences.
-  // // const days = Math.floor(seconds / 86400)
-  // // seconds -= days * 86400
-  // // const hours = Math.floor(seconds / 3600)
-  // // seconds -= hours * 3600
-  // // const minutes = Math.floor(seconds / 60)
-  // // seconds -= minutes * 60
-  // // const time = days + ':' + hours % 24 + ':' + minutes % 60 + ':' + seconds % 60
-  // // console.log(time)
-  // // End of the Example comparison
-  // // ===
-  // // One more example of timestamp not verified
-  // // var currTimestamp = Date.now(), //1482905176396
-  // // utcDateString = (new Date(currTimestamp)).toUTCString(); //"Wed, 28 Dec 2016 06:06:50 GMT"
-  // // new Date(utcDateString).getTime(); //This will give you UTC Timestamp in JavaScript
-  // // ===
-  // // Tom's
-  // // const now = new Date()
-  // // const utcMilllisecondsSinceEpoch = now.getTime()
-  // // const utcSecondsSinceEpoch = Math.round(utcMilllisecondsSinceEpoch / 1000)
-  // // console.log('NOWnow = ' + utcSecondsSinceEpoch)
-  // // ===
-  // // new Date(dateString).getTime() / 1000
-  // // const getUnixTimeUtc = (dateString = new Date()) => Math.round(new Date(dateString).getTime() / 1000)
-  // // console.log('getUnixTimeUtc=', getUnixTimeUtc)
-  // // const utc = new Date(new Date().toUTCString()).getTime()
-  // // console.log(' utc=', utc)
-  // // https://www.epochconverter.com/
-  // // TODO test --- --- --- --- --- --- --- --- ---
+  // https://www.epochconverter.com/
+  // TODO test END --- --- --- --- --- --- --- --- ---
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
@@ -115,7 +61,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   state.iteration = diff // active iteration number
   console.log('Counted ITERATION:', diff)
   //
-  // SVRS processing
+  // SVRS data processing TODO only this may be here ! === === ===
   //
   // const attr = payload.key
   const val = payload.value
@@ -233,15 +179,16 @@ export const setSVRSTableAttrVal = function (state, payload) {
 // === === === === === === === === === === === === === === === === === === === === ===
 // P A R A M E T E R S --- TODO NOT TOUCH ------
 export const setParamTableAttrVal = function (state, val) { // TODO Note: This may be sorted out.
-  // Note I am reading only 10 rows from the backend's parameters table, even if there is more.
-  // Called from LayoutMain.vue
+  // Note: I am reading only 10 rows from the backend's parameters table, even if there is more.
+  // Note: Read parameters may come in any order.
+  // Called by LayoutMain.vue
   // Parameters read are stored in Vuex, then used by SVRS.
   //
   // console.log('++val.value==', val.value[1].value)
   // console.log('++val.paramname==', val.value[1].paramname)
   for (let i = 9; i >= 0; i--) { // Read from backend in any order.
     // console.log(' i=', i)
-    // NOTE: Actually, 'parameters' table rows can be in any order
+    // All payload placed in 'state.svr' Vuex
     if (val.value[i].paramname === 'lockfactor') { state.lockfactor = val.value[i].value }
     if (val.value[i].paramname === 'ratifyend') { state.ratifyend = val.value[i].value }
     if (val.value[i].paramname === 'ratifystart') { state.ratifystart = val.value[i].value }
@@ -267,19 +214,21 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
   console.log('= state.surveyranges = ', state.surveyranges)
   console.log('= state.voteranges = ', state.voteranges)
 
-  // TODO Unpack slider ranges for SVR displays here:
+  // TODO Unpack slider ranges for SVR displays here!!!:
   //
-}
+} // === end of parameters table service ===
 
 // === === === === === === === === === === === === === === === === === === === === ===
 // S Y S T E M // TODO NOT TOUCH
-// Function setSystemTableAttrVal called from getSystemTable called from LayoutMain.vue
-// // in computed()
+// Function setSystemTableAttrVal called from getSystemTable
+// Called in LayoutMain.vue
+//
 // Input Backend (freeosgov): system table
 // Output (to Vuex):
 // - initUTC - init time in seconds (achieved from 'init' of system table).
-// - iteration (current iteration build up from already existing data) // TODO Not use system iteration now!
-//
+// - iteration (current iteration build up from already existing data) // TODO Not use the system iteration now!
+// - all remaining parameters - may be stored in Vuex - just in case, however consider further development of the prototype
+// when system may be called again somwhere in the code.
 export const setSystemTableAttrVal = function (state, payload) {
   // const attr = payload.key
   const val = payload.value
@@ -287,7 +236,7 @@ export const setSystemTableAttrVal = function (state, payload) {
   const str = val[0].init
   const replaced = str.replace('T', ', ')
   // ' GMT+00:00' TODO add it! after 'replaced' not before!
-  const myDate = new Date(replaced + ' GMT+00:00')
+  const myDate = new Date(replaced + ' GMT+00:00') // very important!, otherwise javascript will change to local time by default.
   const initUTC = myDate.getTime() / 1000.0
   state.initUTC = initUTC // init point in UTC seconds
   console.log('init in UTC sec.', initUTC)
@@ -321,7 +270,7 @@ export const setUserTableAttrVal = function (state, payload) { // Unpack users t
   state.total_issuance_amount = val[0].total_issuance_ammount
 }
 
-export const setRegPopUp = function (state, payload) { // DO NOT TOUCH!
+export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
   state.isRegOpen = payload
   console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
 }

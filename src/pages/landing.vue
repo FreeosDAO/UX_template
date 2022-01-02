@@ -13,22 +13,12 @@
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
         <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
-        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{secondsToHms(this.timer)}}</div>
-        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToHms(this.timer)}}</div>
+        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{secondsToDHms(this.timer)}}</div>
+        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToDHms(this.timer)}}</div>
         <!-- <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div> -->
           <div><br></div>
         </q-card-section>
       </q-card>
-        <!-- <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
-               style="position: absolute;
-          top:100px; center:0px; ">
-          <div > &nbsp;{{this.landing_title[mode]}}</div>
-        </q-btn>
-        <q-btn v-else size="20px" @click="submit()" no-caps class="bg-grey-6 text-white text-body1"
-               style="position: absolute;
-          top:100px; center:0px; ">
-          <div> &nbsp;{{this.landing_text[mode]}}</div>
-        </q-btn> -->
       </div>
       <!-- Central Card -->
       <div class="row justify-center">
@@ -215,22 +205,9 @@ export default {
       }
     },
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
-    // iterationNow: function () { // todo Actually not used, this computation was made in svr/mutations.js
-    // // Note that getTime() returns milliseconds, not plain seconds:
-    // const currentTimeSec = Math.floor((new Date()).getTime() / 1000)
-    // const diff = Math.floor(((currentTimeSec - this.init_time /* -(12 * 3600) */) / this.iterationSize) + 1)
-    // // console.log('Correct UTC timestamp ' + currentTimeSec)
-    // // console.log('Iteration = ', diff)
-    // return this.diff
-    // // state.iteration = diff // active iteration number
-    // } // ,
-    // modeNow: function (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
-    // return !((mode === 0) || (mode === 2) || (mode === 4) || (mode === 5)) // waiting modes listed
-    // } // TODO 'modeNow' function probably is not longer necessary. Actually its alternative is used.
   }, // End of 'computed' section.
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
-    ...mapActions('svr', ['addRegUser']),
     gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
       this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
@@ -247,24 +224,24 @@ export default {
       // serving for mint page TODO
     },
 
-    allTimers () { // TODO example / seems to be not used
-      this.expires = (this.expires_at * 1000) // normalize UTC formats
-      // http://jsfiddle.net/JamesFM/bxEJd/
-      const timestamp = Date.now()
-      if (timestamp > this.expires) {
-        this.expiration_timer = 0.0
-      } else {
-        this.expiration_timer = (this.expires - timestamp) / 60000 // display in minutes
-        this.expiration_timer = this.expiration_timer.toFixed(2)
-      }
-      console.log('281-timestamp:', this.expires, timestamp)
-    },
-    secondsToHms (a) { // TODO rewrite
+    // allTimers () { // TODO example / seems to be not used
+    // this.expires = (this.expires_at * 1000) // normalize UTC formats
+    // // http://jsfiddle.net/JamesFM/bxEJd/
+    // const timestamp = Date.now()
+    // if (timestamp > this.expires) {
+    // this.expiration_timer = 0.0
+    // } else {
+    // this.expiration_timer = (this.expires - timestamp) / 60000 // display in minutes
+    // this.expiration_timer = this.expiration_timer.toFixed(2)
+    // }
+    // console.log('281-timestamp:', this.expires, timestamp)
+    // },
+    secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
       a = Number(a)
       const d = Math.floor(a / 86400)
       const h = Math.floor(a % 86400 / 3600)
       const m = Math.floor(a % 3600 / 60)
-      const dDisplay = d > 0 ? d + (h === 1 ? ' hour, ' : ' hours, ') : ''
+      const dDisplay = d > 0 ? d + (h === 1 ? ' day, ' : ' days, ') : ''
       const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : ''
       const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
       return dDisplay + hDisplay + mDisplay
@@ -275,10 +252,10 @@ export default {
       // return date.toISOString().substr(11, 8);
       // }
     },
-    // TODO add alerts
+    //
     submit () { // When pressed button the function interpret selected mode
       // NOTE: This is called only when button is pressed!!!
-      console.log('281-time_init_point=', this.init_time) // TODO showing wrongly 1631620800
+      console.log('281-time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')
@@ -297,18 +274,20 @@ export default {
   },
   created () { // auto refresh of selected backend tables and screen timer.
     // this.getSvrsTable(this.accountName)
-    // this.getUserTable(this.accountName)
+    this.getSvrsTable(this.accountName)
+    console.log('Page mounted:')
     this.setIntervalId = setInterval(() => {
-      this.regpopup = this.isRegOpen // registration popup state
-      console.log('324-isRegOpen=', this.regpopup)
       this.getSvrsTable(this.accountName)
-      this.getUserTable(this.accountName)
-      console.log('325-state.isRegOpen=', this.isRegOpen)
+      // this.getUserTable(this.accountName) // TODO move to toolbar page.
     }, 60000) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {
     clearInterval(this.setIntervalId)
+  },
+  mounted () {
+    this.getSvrsTable(this.accountName)
+    console.log('Page mounted:')
   }
 }
 </script>

@@ -238,7 +238,7 @@ export default {
   },
   created () {
     this.checkIfLoggedIn()
-    this.version = process.env.V_STRING
+    this.version = process.env.V_STRING // TODO used ?
     this.getSystemTable()
     this.getParametersTable()
     this.getExchangeTable()

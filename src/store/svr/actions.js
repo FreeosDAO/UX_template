@@ -171,7 +171,7 @@ export async function getParametersTable (state) {
 }
 
 // === === === TODO
-// Call in MaynLayout
+// Called in MainLayout.vue
 export async function getExchangeTable (state) {
   console.log('getParameters', process.env.APP_NAME)
   const result = await connect({
@@ -187,7 +187,7 @@ export async function getExchangeTable (state) {
   }
   console.log('EXCHANGE.currentprice ==', val.value[0].currentprice)
   console.log('EXCHANGE.targetprice ==', val.value[0].targetprice)
-  // state.commit('setExchangeTableAttrVal', val)
+  state.commit('setExchangeTableAttrVal', val)
 }
 
 // === === ===
