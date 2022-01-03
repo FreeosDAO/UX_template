@@ -49,6 +49,7 @@
           </div>
         </div>
       </q-card>
+        <!-- -->
         <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:250px; center:0px; ">
@@ -59,6 +60,7 @@
           top:250px; center:0px; ">
           <div> &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
+        <!-- -->
       </div>
       <!-- <q-card-section>
          <div style="height: 350px" class="bg-grey-6"></div>

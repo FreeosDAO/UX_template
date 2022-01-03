@@ -1,6 +1,7 @@
 export default () => ({
   // svr state
   user_mode: 1, // TODO change back to zero after test // This shows the final route decision (to route to S,V, or R page).
+  delay: 60, // 1 minute delay to the timer
   initUTC: 0, // Initial time point in UTC seconds (read from System table and converted).
   //             Counted in: setSystemTableAttrVal.
   timer: 0, // This is based on current offset value. It is used to build up currently displayed timer value on landing page.

@@ -124,11 +124,12 @@ export const setSVRSTableAttrVal = function (state, payload) {
   console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
     ' SV_OK:', SV_OK, ' R_OK:', R_OK)
   console.log('SystemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
+  const delay = state.delay
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
     if (nothing) {
       state.user_mode = 1
-      state.timer = surveyend - currentoffset // survey timer in seconds
+      state.timer = surveyend - currentoffset + delay // survey timer in seconds
     } // Survey Open
     if (surveyOK) {
       state.user_mode = 2

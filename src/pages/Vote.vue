@@ -354,8 +354,22 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  created () {
-    this.randomize() // randomize display for question 6.
+  created () { // auto refresh of selected backend tables and screen timer.
+    // this.getSvrsTable(this.accountName)
+    // this.getUserTable(this.accountName)
+    this.randomize() // randomize display for question 5.
+    this.setIntervalId = setInterval(() => {
+      // todo call local timer
+      if (!this.localtimer()) {
+        this.greetcode = 0 // means exit due to survey timeout :(
+        clearInterval(this.setIntervalId)
+        this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+      } // emergency exit :)
+    }, 60000) // call each 60 sec.
+    document.addEventListener('beforeunload', this.handler)
+  },
+  beforeDestroy () {
+    clearInterval(this.setIntervalId)
   },
   methods: {
     ...mapActions('svr', ['addVoteResult']),
@@ -388,6 +402,39 @@ export default {
         this.$set(this.options, randomIndex, temp)
       }
     },
+    // Efficiency Note: This should be made in the future as a globally accessible function (in mixins or plugins)
+    secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
+      a = Number(a)
+      const d = Math.floor(a / 86400)
+      const h = Math.floor(a % 86400 / 3600)
+      const m = Math.floor(a % 3600 / 60)
+      const dDisplay = d > 0 ? d + (h === 1 ? ' day, ' : ' days, ') : ''
+      const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : ''
+      const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
+      return dDisplay + hDisplay + mDisplay
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+      // toTime(seconds) {
+      // var date = new Date(null);
+      // date.setSeconds(seconds);
+      // return date.toISOString().substr(11, 8);
+      // }
+    },
+    localtimer () { // todo rewrite
+      // Set up on data the variable: LTimer, (function return isSurveyActive),
+      let isVoteActive = false
+      const LTimer = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
+      const currentoffset = (LTimer - this.inittime) % this.iterationSize
+      if ((this.surveystart <= currentoffset) && (currentoffset <= this.surveyend)) {
+        isVoteActive = true
+      } else {
+        isVoteActive = false
+      }
+      console.log('survey.line394: isSurveyActive (?) = ', isVoteActive)
+      console.log('survey.line395: currentoffset (?) = ', currentoffset)
+      this.displaytimer = this.surveyend - currentoffset
+      return isVoteActive
+    },
+    // ===
     resetForm () {
       this.submitData = {
         // TODO function to consider?
@@ -405,7 +452,9 @@ export default {
       voterange3s: state => state.svr.voterange3s,
       voterange3e: state => state.svr.voterange3e,
       voterange5s: state => state.svr.voterange5s,
-      voterange5e: state => state.svr.voterange5e
+      voterange5e: state => state.svr.voterange5e,
+      inittime: state => state.svr.initUTC,
+      iterationSize: state => state.svr.iterationSize
     })
   }
 }
