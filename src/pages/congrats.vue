@@ -4,7 +4,7 @@
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
       <q-card-section>
-        <div class="text-h5 text-center">Congratulations!</div>
+        <div class="text-h5 text-center">Congratulations! {{$route.params.id}}</div>
       </q-card-section>
       <q-card flat class="mycard1">
         <q-card-section>
@@ -50,11 +50,7 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  // computed: {
-  // ...mapState({
-  // mode: state => state.account.user_mode
-  // })
-  // },
+
   methods: {
     ...mapActions('account', ['setUserMode']),
     ...mapActions('svr', ['getSvrsTable']),
@@ -62,16 +58,15 @@ export default {
       /* TODO Note: If user will change page using back/forward on browser,
       * nothing happen as landing (home) page updates the switching context anyway
       */
-      this.$router.push('/land') // back to home page anyway
+      this.$router.push('/land') // back to home page
     }
   },
   created () { // auto refresh of selected backend tables and screen timer.
-    // this.getSvrsTable(this.accountName)
     this.getSvrsTable(this.accountName)
     console.log('Congrats Page mounted:')
     this.setIntervalId = setInterval(() => {
       this.getSvrsTable(this.accountName)
-    }, 60000) // call each 60 sec.
+    }, 60000) // call each 60 sec. - todo make param.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {

@@ -411,11 +411,11 @@ export default {
     // this.getUserTable(this.accountName)
     this.randomize() // randomize display for question 5.
     this.setIntervalId = setInterval(() => {
-      // todo call local timer
       if (!this.localtimer()) {
-        this.greetcode = 0 // means exit due to survey timeout :(
+        const greetcode = 0 // todo what about correct exit? else greetcode = 1
         clearInterval(this.setIntervalId)
-        this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+        // this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+        this.$router.push({ path: `/congs/${greetcode}` })
       } // emergency exit :)
     }, 60000) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)

@@ -12,10 +12,11 @@
       <div class="row justify-center" style="position:relative;">
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
+          <!-- TODO keylockOn ?? not interpreted here ??? -->
         <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
-        <div v-if="mode===0" class="text-subtitle3 bg-grey-2 text-center">Opens in: &nbsp;{{secondsToDHms(this.timer)}}</div>
+        <div v-if="this.timer <= 60" class="text-subtitle3 bg-grey-2 text-center">{{this.timerMessage[mode]}} <div class="red">
+          less then one minute. </div> </div>
         <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToDHms(this.timer)}}</div>
-        <!-- <div class="text-subtitle3 bg-grey-2 text-center">Closes in: {{countdown_timer}}</div> -->
           <div><br></div>
         </q-card-section>
       </q-card>
@@ -49,8 +50,8 @@
           </div>
         </div>
       </q-card>
-        <!-- -->
-        <q-btn v-if="modeNow" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+        <!-- TODO What can change modeNow here ?? -->
+        <q-btn v-if="keylockOn" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:250px; center:0px; ">
           <div > &nbsp;{{this.landing_title[mode]}}</div>
@@ -138,8 +139,8 @@ export default {
   },
   data () {
     return {
-      modeNow: false, // Main button calling S-V-R is
-      // regpopup: null, // Variable is copy of isRegOpen from store. todo - consider delete
+      keylockOn: false, // Locks button calling S-V-R
+      // regpopup: null, // Variable is copy of isRegOpen from store. todo - mode to tolbar
       interval: null,
       isWaiting: false,
       points: '82345.65',
@@ -192,7 +193,7 @@ export default {
       iteration: state => state.svr.iteration,
       iterationSize: state => state.svr.iterationSize,
       // Used for timer only:
-      timer: state => state.svr.timer,
+      timer: state => state.svr.timer, // this timer value is refreshed each time when svrs is read.
       surveybase: state => state.svr.surveyend,
       votebase: state => state.svr.voteend,
       ratifybase: state => state.svr.ratifyend
@@ -207,12 +208,13 @@ export default {
       }
     },
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
+    // eslint-disable-next-line vue/no-dupe-keys
   }, // End of 'computed' section.
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
     gohome () { // Register current user to backend (call backend;s register)
       // set trigger in Vuex
-      this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
+      // this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
       // TODO write registration data to backend 'users' table.
     },
     ver () { // TODO can be removed
@@ -222,22 +224,14 @@ export default {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel1 = menuItem.label
     },
+    modeNow (mode) { // disable button if no active mode (Switch to any SVR page is impossible now)
+      if ((mode === 0) || (mode === 2) || (mode === 4) || (mode === 6)) { // blocking modes
+        return true // when true lock main key
+      } else { return false }
+    },
     doit () {
       // serving for mint page TODO
     },
-
-    // allTimers () { // TODO example / seems to be not used
-    // this.expires = (this.expires_at * 1000) // normalize UTC formats
-    // // http://jsfiddle.net/JamesFM/bxEJd/
-    // const timestamp = Date.now()
-    // if (timestamp > this.expires) {
-    // this.expiration_timer = 0.0
-    // } else {
-    // this.expiration_timer = (this.expires - timestamp) / 60000 // display in minutes
-    // this.expiration_timer = this.expiration_timer.toFixed(2)
-    // }
-    // console.log('281-timestamp:', this.expires, timestamp)
-    // },
     secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
       a = Number(a)
       const d = Math.floor(a / 86400)
@@ -248,11 +242,6 @@ export default {
       const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
       return dDisplay + hDisplay + mDisplay
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-      // toTime(seconds) {
-      // var date = new Date(null);
-      // date.setSeconds(seconds);
-      // return date.toISOString().substr(11, 8);
-      // }
     },
     //
     submit () { // When pressed button the function interpret selected mode
@@ -270,7 +259,6 @@ export default {
           break
         default: // Waiting modes are {0, 2, 4, or 6}. Press Buttons are inactive for it.
           // Nothing to do - see function modeNow(mode) in this file
-          this.modeNow = true
       }
     }
   },
@@ -280,8 +268,11 @@ export default {
     console.log('Page mounted:')
     this.setIntervalId = setInterval(() => {
       this.getSvrsTable(this.accountName)
+      // TODO Set Up modeNow here !
+      this.keylockOn = this.modeNow(this.mode)
+      console.log('=> mode=', this.mode, '### this.keylockOn = ', this.keylockOn)
       // this.getUserTable(this.accountName) // TODO move to toolbar page.
-    }, 60000) // call each 60 sec.
+    }, 60000) // call each 60 sec. // TODO param.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {
@@ -326,5 +317,9 @@ export default {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.red {
+  color: #C10015;
 }
 </style>

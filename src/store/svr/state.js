@@ -5,11 +5,6 @@ export default () => ({
   initUTC: 0, // Initial time point in UTC seconds (read from System table and converted).
   //             Counted in: setSystemTableAttrVal.
   timer: 0, // This is based on current offset value. It is used to build up currently displayed timer value on landing page.
-  // timer: { // TODO Unlock later after format
-  // days: 0,
-  // hours: 0,
-  // min: 0
-  // }
   //
   // Used to transfer from parameters table to setSVRSTableAttrVal:
   lockfactor: 0,
