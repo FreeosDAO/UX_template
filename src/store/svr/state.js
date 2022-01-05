@@ -4,7 +4,9 @@ export default () => ({
   delay: 60, // 1 minute delay to the timer
   initUTC: 0, // Initial time point in UTC seconds (read from System table and converted).
   //             Counted in: setSystemTableAttrVal.
-  timer: 0, // This is based on current offset value. It is used to build up currently displayed timer value on landing page.
+  timer: 0, // Displayed timer value on landing page.
+  timerOffset: 0, // Offset going through complete iteration from beginning to the end.
+  congratulationTitle: '',
   //
   // Used to transfer from parameters table to setSVRSTableAttrVal:
   lockfactor: 0,

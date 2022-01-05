@@ -12,11 +12,11 @@
       <div class="row justify-center" style="position:relative;">
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
-          <!-- TODO keylockOn ?? not interpreted here ??? -->
-        <div class="text-h5 text-grey-7 text-left"><p>{{this.landing_text[mode]}}</p></div>
+          <!-- -->
+        <div class="text-h5 text-grey-7 text-left"><p>{{timerOffset}} {{this.landing_text[mode]}}</p></div>
         <div v-if="this.timer <= 60" class="text-subtitle3 bg-grey-2 text-center">{{this.timerMessage[mode]}} <div class="red">
           less then one minute. </div> </div>
-        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToDHms(this.timer)}}</div>
+        <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToDHms(this.timer)}} {{this.timer}}</div>
           <div><br></div>
         </q-card-section>
       </q-card>
@@ -50,7 +50,6 @@
           </div>
         </div>
       </q-card>
-        <!-- TODO What can change modeNow here ?? -->
         <q-btn v-if="keylockOn" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:250px; center:0px; ">
@@ -85,8 +84,8 @@
         ><div class="mini1">Claimed</div></q-btn>
       </q-card>
       </div>
-    <!-- </q-card> REGISTER POP-UP -->
-    <q-dialog v-model="status">  <!-- Note: v-model operate on copy of isRegOpen -->
+    <!-- </q-card> REGISTER POP-UP TODO move to topFrame.vue
+    <q-dialog v-model="status">
       <q-card>
         <q-separator></q-separator>
         <section>
@@ -123,20 +122,20 @@
           <q-btn flat label="Decline" color="primary" @click="status.set(false)" v-close-popup></q-btn>
         </q-card-actions>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import Register from 'pages/Register'
+// import Register from 'pages/Register'
 // import { addRegUser } from 'src/store/svr/actions'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
-  components: {
-    regtag: Register
-  },
+  // components: {
+  // regtag: Register
+  // },
   data () {
     return {
       keylockOn: false, // Locks button calling S-V-R
@@ -190,23 +189,24 @@ export default {
       isRegOpen: state => state.svr.isRegOpen,
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
-      iteration: state => state.svr.iteration,
-      iterationSize: state => state.svr.iterationSize,
+      // iteration: state => state.svr.iteration, todo not used - remove
+      // iterationSize: state => state.svr.iterationSize, todo not used - remove
       // Used for timer only:
-      timer: state => state.svr.timer, // this timer value is refreshed each time when svrs is read.
+      timer: state => state.svr.timer, // timer displayed on a page - refreshed each time when 'svrs' table is read.
+      timerOffset: state => state.svr.timerOffset,
       surveybase: state => state.svr.surveyend,
       votebase: state => state.svr.voteend,
       ratifybase: state => state.svr.ratifyend
       // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
-    status: { // serve for v-model for the Register pop-up window
-      get () {
-        return this.$store.state.svr.isRegOpen
-      },
-      set (value) { // true or false
-        this.$store.commit('svr/setRegPopUp', value)
-      }
-    },
+    // status: { // serve for v-model for the Register pop-up window todo move to topFrame.vue
+    // get () {
+    // return this.$store.state.svr.congratulationTitle
+    // },
+    // set (value) { // true or false
+    // this.$store.commit('svr/setcongratulationTitle', value)
+    // }
+    // },
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
     // eslint-disable-next-line vue/no-dupe-keys
   }, // End of 'computed' section.
@@ -246,7 +246,7 @@ export default {
     //
     submit () { // When pressed button the function interpret selected mode
       // NOTE: This is called only when button is pressed!!!
-      console.log('281-time_init_point=', this.init_time)
+      // console.log('281-time_init_point=', this.init_time)
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')

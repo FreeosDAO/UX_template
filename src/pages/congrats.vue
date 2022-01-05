@@ -8,7 +8,7 @@
       </q-card-section>
       <q-card flat class="mycard1">
         <q-card-section>
-          {{ lorem }}
+          {{congratTitle}}{{ lorem }}
         </q-card-section>
         <q-card-section>
           <q-img
@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'congrats',
   data () {
@@ -50,9 +50,13 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-
+  computed: {
+    ...mapState({
+      congratTitle: state => state.svr.congratulationTitle
+    })
+  },
   methods: {
-    ...mapActions('account', ['setUserMode']),
+    // ...mapActions('account', ['setUserMode']),
     ...mapActions('svr', ['getSvrsTable']),
     handleClick () {
       /* TODO Note: If user will change page using back/forward on browser,

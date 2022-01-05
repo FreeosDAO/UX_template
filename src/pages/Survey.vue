@@ -254,7 +254,7 @@ export default {
       version: '',
       iteration: 0,
       displaytimer: 0, // local timer
-      greetcode: 0, // greetings code passed to congratulations page :)
+      greetTitle: 0, // greetings title code passed to congratulations page :)  allowed 0-3.
       value_radio1: 0, // control for 1st radio button
       value_radio2: 0, // control for 2nd radio button
       // submitData are passed as this survey-result to the back-end.
@@ -311,7 +311,7 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  filters: { // extract sliders parameters for survey.
+  filters: { // todo extract sliders parameters for survey.
     q1slidermin: function (string) { return string.substring(0, 15) },
     q1slidermax: function (string) { return string.substring(0, 15) },
     q2slidermin: function (string) { return string.substring(0, 15) },
@@ -334,7 +334,15 @@ export default {
       surveyend: state => state.svr.surveyend,
       surveystart: state => state.svr.surveystart
     }),
-    ...mapGetters('account', ['isAuthenticated', 'connecting'])
+    ...mapGetters('account', ['isAuthenticated', 'connecting']),
+    congratTitle: { // serve for v-model for the Register pop-up window
+      get () {
+        return this.$store.state.svr.congratulationTitle
+      },
+      set (value) { // true or false
+        this.$store.commit('svr/congratulationTitle', value)
+      }
+    }
   },
   methods: {
     ...mapActions('svr', ['addSurveyResult']),
@@ -356,8 +364,8 @@ export default {
       this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
       // notifyAlert('success', 'Survey Submitted.') // TODO so optimistic - remove from here but left in actions
-      this.greetcode = 1 // means survey completed :)
-      this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+      this.congratTitle.set('Survey') // Pass title for the greetings page.
+      this.$router.push('/congs') // congratulations page //
     },
     randomize () {
       for (let i = this.options.length - 1; i > 0; i--) {
@@ -378,11 +386,6 @@ export default {
       const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : ''
       return dDisplay + hDisplay + mDisplay
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-      // toTime(seconds) {
-      // var date = new Date(null);
-      // date.setSeconds(seconds);
-      // return date.toISOString().substr(11, 8);
-      // }
     },
     localtimer () {
       // Set up on data the variable: LTimer, (function return isSurveyActive),
@@ -411,11 +414,12 @@ export default {
     // this.getUserTable(this.accountName)
     this.randomize() // randomize display for question 5.
     this.setIntervalId = setInterval(() => {
+      console.log('survey.line417: this.localtimer() = ', this.localtimer(), ' ! ', !this.localtimer())
       if (!this.localtimer()) {
-        const greetcode = 0 // todo what about correct exit? else greetcode = 1
         clearInterval(this.setIntervalId)
-        // this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
-        this.$router.push({ path: `/congs/${greetcode}` })
+        // this.congratTitle.set('Out of Survey period. You still can wait for Vote.') // Pass title for the greetings page.
+        console.log('survey.line422: this.localtimer() = ', this.localtimer(), ' ! ', !this.localtimer())
+        this.$router.push('/congs') // go to congratulations page
       } // emergency exit :)
     }, 60000) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)

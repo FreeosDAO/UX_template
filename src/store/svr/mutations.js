@@ -28,11 +28,12 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let isRatifyActive = false
   const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
-  state.timerOffset = currentoffset // Update timer in Vuex
-  console.log(' current_Time = ', currentT)
+  state.timerOffset = currentoffset // Update timer in Vuex todo ??
+  // console.log(' current_Time = ', currentT)
   // console.log('Time Zone =', n)
-  console.log(' init_time_seconds = ', state.initUTC)
+  // console.log(' init_time_seconds = ', state.initUTC)
   console.log(' current_offset = ', currentoffset)
+  // console.log(' state.timerOffset = ', state.timerOffset)
   // const now = new Date()
   // console.log('My Time=', Math.floor(now.getTime() / 1000)) // TODO Seems to be the best one. TODO LOOKS OK AS GMT UTC
   // TODO this timer is not implemented for counting of the iteration TODO TODO !!! === === === === === === === === ===
@@ -43,7 +44,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const voteend = state.voteend
   const votestart = state.votestart
   // set userStatus:
-  console.log('mu.30: is Active? S=', isSurveyActive, ' V=', isVoteActive, ' R=', isRatifyActive)
+  console.log('systemStatus: isSurveyActive=', isSurveyActive, ' isVoteActive=', isVoteActive, ' isRatifyActive=', isRatifyActive)
   if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { isSurveyActive = true } // We are in Survey period.
   if ((votestart <= currentoffset) && (currentoffset <= voteend)) { isVoteActive = true } // -- "" --  Vote period.
   if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true } // Ratify period
@@ -59,20 +60,20 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // const currentTimeSec = Math.floor((new Date()).getTime() / 1000) // ?? delete
   const diff = Math.floor(((currentT - state.initUTC) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
-  console.log('Counted ITERATION:', diff)
+  // console.log('Counted ITERATION:', diff)
   //
   // SVRS data processing TODO only this may be here ! === === ===
   //
   // const attr = payload.key
   const val = payload.value
-  console.log('*** SVRS payload (landing)', JSON.stringify(val)) // test
+  console.log('*** SVRS payload', JSON.stringify(val)) // test
   // state.SVRSInfo[attr] = val
   //
   let surveyDone = false // Keep it as it is (whatever do you think :) )
   let voteDone = false
   let ratifyDone = false
   const survey1 = val[0].survey1
-  console.log('val[0]survey1', val[0].survey1)
+  // console.log('val[0]survey1', val[0].survey1)
   const survey2 = val[0].survey2
   const survey3 = val[0].survey3
   const survey4 = val[0].survey4
@@ -108,8 +109,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
     ratifyDone = true
     console.log('user has already completed the ratify')
   }
-  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone,
-    ' thisIteration=', thisIteration)
+  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone)
   let nothing = false
   let surveyOK = false
   let voteOK = false
@@ -121,9 +121,9 @@ export const setSVRSTableAttrVal = function (state, payload) {
   if ((voteDone === true) && (ratifyDone === false)) { voteOK = true } // S-any, V-true, R-false
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
-  console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
-    ' SV_OK:', SV_OK, ' R_OK:', R_OK)
-  console.log('SystemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
+  // console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
+  // ' SV_OK:', SV_OK, ' R_OK:', R_OK)
+  console.log('systemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
   // const delay = state.delay
   if (isSurveyActive) {
     // state.user_mode = 0 means system inactive
@@ -275,4 +275,9 @@ export const setUserTableAttrVal = function (state, payload) { // Unpack users t
 export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
   state.isRegOpen = payload
   console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
+}
+
+export const setcongratulationTitle = function (state, payload) { // DO NOT TOUCH! TODO need review
+  state.setcongratulationTitle = payload
+  // console.log('=> congratulationTitle=, payload', state.congratulationTitle, payload)
 }
