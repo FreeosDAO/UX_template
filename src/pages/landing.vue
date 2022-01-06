@@ -12,10 +12,10 @@
       <div class="row justify-center" style="position:relative;">
       <q-card flat round bordered class="mycard1 bg-grey-4">
         <q-card-section>
-          <!-- -->
+          <!-- todo button should be locked down if less than 60 sec. todo-->
         <div class="text-h5 text-grey-7 text-left"><p>{{timerOffset}} {{this.landing_text[mode]}}</p></div>
-        <div v-if="this.timer <= 60" class="text-subtitle3 bg-grey-2 text-center">{{this.timerMessage[mode]}} <div class="red">
-          less then one minute. </div> </div>
+        <div v-if="this.timer <= 60" class="text-subtitle3 bg-grey-2 text-center">{{this.timerMessage[mode]}} <span class="red">
+          less then one minute. </span> </div>
         <div v-else class="text-subtitle3 bg-grey-2 text-center">&nbsp;{{this.timerMessage[mode]}}&nbsp;{{secondsToDHms(this.timer)}} {{this.timer}}</div>
           <div><br></div>
         </q-card-section>
@@ -50,7 +50,8 @@
           </div>
         </div>
       </q-card>
-        <q-btn v-if="keylockOn" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
+        <!-- <span v-show="!(this.timer <= 60)"> -->
+        <q-btn v-if="keylockOn||(this.timer<=60)" size="20px" disable no-caps class="bg-grey-6 text-white text-body1"
                style="position: absolute;
           top:250px; center:0px; ">
           <div > &nbsp;{{this.landing_title[mode]}}</div>
@@ -60,6 +61,7 @@
           top:250px; center:0px; ">
           <div> &nbsp;{{this.landing_text[mode]}}</div>
         </q-btn>
+        <!-- </span> -->
         <!-- -->
       </div>
       <!-- <q-card-section>
@@ -84,45 +86,6 @@
         ><div class="mini1">Claimed</div></q-btn>
       </q-card>
       </div>
-    <!-- </q-card> REGISTER POP-UP TODO move to topFrame.vue
-    <q-dialog v-model="status">
-      <q-card>
-        <q-separator></q-separator>
-        <section>
-        <regtag></regtag>
-        </section>
-        <q-separator></q-separator>
-        <q-card-section class="text-h6">
-          <div class="q-gutter-sm row justify-center">
-            <q-btn
-              dense
-              no-caps
-              size="25px"
-              align="center"
-              @click="gohome()"
-              class="full-width q-px-xl q-py-xs center"
-              color="grey-6"
-              label="Register with Freeos"
-            >
-            </q-btn><br>
-            <q-btn
-              flat
-              no-caps
-              size="25px"
-              align="center"
-              @click="gohome()"
-              class="full-width q-px-xl q-py-xs center"
-              color="grey-6"
-              label="Sign In"
-            >
-            </q-btn>
-          </div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="Decline" color="primary" @click="status.set(false)" v-close-popup></q-btn>
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
   </div>
 </template>
 
@@ -189,6 +152,7 @@ export default {
       isRegOpen: state => state.svr.isRegOpen,
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
+      scan_interval: state => state.svr.scan_interval,
       // iteration: state => state.svr.iteration, todo not used - remove
       // iterationSize: state => state.svr.iterationSize, todo not used - remove
       // Used for timer only:
@@ -199,14 +163,6 @@ export default {
       ratifybase: state => state.svr.ratifyend
       // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
-    // status: { // serve for v-model for the Register pop-up window todo move to topFrame.vue
-    // get () {
-    // return this.$store.state.svr.congratulationTitle
-    // },
-    // set (value) { // true or false
-    // this.$store.commit('svr/setcongratulationTitle', value)
-    // }
-    // },
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
     // eslint-disable-next-line vue/no-dupe-keys
   }, // End of 'computed' section.
@@ -271,8 +227,7 @@ export default {
       // TODO Set Up modeNow here !
       this.keylockOn = this.modeNow(this.mode)
       console.log('=> mode=', this.mode, '### this.keylockOn = ', this.keylockOn)
-      // this.getUserTable(this.accountName) // TODO move to toolbar page.
-    }, 60000) // call each 60 sec. // TODO param.
+    }, this.scan_interval) // call each 30 sec. // TODO param.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {

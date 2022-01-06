@@ -6,7 +6,7 @@
       <q-card-section>
         <div class="text-h5 text-center">Please ratify</div>
         <div class="text-subtitle2 text-center">Ratification iteration &nbsp; {{iteration}}</div>
-        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div>
+        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{secondsToDHms(this.displaytimer)}}</div>
       </q-card-section>
       <q-card-section>
         <q-separator inset class="grey6"></q-separator>
@@ -169,6 +169,7 @@ export default {
   name: 'Vote',
   data () {
     return { // TODO Note: These data values should be read from somewhere:
+      displaytimer: 0,
       issuance: '12,235,167',
       issuatrend: '-0.2%',
       mintfees: '7.33',
@@ -200,6 +201,7 @@ export default {
     ...mapState({
       accountName: state => state.account.accountName,
       inittime: state => state.svr.initUTC,
+      scan_interval: state => state.svr.scan_interval,
       iterationSize: state => state.svr.iterationSize
     })
   },
@@ -250,7 +252,7 @@ export default {
       }
       console.log('survey.line394: isRatifyActive (?) = ', isRatifyActive)
       console.log('survey.line395: currentoffset (?) = ', currentoffset)
-      this.displaytimer = this.surveyend - currentoffset
+      this.displaytimer = this.ratifyend - currentoffset
       return isRatifyActive
     },
     // ===
@@ -263,13 +265,11 @@ export default {
     // this.getUserTable(this.accountName)
     this.randomize() // randomize display for question 5.
     this.setIntervalId = setInterval(() => {
-      // todo call local timer
       if (!this.localtimer()) {
-        this.greetcode = 0 // means exit due to survey timeout :(
         clearInterval(this.setIntervalId)
-        this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+        this.$router.push('/congs') // congratulations page
       } // emergency exit :)
-    }, 60000) // call each 60 sec.
+    }, this.scan_interval) // call each 30 sec.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {

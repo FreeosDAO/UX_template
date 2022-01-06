@@ -47,7 +47,45 @@
           </q-menu>
         </q-btn>
       </q-toolbar>
-    <!-- </q-card> -->
+     <q-dialog v-model="alert">
+       <q-card>
+         console.log(' account_type=', this.account_type)
+       <q-separator></q-separator>
+       <section>
+       <regtag></regtag>
+       </section>
+       <q-separator></q-separator>
+    <q-card-section class="text-h6">
+      <div class="q-gutter-sm row justify-center">
+        <q-btn
+          dense
+          no-caps
+          size="25px"
+          align="center"
+          @click="gohome()"
+          class="full-width q-px-xl q-py-xs center"
+          color="grey-6"
+          label="Register with Freeos"
+        >
+        </q-btn><br>
+        <q-btn
+          flat
+          no-caps
+          size="25px"
+          align="center"
+          @click="gohome()"
+          class="full-width q-px-xl q-py-xs center"
+          color="grey-6"
+          label="Sign In"
+        >
+        </q-btn>
+      </div>
+    </q-card-section>
+    <q-card-actions align="right">
+      <q-btn flat label="Decline" color="primary" @click="alert = false" v-close-popup></q-btn>
+    </q-card-actions>
+  </q-card>
+</q-dialog>
   </div>
 </template>
 
@@ -59,25 +97,45 @@
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
 // import landing from './landing.vue'
 
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import Register from 'pages/Register'
 
 export default {
   name: 'topFrame',
-  // components: {
-  // landing
-  // },
+  components: {
+    regtag: Register
+  },
   data () {
     return {
-      points: null
+      points: null,
+      alert: null
+    }
+  },
+  created () {
+    // verify user registration. Read 'users' table.
+    // todo if registration ok (V account) go to landing.vue otherwise logout
+    // todo ask on what to do with a accounts?
+    this.getUserTable(this.accountName)
+    console.log(' topFrame.vue')
+    // if (this.account_type === 'v') {
+    if (this.isRegOpen) {
+      console.log(' isRegOpen=', this.isRegOpen)
+      this.alert = true
+    } else {
+      console.log(' isRegOpen=', this.isRegOpen)
+      this.alert = false
     }
   },
   computed: {
     ...mapState({
-      accountName: state => state.account.accountName
-
+      accountName: state => state.account.accountName,
+      iteration: state => state.svr.iteration,
+      account_type: state => state.svr.account_type,
+      isRegOpen: state => state.svr.isRegOpen
     })
   },
   methods: {
+    ...mapActions('svr', ['getUserTable'])
   }
 }
 </script>

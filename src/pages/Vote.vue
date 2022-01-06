@@ -7,7 +7,7 @@
         <div class="text-h5 text-center">This Weeks Vote</div>
         <div class="text-subtitle1 text-center">Yours vote runs the economy</div>
         <!-- <div class="text-subtitle2 text-center">Voting iteration &nbsp; {{iteration}}</div> TODO ask is needed ? -->
-        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{expiration_timer}}</div> <!-- TODO timer -->
+        <div class="text-subtitle2 bg-grey-4 text-center">Closes in: {{secondsToDHms(this.displaytimer)}}</div> <!-- TODO timer -->
       </q-card-section>
       <q-card flat class="mycard1">
         <q-card-section>
@@ -301,6 +301,7 @@ export default {
   data () { // VOTE
     return {
       version: '',
+      displaytimer: 0, // local timer
       selection1: 0,
       selection2: 0,
       selection3: 0,
@@ -359,13 +360,11 @@ export default {
     // this.getUserTable(this.accountName)
     this.randomize() // randomize display for question 5.
     this.setIntervalId = setInterval(() => {
-      // todo call local timer
       if (!this.localtimer()) {
-        this.greetcode = 0 // means exit due to survey timeout :(
         clearInterval(this.setIntervalId)
-        this.$router.push('/congs') // congratulations page // todo add parameter for congratulations (greetcode).
+        this.$router.push('/congs') // congratulations page
       } // emergency exit :)
-    }, 60000) // call each 60 sec.
+    }, this.scan_interval) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {
@@ -386,7 +385,7 @@ export default {
       this.submitData.q6choice3 = this.selection3.value
       // const self = this
       this.submitData.currentAccountName = this.accountName
-      console.log('@#$ Vote submitData = ', this.submitData)
+      console.log('Vote submitData = ', this.submitData)
       this.addVoteResult(this.submitData) // Submit to back-end to sum with global results
       // // .then(response => { // TODO remove it
       // self.resetForm()
@@ -429,12 +428,11 @@ export default {
       } else {
         isVoteActive = false
       }
-      console.log('survey.line394: isSurveyActive (?) = ', isVoteActive)
+      console.log('survey.line394: isVoteActive (?) = ', isVoteActive)
       console.log('survey.line395: currentoffset (?) = ', currentoffset)
-      this.displaytimer = this.surveyend - currentoffset
+      this.displaytimer = this.voteend - currentoffset
       return isVoteActive
     },
-    // ===
     resetForm () {
       this.submitData = {
         // TODO function to consider?
@@ -454,7 +452,8 @@ export default {
       voterange5s: state => state.svr.voterange5s,
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,
-      iterationSize: state => state.svr.iterationSize
+      iterationSize: state => state.svr.iterationSize,
+      scan_interval: state => state.svr.scan_interval
     })
   }
 }

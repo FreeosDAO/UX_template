@@ -1,14 +1,14 @@
 export default () => ({
   // svr state
-  user_mode: 1, // TODO change back to zero after test // This shows the final route decision (to route to S,V, or R page).
-  delay: 60, // 1 minute delay to the timer
+  user_mode: 1, // TODO change back to zero/null after test // This shows the final route decision (to route to S,V, or R page).
+  delay: 60, // 1-minute display timer delay // actually, not used todo left for testing
   initUTC: 0, // Initial time point in UTC seconds (read from System table and converted).
   //             Counted in: setSystemTableAttrVal.
   timer: 0, // Displayed timer value on landing page.
   timerOffset: 0, // Offset going through complete iteration from beginning to the end.
-  congratulationTitle: '',
+  congratulationTitle: '', // todo not work well yet
   //
-  // Used to transfer from parameters table to setSVRSTableAttrVal:
+  // 'parameters' table. (Used to transfer from parameters table to setSVRSTableAttrVal:)
   lockfactor: 0,
   ratifystart: 0,
   surveyend: 0,
@@ -33,14 +33,14 @@ export default () => ({
   voterange2s: 6,
   voterange2e: 30,
   voterange3s: 0.0167,
-  voterange3e: 0, // uses const from .env
+  voterange3e: 0, // todo uses const from .env
   voterange5s: 0,
   voterange5e: 50,
   //
-  // user table (registration)
-  isRegOpen: null, // Is Registration pop-up open? (default:  false = no, null - undefined)
+  // 'users' table (registration)
+  isRegOpen: null, // todo not longer used - delete a.s.a.p.
   stake: 0,
-  account_type: null,
+  account_type: null, // 'v' or 'a' - accept only 'v'
   registered_iteration: null,
   staked_iteration: null,
   votes: 0,
@@ -48,7 +48,8 @@ export default () => ({
   last_issuance: 0,
   total_issuance_ammount: 0,
   iteration: 0, // current iteration counted 'by myself'
-  // constants (eventually move to .env)
-  iterationSize: 3600, // TODO after testing switch back to normal size of iteration: 604800 (read from env).
-  current_price: 1.2700 // TODO Source not defined!
+  // CONSTANTS: (consider move to .env)
+  iterationSize: 3600, // TODO after testing switch back to normal size of iteration: 604800 (todo read from env).
+  current_price: 1.2700, // TODO Source need to be defined!
+  scan_interval: 30000 // 30 sec. right now // the interval between refreshing backend table reads (actually only svrs)
 })

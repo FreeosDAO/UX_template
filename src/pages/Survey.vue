@@ -332,7 +332,8 @@ export default {
       inittime: state => state.svr.initUTC,
       iterationSize: state => state.svr.iterationSize,
       surveyend: state => state.svr.surveyend,
-      surveystart: state => state.svr.surveystart
+      surveystart: state => state.svr.surveystart,
+      scan_interval: state => state.svr.scan_interval
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
     congratTitle: { // serve for v-model for the Register pop-up window
@@ -421,7 +422,7 @@ export default {
         console.log('survey.line422: this.localtimer() = ', this.localtimer(), ' ! ', !this.localtimer())
         this.$router.push('/congs') // go to congratulations page
       } // emergency exit :)
-    }, 60000) // call each 60 sec.
+    }, this.scan_interval) // call each 60 sec.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {

@@ -231,7 +231,7 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
 // - iteration (current iteration build up from already existing data) // TODO Not use the system iteration now!
 // - all remaining parameters - may be stored in Vuex - just in case, however consider further development of the prototype
 // when system may be called again somwhere in the code.
-export const setSystemTableAttrVal = function (state, payload) {
+export const setSystemTableAttrVal = function (state, payload) { // TODO WTF?
   // const attr = payload.key
   const val = payload.value
   console.log('*** SYSTEM Table Payload', JSON.stringify(val))
@@ -264,6 +264,7 @@ export const setUserTableAttrVal = function (state, payload) { // Unpack users t
   // console.log('*** USERS total_issuance_amount:', val[0].total_issuance_amount) // test
   state.stake = val[0].stake
   state.account_type = val[0].account_type
+  console.log(' account_type=', state.account_type)
   state.registered_iteration = val[0].registered_iteration
   state.staked_iteration = val[0].staked_iteration
   state.votes = val[0].votes
@@ -272,12 +273,12 @@ export const setUserTableAttrVal = function (state, payload) { // Unpack users t
   state.total_issuance_amount = val[0].total_issuance_ammount
 }
 
-export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
-  state.isRegOpen = payload
-  console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
-}
-
 export const setcongratulationTitle = function (state, payload) { // DO NOT TOUCH! TODO need review
   state.setcongratulationTitle = payload
   // console.log('=> congratulationTitle=, payload', state.congratulationTitle, payload)
+}
+
+export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
+  state.isRegOpen = payload
+  console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
 }
