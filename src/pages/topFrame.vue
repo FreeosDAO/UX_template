@@ -10,7 +10,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          &nbsp; &nbsp;{{accountName}} &nbsp;  <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
+          &nbsp; &nbsp;{{accountName}} &nbsp; {{header}} <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
         </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
@@ -97,34 +97,37 @@
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
 // import landing from './landing.vue'
 
-import { mapActions, mapState } from 'vuex'
 import Register from 'pages/Register'
+import { mapActions, mapGetters, mapState } from 'vuex'
+// import { bus } from 'C:/Users/Andrew/UX_template/.quasar/app.js' // todo experiment
+// import { bus } from '../App.vue' // todo added by me
 
 export default {
   name: 'topFrame',
+  props: { // todo experiment
+    header: {
+      type: String
+    }
+  }, // end
   components: {
     regtag: Register
   },
   data () {
     return {
       points: null,
-      alert: null
+      alert: null,
+      acctname: null
     }
   },
   created () {
-    // verify user registration. Read 'users' table.
-    // todo if registration ok (V account) go to landing.vue otherwise logout
-    // todo ask on what to do with a accounts?
-    this.getUserTable(this.accountName)
-    console.log(' topFrame.vue')
-    // if (this.account_type === 'v') {
-    if (this.isRegOpen) {
-      console.log(' isRegOpen=', this.isRegOpen)
-      this.alert = true
-    } else {
-      console.log(' isRegOpen=', this.isRegOpen)
-      this.alert = false
-    }
+    // console.log('this.accountName=', this.accountName, 'isAccount?', this.isAccount) // TODO verify is defined -- Not work here !!!
+    // TODO Copy that to mounted !
+    // this.getUserTable(this.accountName)
+    // console.log('*** this.accountName=', this.accountName)
+    // this.getUserTable(this.accountName)
+    // this.getUserTable(this.accountName)
+    // console.log('*** this.accountName=', this.accountName)
+    // this.getUserTable(this.accountName)
   },
   computed: {
     ...mapState({
@@ -132,7 +135,8 @@ export default {
       iteration: state => state.svr.iteration,
       account_type: state => state.svr.account_type,
       isRegOpen: state => state.svr.isRegOpen
-    })
+    }),
+    ...mapGetters('account', ['isAccount'])
   },
   methods: {
     ...mapActions('svr', ['getUserTable'])

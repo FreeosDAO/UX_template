@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import account from './account'
 import svr from './svr'
 // import other from './other'

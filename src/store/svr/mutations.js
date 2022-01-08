@@ -281,4 +281,20 @@ export const setcongratulationTitle = function (state, payload) { // DO NOT TOUC
 export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
   state.isRegOpen = payload
   console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
+  // true - Registration Pop-Up is open, else closed.
+  if (!payload) { // false; so, the user's record exists, :|
+    if (state.account_type === 'v') { // The user's record exists with correct account type :)
+      state.isRegOpen = false // Only in this case the register pop-up is not displayed.
+    } else { // so, the user's record exists, with incorrect account type :(
+      state.isRegOpen = true
+    }
+  } else { // user's record do not exist at all
+    state.isRegOpen = true
+  }
+  console.log('state.isRegOpen=', state.isRegOpen)
+}
+
+export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOUCH! TODO need review
+  // state.setcongratulationTitle = payload
+  // console.log('=> congratulationTitle=, payload', state.congratulationTitle, payload)
 }

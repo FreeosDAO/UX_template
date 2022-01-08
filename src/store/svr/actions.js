@@ -185,8 +185,8 @@ export async function getExchangeTable (state) {
     key: 'ExchangeData',
     value: result.rows
   }
-  console.log('EXCHANGE.currentprice ==', val.value[0].currentprice)
-  console.log('EXCHANGE.targetprice ==', val.value[0].targetprice)
+  // console.log('EXCHANGE.currentprice ==', val.value[0].currentprice) // todo something
+  // console.log('EXCHANGE.targetprice ==', val.value[0].targetprice) // todo something
   state.commit('setExchangeTableAttrVal', val)
 }
 
@@ -286,7 +286,7 @@ export async function addReRegUser ({ state }, currentAccountName) {
   }
 }
 
-// === g e t U s e r T a b l e ===
+// === === === g e t U s e r T a b l e === === ===
 // Is called by landing.vue
 // Read all the data from table for a given user (scope)
 // Additionally, set-up the
@@ -308,11 +308,11 @@ export async function getUserTable (state, name) {
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
-      notifyAlert('err', 'E: User not Registered.')
+      notifyAlert('err', 'E: User is definitely not Registered.')
       // Set 'on' the (pop-up) 'Registration's window trigger on Vuex:
       state.commit('setRegPopUp', true) // The Register Pop-up is open.
-    } else { // The user is already registered - no Register pop-up window visible.
-      notifyAlert('success', 'User Is Registered.')
+    } else { // The user may be registered, however may have not valid account type.
+      notifyAlert('success', 'User may be Registered. Account type verification in progress.')
       state.commit('setRegPopUp', false) // The Register Pop-up is closed.
     }
   }

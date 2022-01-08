@@ -40,6 +40,7 @@
     <q-page-container>
       <topFrame />
       <router-view />
+      <!-- <q-btn style="text-color:blue" v-on:click="changeHeader">{{header}}</q-btn> -->
     </q-page-container>
 
   </q-layout>
@@ -48,6 +49,7 @@
 // import WalletLoginDialog from 'components/accountManagement/WalletLoginDialog'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import topFrame from '../pages/topFrame.vue'
+// import { bus } from '../App.vue' // todo added by me
 // import { getExchangerateTable, getExchangeTable } from 'src/store/svr/actions'
 // import { getSystemTable } from 'src/store/svr/actions'
 
@@ -204,6 +206,11 @@ export default {
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
   },
+  props: { // todo by me
+    header: {
+      type: String
+    }
+  },
   methods: {
     ...mapActions('svr', ['getParametersTable', 'getSystemTable', 'getExchangeTable']),
     onSigninFinish (event) {
@@ -213,11 +220,17 @@ export default {
         this.onSelectMenu(menuList[0])
       }
     },
+    // changeHeader () {
+    // this.header = this.accountName
+    // bus.$emit('changeIt', this.accountName)
+    // console.log('change header')
+    // },
     onSelectMenu (menuItem) {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel = menuItem.label
     },
     ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout']),
+    ...mapActions('svr', ['getUserTable']),
     whatever () { // test
       // this.actionWhateverCompute(this.accountName)
     }
@@ -226,10 +239,10 @@ export default {
     isAuthenticated: {
       immediate: true,
       handler: function (val) {
-        // if (val && this.accountName) {
-        // this.getAccountBang()
-        // this.getActionBoo()
-        // }
+        if (val && this.accountName) {
+          this.getUserTable(this.accountName)
+          console.log('*** this.accountName=', this.accountName)
+        }
         if (val && this.$route.query.returnUrl) {
           this.$router.push({ path: this.$route.query.returnUrl })
         }
@@ -242,10 +255,10 @@ export default {
     this.getSystemTable()
     this.getParametersTable()
     this.getExchangeTable()
+  },
+  mounted () {
+    //
   }
-  // mounted () {
-  // this.getTable(this.accountName)
-  // }
 }
 // Photo by Matthew Henry on Unsplash
 </script>
