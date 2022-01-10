@@ -37,19 +37,23 @@ export default () => ({
   voterange5s: 0,
   voterange5e: 50,
   //
-  // 'users' table (registration)
-  isRegOpen: null, // todo not longer used - delete a.s.a.p.
+  fieldA: '',
+  fieldB: '',
+  // === 'users' table (registration) ===
+  isRegOpen: null, // open Registration dialog pop-up, if true
+  userRecordExists: null, // 'users' table record exists for a given user, if true
   stake: 0,
-  account_type: null, // 'v' or 'a' - accept only 'v'
+  account_type: null, // 'v' or 'a' - Note: accept only 'v'
   registered_iteration: null,
   staked_iteration: null,
   votes: 0,
   issuances: 0,
   last_issuance: 0,
   total_issuance_ammount: 0,
+  // === === ===
   iteration: 0, // current iteration counted 'by myself'
   // CONSTANTS: (consider move to .env)
   iterationSize: 3600, // TODO after testing switch back to normal size of iteration: 604800 (todo read from env).
   current_price: 1.2700, // TODO Source need to be defined!
-  scan_interval: 30000 // 30 sec. right now // the interval between refreshing backend table reads (actually only svrs)
+  scan_interval: 30000 // 30 sec. right now // the interval between refreshing backend table reads (actually only affect svrs)
 })

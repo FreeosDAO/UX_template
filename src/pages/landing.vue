@@ -85,23 +85,67 @@
           color="grey-6"
         ><div class="mini1">Claimed</div></q-btn>
       </q-card>
-      </div>
+       <q-btn @click="gohome()"> A {{this.userRecordExists}}TEST{{this.isRegOpen}} B </q-btn>
+        </div>
+    <!-- -->
+    <q-dialog v-model="this.isRegOpen">
+      <q-card>
+        console.log(' account_type=', this.account_type)
+        <q-separator></q-separator>
+        <section>
+          <regtag></regtag>
+        </section>
+        <q-separator></q-separator>
+        <q-card-section class="text-h6">
+          <div class="q-gutter-sm row justify-center">
+            <q-btn
+              dense
+              no-caps
+              size="25px"
+              align="center"
+              @click="gohome()"
+              class="full-width q-px-xl q-py-xs center"
+              color="grey-6"
+              label="Register with Freeos"
+            >
+            </q-btn><br>
+            <q-btn
+              flat
+              no-caps
+              size="25px"
+              align="center"
+              @click="gohome()"
+              class="full-width q-px-xl q-py-xs center"
+              color="grey-6"
+              label="Sign In"
+            >
+            </q-btn>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Decline" color="primary" @click="this.alert = false" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <!-- -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-// import Register from 'pages/Register'
+import Register from 'pages/Register'
+import { mapFields } from 'vuex-map-fields'
 // import { addRegUser } from 'src/store/svr/actions'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
-  // components: {
-  // regtag: Register
-  // },
+  components: {
+    regtag: Register
+  },
   data () {
     return {
       keylockOn: false, // Locks button calling S-V-R
+      alert: false,
       // regpopup: null, // Variable is copy of isRegOpen from store. todo - mode to tolbar
       interval: null,
       isWaiting: false,
@@ -153,14 +197,17 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       scan_interval: state => state.svr.scan_interval,
-      // iteration: state => state.svr.iteration, todo not used - remove
-      // iterationSize: state => state.svr.iterationSize, todo not used - remove
+      userRecordExists: state => state.svr.userRecordExists,
       // Used for timer only:
       timer: state => state.svr.timer, // timer displayed on a page - refreshed each time when 'svrs' table is read.
       timerOffset: state => state.svr.timerOffset,
       surveybase: state => state.svr.surveyend,
       votebase: state => state.svr.voteend,
-      ratifybase: state => state.svr.ratifyend
+      ratifybase: state => state.svr.ratifyend,
+      ...mapFields([
+        'fieldA',
+        'fieldB'
+      ])
       // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
@@ -172,6 +219,8 @@ export default {
       // set trigger in Vuex
       // this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
       // TODO write registration data to backend 'users' table.
+      console.log('isRegOpen=', this.isRegOpen)
+      console.log('userRecordExists=', this.userRecordExists)
     },
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
@@ -220,6 +269,8 @@ export default {
   },
   created () { // auto refresh of selected backend tables and screen timer.
     // this.getSvrsTable(this.accountName)
+    this.$set(this, 'alert', this.isRegOpen)
+    console.log('alert=', this.alert)
     this.getSvrsTable(this.accountName)
     console.log('Page mounted:')
     this.setIntervalId = setInterval(() => {

@@ -236,7 +236,7 @@ export default {
     }
   },
   watch: {
-    isAuthenticated: {
+    isAuthenticated: { // gather info from users table on registration when account name changes.
       immediate: true,
       handler: function (val) {
         if (val && this.accountName) {
@@ -257,7 +257,7 @@ export default {
     this.getExchangeTable()
   },
   mounted () {
-    //
+    // this.$router.push('/land')
   }
 }
 // Photo by Matthew Henry on Unsplash

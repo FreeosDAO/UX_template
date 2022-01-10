@@ -30,7 +30,8 @@
     "moment-timezone": "^0.5.34",
     "pure-vue-chart": "^0.4.0",
     "quasar": "^1.0.0",
-    "vuejs-countdown": "^0.2.1"
+    "vuejs-countdown": "^0.2.1",
+    "vuex-map-fields": "^1.4.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

@@ -289,7 +289,7 @@ export async function addReRegUser ({ state }, currentAccountName) {
 // === === === g e t U s e r T a b l e === === ===
 // Is called by landing.vue
 // Read all the data from table for a given user (scope)
-// Additionally, set-up the
+// Additionally, set-up the RegPopUp displaying Register page when necessary.
 export async function getUserTable (state, name) {
   try {
     const result = await connect({
@@ -305,16 +305,19 @@ export async function getUserTable (state, name) {
     }
     console.log(' ## getUserTable', result)
     state.commit('setUserTableAttrVal', val)
+    notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+    state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
+      // The user has no record in users tasble at all.
       notifyAlert('err', 'E: User is definitely not Registered.')
-      // Set 'on' the (pop-up) 'Registration's window trigger on Vuex:
-      state.commit('setRegPopUp', true) // The Register Pop-up is open.
-    } else { // The user may be registered, however may have not valid account type.
-      notifyAlert('success', 'User may be Registered. Account type verification in progress.')
-      state.commit('setRegPopUp', false) // The Register Pop-up is closed.
-    }
+      // Set 'on' the (pop-up) the registration's window trigger on Vuex (RegPopUp):
+      state.commit('setRegPopUp', true) // The Register Pop-up becomes visible.
+    } // else { // The user may be registered, however may have not valid account type.
+    // notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+    // state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.
+    // }
   }
 }
 

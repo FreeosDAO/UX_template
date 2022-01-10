@@ -1,4 +1,5 @@
 <template>
+  <!-- NOTE: Index is calling landing page at the beginning of whole service -->
   <div class="text-center q-pa-lg v-text-field">
     <!-- <div class="text-h4 text-weight-medium q-mb-md">Proton DFinity Bridge</div> -->
     <div class="text-h6 text-weight-regular">
@@ -14,6 +15,13 @@
 </template>
 
 <script>
+// import { mapState } from 'vuex'
+
+// import { isAuthenticated } from 'src/store/account/getters'
+// import { mapGetters } from 'vuex'
+
+import { mapGetters, mapState } from 'vuex'
+
 export default {
   name: 'PageIndex',
   data () {
@@ -26,8 +34,26 @@ export default {
       this.version = process.env.V_STRING
     }
   },
-  created () {
-    this.ver()
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName
+    }),
+    ...mapGetters('account', ['isAuthenticated'])
+  },
+  watch: {
+    isAuthenticated: { // gather info from users table on registration when account name changes.
+      immediate: true,
+      handler: function (val) {
+        if (val && this.accountName) {
+          // this.getUserTable(this.accountName)
+          this.$router.push('/land') // back to home page
+          console.log('***index.vue this.accountName=', this.accountName)
+        }
+        if (val && this.$route.query.returnUrl) {
+          this.$router.push({ path: this.$route.query.returnUrl })
+        }
+      }
+    }
   }
 }
 </script>

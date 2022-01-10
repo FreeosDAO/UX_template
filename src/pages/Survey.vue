@@ -365,7 +365,7 @@ export default {
       this.addSurveyResult(this.submitData) // Submit to back-end to sum with global results
       // self.resetForm() // TODO uncomment if form reset is required
       // notifyAlert('success', 'Survey Submitted.') // TODO so optimistic - remove from here but left in actions
-      this.congratTitle.set('Survey') // Pass title for the greetings page.
+      // this.congratTitle.set('Survey') // Pass title for the greetings page.
       this.$router.push('/congs') // congratulations page //
     },
     randomize () {

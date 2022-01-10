@@ -10,9 +10,10 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          &nbsp; &nbsp;{{accountName}} &nbsp; {{header}} <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
+          &nbsp; &nbsp;{{accountName}} &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
         </q-toolbar-title>
-        <q-btn dense flat round icon="menu">
+        <!-- <div>TEST{{isAuthenticated}}TEST</div> -->
+        <q-btn v-if="isAuthenticated" dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
                   :style="{ backgroundColor: '#eee', color: 'blue'}">
             <q-list style="min-width: 100px">
@@ -47,45 +48,6 @@
           </q-menu>
         </q-btn>
       </q-toolbar>
-     <q-dialog v-model="alert">
-       <q-card>
-         console.log(' account_type=', this.account_type)
-       <q-separator></q-separator>
-       <section>
-       <regtag></regtag>
-       </section>
-       <q-separator></q-separator>
-    <q-card-section class="text-h6">
-      <div class="q-gutter-sm row justify-center">
-        <q-btn
-          dense
-          no-caps
-          size="25px"
-          align="center"
-          @click="gohome()"
-          class="full-width q-px-xl q-py-xs center"
-          color="grey-6"
-          label="Register with Freeos"
-        >
-        </q-btn><br>
-        <q-btn
-          flat
-          no-caps
-          size="25px"
-          align="center"
-          @click="gohome()"
-          class="full-width q-px-xl q-py-xs center"
-          color="grey-6"
-          label="Sign In"
-        >
-        </q-btn>
-      </div>
-    </q-card-section>
-    <q-card-actions align="right">
-      <q-btn flat label="Decline" color="primary" @click="alert = false" v-close-popup></q-btn>
-    </q-card-actions>
-  </q-card>
-</q-dialog>
   </div>
 </template>
 
@@ -97,7 +59,7 @@
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
 // import landing from './landing.vue'
 
-import Register from 'pages/Register'
+// import Register from 'pages/Register'
 import { mapActions, mapGetters, mapState } from 'vuex'
 // import { bus } from 'C:/Users/Andrew/UX_template/.quasar/app.js' // todo experiment
 // import { bus } from '../App.vue' // todo added by me
@@ -109,9 +71,6 @@ export default {
       type: String
     }
   }, // end
-  components: {
-    regtag: Register
-  },
   data () {
     return {
       points: null,
@@ -120,7 +79,7 @@ export default {
     }
   },
   created () {
-    // console.log('this.accountName=', this.accountName, 'isAccount?', this.isAccount) // TODO verify is defined -- Not work here !!!
+    console.log('this.accountName=', this.accountName, 'isAccount?', this.isAccount) // TODO verify is defined -- Not work here !!!
     // TODO Copy that to mounted !
     // this.getUserTable(this.accountName)
     // console.log('*** this.accountName=', this.accountName)
@@ -133,13 +92,13 @@ export default {
     ...mapState({
       accountName: state => state.account.accountName,
       iteration: state => state.svr.iteration,
-      account_type: state => state.svr.account_type,
-      isRegOpen: state => state.svr.isRegOpen
+      account_type: state => state.svr.account_type
+      // isRegOpen: state => state.svr.isRegOpen // todo to remove
     }),
-    ...mapGetters('account', ['isAccount'])
+    ...mapGetters('account', ['isAuthenticated'])
   },
   methods: {
-    ...mapActions('svr', ['getUserTable'])
+    ...mapActions('svr', ['getUserTable']) // todo to remove
   }
 }
 </script>

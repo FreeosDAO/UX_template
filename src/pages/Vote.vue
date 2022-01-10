@@ -418,18 +418,19 @@ export default {
       // return date.toISOString().substr(11, 8);
       // }
     },
-    localtimer () { // todo rewrite
-      // Set up on data the variable: LTimer, (function return isSurveyActive),
+    localtimer () {
+      // Set up on data the variable: LTimer, (function return isVoteActive),
       let isVoteActive = false
       const LTimer = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
       const currentoffset = (LTimer - this.inittime) % this.iterationSize
-      if ((this.surveystart <= currentoffset) && (currentoffset <= this.surveyend)) {
+      if ((this.votestart <= currentoffset) && (currentoffset <= this.voteend)) {
+        console.log('this.votestart', this.votestart, 'this.voteend', this.voteend)
         isVoteActive = true
       } else {
         isVoteActive = false
       }
-      console.log('survey.line394: isVoteActive (?) = ', isVoteActive)
-      console.log('survey.line395: currentoffset (?) = ', currentoffset)
+      console.log('isVoteActive = ', isVoteActive)
+      console.log('currentoffset = ', currentoffset)
       this.displaytimer = this.voteend - currentoffset
       return isVoteActive
     },
@@ -453,6 +454,8 @@ export default {
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,
       iterationSize: state => state.svr.iterationSize,
+      voteend: state => state.svr.voteend,
+      votestart: state => state.svr.votestart,
       scan_interval: state => state.svr.scan_interval
     })
   }

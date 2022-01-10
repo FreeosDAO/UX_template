@@ -202,6 +202,8 @@ export default {
       accountName: state => state.account.accountName,
       inittime: state => state.svr.initUTC,
       scan_interval: state => state.svr.scan_interval,
+      ratifyend: state => state.svr.ratifyend,
+      ratifystart: state => state.svr.ratifystart,
       iterationSize: state => state.svr.iterationSize
     })
   },
@@ -245,13 +247,13 @@ export default {
       let isRatifyActive = false
       const LTimer = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
       const currentoffset = (LTimer - this.inittime) % this.iterationSize
-      if ((this.surveystart <= currentoffset) && (currentoffset <= this.surveyend)) {
+      if ((this.ratifystart <= currentoffset) && (currentoffset <= this.ratifyend)) {
         isRatifyActive = true
       } else {
         isRatifyActive = false
       }
-      console.log('survey.line394: isRatifyActive (?) = ', isRatifyActive)
-      console.log('survey.line395: currentoffset (?) = ', currentoffset)
+      console.log('isRatifyActive (?) = ', isRatifyActive)
+      console.log('currentoffset (?) = ', currentoffset)
       this.displaytimer = this.ratifyend - currentoffset
       return isRatifyActive
     },
@@ -263,7 +265,6 @@ export default {
   created () { // auto refresh of selected backend tables and screen timer.
     // this.getSvrsTable(this.accountName)
     // this.getUserTable(this.accountName)
-    this.randomize() // randomize display for question 5.
     this.setIntervalId = setInterval(() => {
       if (!this.localtimer()) {
         clearInterval(this.setIntervalId)

@@ -10,6 +10,7 @@ setRegPopUp - end
 // import notifyAlert from 'src/services/notify-alert'
 
 // ===               set SVRS Table Attr Val               ===
+
 export const setSVRSTableAttrVal = function (state, payload) {
   //
   // TODO TEST
@@ -278,20 +279,26 @@ export const setcongratulationTitle = function (state, payload) { // DO NOT TOUC
   // console.log('=> congratulationTitle=, payload', state.congratulationTitle, payload)
 }
 
-export const setRegPopUp = function (state, payload) { // DO NOT TOUCH! TODO need review
+export const setRegPopUp = function (state, payload) {
   state.isRegOpen = payload
   console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
   // true - Registration Pop-Up is open, else closed.
   if (!payload) { // false; so, the user's record exists, :|
     if (state.account_type === 'v') { // The user's record exists with correct account type :)
-      state.isRegOpen = false // Only in this case the register pop-up is not displayed.
-    } else { // so, the user's record exists, with incorrect account type :(
+      state.isRegOpen = false
+      state.userRecordExists = true
+      console.log('=>1 isRegOpen=', state.isRegOpen)
+    } else { // The user's record exists, with incorrect account type :|
       state.isRegOpen = true
+      state.userRecordExists = true
+      console.log('=>2 isRegOpen=', state.isRegOpen)
     }
-  } else { // user's record do not exist at all
-    state.isRegOpen = true
+  } else { // The user's record do not exist at all :(
+    state.isRegOpen = true // User need registration
+    state.userRecordExists = false
+    console.log('=>3 isRegOpen=', state.isRegOpen)
   }
-  console.log('state.isRegOpen=', state.isRegOpen)
+  console.log('state.isRegOpen=', state.isRegOpen, 'state.userRecordExists=', state.userRecordExists)
 }
 
 export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOUCH! TODO need review
