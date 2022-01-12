@@ -132,21 +132,46 @@ export async function addRatifyResult ({ state }, data) {
 // Where called: landing.vue
 // retrieve userStatus info
 //
+// export async function getSvrsTable (state, name) {
+// const result = await connect({
+// json: true,
+// code: process.env.APP_NAME,
+// scope: name, // Note: Depends on Scope. Data are specific for a given user.
+// table: 'svrs',
+// limit: 12
+// })
+// const val = {
+// key: 'SVRSData',
+// value: result.rows
+// }
+// state.commit('setSVRSTableAttrVal', val)
+// }
+// === === ===
 export async function getSvrsTable (state, name) {
-  const result = await connect({
-    json: true,
-    code: process.env.APP_NAME,
-    scope: name, // Note: Depends on Scope. Data are specific for a given user.
-    table: 'svrs',
-    limit: 12
-  })
-  const val = {
-    key: 'SVRSData',
-    value: result.rows
+  try {
+    const result = await connect({
+      json: true,
+      code: process.env.APP_NAME,
+      scope: name,
+      table: 'svrs',
+      limit: 12
+    })
+    const val = {
+      key: 'SVRSData',
+      value: result.rows
+    }
+    console.log(' ## getSvrsTable', result)
+    state.commit('setSVRSTableAttrVal', val)
+    notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+  } catch (e) {
+    console.log('E=', e)
+    if (e.message.startsWith('Cannot read properties')) {
+      // The user has no record in users tasble at all.
+      notifyAlert('err', 'E: User has no svrs table.')
+    }
   }
-  state.commit('setSVRSTableAttrVal', val)
 }
-//
+
 // ----- g e t P a r a m e t e r s T a b l e -----
 //
 // parameters table (retrieve)
@@ -307,13 +332,15 @@ export async function getUserTable (state, name) {
     state.commit('setUserTableAttrVal', val)
     notifyAlert('success', 'User may be Registered. Account type verification in progress.')
     state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.
+    localStorage.setItem('lsIsRegOpen', 'false')
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
       // The user has no record in users tasble at all.
-      notifyAlert('err', 'E: User is definitely not Registered.')
+      notifyAlert('err', 'E: User is definitely not Registered. Wait 30 sec. for registration page.') // todo push messages to mutations?
       // Set 'on' the (pop-up) the registration's window trigger on Vuex (RegPopUp):
       state.commit('setRegPopUp', true) // The Register Pop-up becomes visible.
+      // localStorage.setItem('lsIsRegOpen', 'true')
     } // else { // The user may be registered, however may have not valid account type.
     // notifyAlert('success', 'User may be Registered. Account type verification in progress.')
     // state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.

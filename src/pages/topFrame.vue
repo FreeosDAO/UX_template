@@ -66,11 +66,6 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'topFrame',
-  props: { // todo experiment
-    header: {
-      type: String
-    }
-  }, // end
   data () {
     return {
       points: null,

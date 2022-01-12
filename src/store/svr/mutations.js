@@ -11,6 +11,8 @@ setRegPopUp - end
 
 // ===               set SVRS Table Attr Val               ===
 
+import notifyAlert from 'src/services/notify-alert'
+
 export const setSVRSTableAttrVal = function (state, payload) {
   //
   // TODO TEST
@@ -29,7 +31,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let isRatifyActive = false
   const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
-  state.timerOffset = currentoffset // Update timer in Vuex todo ??
+  state.timerOffset = currentoffset
   // console.log(' current_Time = ', currentT)
   // console.log('Time Zone =', n)
   // console.log(' init_time_seconds = ', state.initUTC)
@@ -175,8 +177,6 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
   }
-  console.log(' mutations => final user_mode => ', state.user_mode)
-  console.log(' mutations => state.timerOffset => ', state.timerOffset)
 }
 
 // === === === === === === === === === === === === === === === === === === === === ===
@@ -284,21 +284,20 @@ export const setRegPopUp = function (state, payload) {
   console.log('=> isRegOpen=, payload', state.isRegOpen, payload)
   // true - Registration Pop-Up is open, else closed.
   if (!payload) { // false; so, the user's record exists, :|
-    if (state.account_type === 'v') { // The user's record exists with correct account type :)
+    if (state.account_type === 'v') {
+      // The user's record exists with correct account type :)
       state.isRegOpen = false
-      state.userRecordExists = true
       console.log('=>1 isRegOpen=', state.isRegOpen)
-    } else { // The user's record exists, with incorrect account type :|
-      state.isRegOpen = true
-      state.userRecordExists = true
+    } else { // The user's record exists, with incorrect account type :| TODO This should be decided later!
+      state.isRegOpen = false // TODO Note: At this moment (only for development) the registration page will be not displayed
+      state.isUserRecordExists = true
+      notifyAlert('warning', 'User account is not "v" type.')
       console.log('=>2 isRegOpen=', state.isRegOpen)
     }
   } else { // The user's record do not exist at all :(
-    state.isRegOpen = true // User need registration
-    state.userRecordExists = false
+    state.isRegOpen = true // User need registration - the register page will be displayed
     console.log('=>3 isRegOpen=', state.isRegOpen)
   }
-  console.log('state.isRegOpen=', state.isRegOpen, 'state.userRecordExists=', state.userRecordExists)
 }
 
 export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOUCH! TODO need review

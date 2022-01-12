@@ -1,50 +1,10 @@
 <template>
-  <!-- Vote.vue TODO Note that only 'Start' part of a button is sensitive. -->
+  <!-- -->
   <div class="q-gutter-y-md q-mx-auto" style="max-width: 400px">
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
-      <!-- Main Q-card -->
-      <q-toolbar>
-        <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp; &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
-          <q-btn dense flat round icon="menu" @click="drawerRight = !drawerRight" />
-        </q-toolbar-title>
-        <q-btn dense flat round icon="menu">
-          <q-menu anchor="bottom left" self="top right"
-                  :style="{ backgroundColor: '#eee', color: 'blue'}">
-            <q-list style="min-width: 100px">
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-circle"></q-icon></q-item-section>
-                <q-item-section>Home</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-circle"></q-icon></q-item-section>
-                <q-item-section>MyFreeos</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-arrow-alt-circle-right"></q-icon></q-item-section>
-                <q-item-section>Mint</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-chevron-circle-down"></q-icon></q-item-section>
-                <q-item-section>Re-Register</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-sign-out-alt"></q-icon></q-item-section>
-                <q-item-section>Sign-out</q-item-section>
-              </q-item>
-              <q-separator></q-separator>
-              <q-item clickable>
-                <q-item-section><q-icon size='md' name="las la-info-circle"></q-icon></q-item-section>
-                <q-item-section>Help &amp; Feedback</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </q-toolbar>
-             <!-- Grey Intro Section -->
+      <!-- Removed q-toolbar from here -->
+        <!-- Grey Intro Section -->
              <div class="row justify-center" >
                <q-card
                       flat round bordered
@@ -72,6 +32,37 @@
                </div>
                 <!-- go home -->
              </q-card-section>
+             <q-card>
+               <q-card-section class="text-h6">
+                  <div class="q-gutter-sm row justify-center">
+                    <q-btn
+                      dense
+                      no-caps
+                      size="25px"
+                      align="center"
+                      @click="gohome()"
+                      class="full-width q-px-xl q-py-xs center"
+                      color="grey-6"
+                      label="Register with Freeos"
+                    >
+                  </q-btn><br>
+                  <q-btn
+                   flat
+                   no-caps
+                   size="25px"
+                   align="center"
+                   @click="gohome()"
+                   class="full-width q-px-xl q-py-xs center"
+                   color="grey-6"
+                   label="Sign In"
+                   >
+                  </q-btn>
+                 </div>
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn label="Logout (Decline)" v-if="isAuthenticated" no-caps flat style="justify-self: flex-end;" @click="() => logout()"></q-btn>
+            </q-card-actions>
+          </q-card>
     </q-card>
   </div>
 </template>
@@ -79,8 +70,8 @@
 <script>
 // import notifyAlert from 'src/services/notify-alert'
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
-
-import { mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import notifyAlert from 'src/services/notify-alert'
 
 export default {
   name: 'Vote',
@@ -101,10 +92,18 @@ export default {
   computed: {
     ...mapState({
       accountName: state => state.account.accountName
-
-    })
+    }),
+    ...mapGetters('account', ['isAuthenticated'])
   },
   methods: {
+    ...mapActions('account', ['logout']),
+    gohome () { // Register current user to backend (call backend;s register)
+      // this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
+      // TODO write registration data to backend 'users' table.
+      // console.log('isRegOpen=', this.isRegOpen)
+      notifyAlert('warning', 'So far this do nothing.')
+      this.$router.push('/land') // back to home page
+    }
   }
 }
 </script>

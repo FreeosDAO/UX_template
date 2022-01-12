@@ -40,9 +40,7 @@
     <q-page-container>
       <topFrame />
       <router-view />
-      <!-- <q-btn style="text-color:blue" v-on:click="changeHeader">{{header}}</q-btn> -->
     </q-page-container>
-
   </q-layout>
 </template>
 <script>
@@ -202,14 +200,10 @@ export default {
   },
   computed: {
     ...mapState({
-      accountName: state => state.account.accountName
+      accountName: state => state.account.accountName,
+      isRegOpen: state => state.svr.isRegOpen
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
-  },
-  props: { // todo by me
-    header: {
-      type: String
-    }
   },
   methods: {
     ...mapActions('svr', ['getParametersTable', 'getSystemTable', 'getExchangeTable']),
@@ -220,11 +214,6 @@ export default {
         this.onSelectMenu(menuList[0])
       }
     },
-    // changeHeader () {
-    // this.header = this.accountName
-    // bus.$emit('changeIt', this.accountName)
-    // console.log('change header')
-    // },
     onSelectMenu (menuItem) {
       (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)
       this.selectedItemLabel = menuItem.label
@@ -255,9 +244,6 @@ export default {
     this.getSystemTable()
     this.getParametersTable()
     this.getExchangeTable()
-  },
-  mounted () {
-    // this.$router.push('/land')
   }
 }
 // Photo by Matthew Henry on Unsplash

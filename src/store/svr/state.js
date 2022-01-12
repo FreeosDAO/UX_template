@@ -41,7 +41,7 @@ export default () => ({
   fieldB: '',
   // === 'users' table (registration) ===
   isRegOpen: null, // open Registration dialog pop-up, if true
-  userRecordExists: null, // 'users' table record exists for a given user, if true
+  isUserRecordExists: null, // 'users' table record exists for a given user, if true
   stake: 0,
   account_type: null, // 'v' or 'a' - Note: accept only 'v'
   registered_iteration: null,

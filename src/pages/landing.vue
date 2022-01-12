@@ -85,68 +85,39 @@
           color="grey-6"
         ><div class="mini1">Claimed</div></q-btn>
       </q-card>
-       <q-btn @click="gohome()"> A {{this.userRecordExists}}TEST{{this.isRegOpen}} B </q-btn>
         </div>
     <!-- -->
-    <q-dialog v-model="this.isRegOpen">
+    <q-dialog v-model="alert">
       <q-card>
-        console.log(' account_type=', this.account_type)
-        <q-separator></q-separator>
-        <section>
-          <regtag></regtag>
-        </section>
-        <q-separator></q-separator>
-        <q-card-section class="text-h6">
-          <div class="q-gutter-sm row justify-center">
-            <q-btn
-              dense
-              no-caps
-              size="25px"
-              align="center"
-              @click="gohome()"
-              class="full-width q-px-xl q-py-xs center"
-              color="grey-6"
-              label="Register with Freeos"
-            >
-            </q-btn><br>
-            <q-btn
-              flat
-              no-caps
-              size="25px"
-              align="center"
-              @click="gohome()"
-              class="full-width q-px-xl q-py-xs center"
-              color="grey-6"
-              label="Sign In"
-            >
-            </q-btn>
-          </div>
+        <q-card-section>
+          <div class="text-h6">Alert</div>
         </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+        </q-card-section>
+
         <q-card-actions align="right">
-          <q-btn flat label="Decline" color="primary" @click="this.alert = false" v-close-popup></q-btn>
+          <q-btn flat label="OK" color="primary" @click="alert = false"></q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- -->
+    <!-- end -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-import Register from 'pages/Register'
-import { mapFields } from 'vuex-map-fields'
-// import { addRegUser } from 'src/store/svr/actions'
+// import Register from 'pages/Register'
+// import { mapFields } from 'vuex-map-fields'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
-  components: {
-    regtag: Register
-  },
   data () {
     return {
       keylockOn: false, // Locks button calling S-V-R
+      regpopon: false,
       alert: false,
-      // regpopup: null, // Variable is copy of isRegOpen from store. todo - mode to tolbar
       interval: null,
       isWaiting: false,
       points: '82345.65',
@@ -197,17 +168,12 @@ export default {
       mode: state => state.svr.user_mode,
       init_time: state => state.svr.initUTC,
       scan_interval: state => state.svr.scan_interval,
-      userRecordExists: state => state.svr.userRecordExists,
       // Used for timer only:
       timer: state => state.svr.timer, // timer displayed on a page - refreshed each time when 'svrs' table is read.
       timerOffset: state => state.svr.timerOffset,
       surveybase: state => state.svr.surveyend,
       votebase: state => state.svr.voteend,
-      ratifybase: state => state.svr.ratifyend,
-      ...mapFields([
-        'fieldA',
-        'fieldB'
-      ])
+      ratifybase: state => state.svr.ratifyend
       // ratifyend: state => state.svr.ratifyend // TODO remove test
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting'])
@@ -215,13 +181,7 @@ export default {
   }, // End of 'computed' section.
   methods: {
     ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
-    gohome () { // Register current user to backend (call backend;s register)
-      // set trigger in Vuex
-      // this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
-      // TODO write registration data to backend 'users' table.
-      console.log('isRegOpen=', this.isRegOpen)
-      console.log('userRecordExists=', this.userRecordExists)
-    },
+    // removed 'gohome()' from here.
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
     },
@@ -268,25 +228,23 @@ export default {
     }
   },
   created () { // auto refresh of selected backend tables and screen timer.
-    // this.getSvrsTable(this.accountName)
-    this.$set(this, 'alert', this.isRegOpen)
-    console.log('alert=', this.alert)
+    console.log('### accountName', this.accountName)
     this.getSvrsTable(this.accountName)
-    console.log('Page mounted:')
     this.setIntervalId = setInterval(() => {
+      if (this.isRegOpen) {
+        this.$router.push('/regi')
+      }
       this.getSvrsTable(this.accountName)
-      // TODO Set Up modeNow here !
       this.keylockOn = this.modeNow(this.mode)
-      console.log('=> mode=', this.mode, '### this.keylockOn = ', this.keylockOn)
+      console.log('=> mode=', this.mode, '### this.keylockOn = ', this.keylockOn, this.isRegOpen)
     }, this.scan_interval) // call each 30 sec. // TODO param.
     document.addEventListener('beforeunload', this.handler)
   },
   beforeDestroy () {
-    clearInterval(this.setIntervalId)
+    clearInterval(this.setIntervalId) // todo is it necessary here ?
   },
   mounted () {
     this.getSvrsTable(this.accountName)
-    console.log('Page mounted:')
   }
 }
 </script>

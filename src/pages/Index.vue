@@ -41,13 +41,13 @@ export default {
     ...mapGetters('account', ['isAuthenticated'])
   },
   watch: {
-    isAuthenticated: { // gather info from users table on registration when account name changes.
+    isAuthenticated: { // todo if registration should be made this should go to Register.vue page
       immediate: true,
       handler: function (val) {
         if (val && this.accountName) {
           // this.getUserTable(this.accountName)
+          // console.log('***index.vue this.accountName=', this.accountName)
           this.$router.push('/land') // back to home page
-          console.log('***index.vue this.accountName=', this.accountName)
         }
         if (val && this.$route.query.returnUrl) {
           this.$router.push({ path: this.$route.query.returnUrl })
