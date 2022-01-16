@@ -204,21 +204,88 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
     if (val.value[i].paramname === 'voteranges') { state.voteranges = val.value[i].value }
   }
   // state.voterange3s = process.env.HARD_EXCHANGE_RATE_FLOOR // parametrize question 3 slider
-  state.voterange3e = state.lockfactor * state.current_price // TODO define current_price source!
+  // state.voterange3e = state.lockfactor * state.currentprice
+  // console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
+  // console.log(' A lockfactor/currentprice =', state.lockfactor, state.currentprice)
   // console.log('*** PARAMETERS payload:', JSON.stringify(payload)) // test
-  console.log('= state.lockfactor = ', state.lockfactor)
-  console.log('= state.ratifyend = ', state.ratifyend)
-  console.log('= state.ratifystart = ', state.ratifystart)
-  console.log('= state.surveyend = ', state.surveyend)
-  console.log('= state.surveystart = ', state.surveystart)
-  console.log('= state.userlifespan = ', state.userlifespan)
-  console.log('= state.voteend = ', state.voteend)
-  console.log('= state.votestart = ', state.votestart)
-  console.log('= state.surveyranges = ', state.surveyranges)
-  console.log('= state.voteranges = ', state.voteranges)
+  // console.log('= state.lockfactor = ', state.lockfactor)
+  // console.log('= state.ratifyend = ', state.ratifyend)
+  // console.log('= state.ratifystart = ', state.ratifystart)
+  // console.log('= state.surveyend = ', state.surveyend)
+  // console.log('= state.surveystart = ', state.surveystart)
+  // console.log('= state.userlifespan = ', state.userlifespan)
+  // console.log('= state.voteend = ', state.voteend)
+  // console.log('= state.votestart = ', state.votestart)
+  // console.log('= state.surveyranges = ', state.surveyranges)
+  // console.log('= state.voteranges = ', state.voteranges)
 
-  // TODO Unpack slider ranges for SVR displays here!!!:
+  // Unpack slider ranges for Survey displays here:
+  const str = state.surveyranges
+  const commapos = str.indexOf(',')
+  // console.log('$ commapos', commapos)
+  const part1 = str.slice(5, commapos)
+  // console.log('$ part1', part1)
+  const part2 = str.slice(commapos + 6)
+  // console.log('$ part2', part2)
+  const commapos1 = part1.indexOf('-')
+  const snum1 = part1.slice(0, commapos1)
+  const snum2 = part1.slice(commapos1)
+  const commapos2 = part2.indexOf('-')
+  const snum3 = part2.slice(0, commapos2)
+  const snum4 = part2.slice(commapos2)
+  const num1 = snum1.replace(/\D/g, '')
+  const num2 = snum2.replace(/\D/g, '')
+  const num3 = snum3.replace(/\D/g, '')
+  const num4 = snum4.replace(/\D/g, '')
+  // console.log('$ num', num1, num2, num3, num4)
+  state.surveyrange1s = parseFloat(num1)
+  state.surveyrange1e = parseFloat(num2)
+  state.surveyrange2s = parseFloat(num3)
+  state.surveyrange2e = parseFloat(num4)
+
+  // Unpack slider ranges for Vote displays here:
+  const vstr = state.voteranges
+  const vcommapos1 = vstr.indexOf(',')
+  const vcommapos2 = vstr.lastIndexOf(',')
+  // console.log('$ vcommapos1', vcommapos1)
+  // console.log('$ vcommapos2', vcommapos2)
+  const vpart1 = vstr.slice(3, vcommapos1) // before first comma
+  // console.log('$ vpart1', vpart1)
+  const vpart2 = vstr.slice(vcommapos1 + 4) // after first comma (before second)
+  // console.log('$ vpart2', vpart2)
+  // cut at comma position
+  const vcommapos3 = vpart2.indexOf(',')
+  const vpart2a = vpart2.slice(0, vcommapos3)
+  // console.log('$ vpart2a', vpart2a)
+  const vpart3 = vstr.slice(vcommapos2 + 4) // after second comma
+  // console.log('$ vpart3', vpart3)
+  // separate from first part
+  const commapos1v = vpart1.indexOf('-')
+  const vsnum1 = vpart1.slice(0, commapos1v)
+  const vsnum2 = vpart1.slice(commapos1v)
+  // separate from second part
+  const commapos2v = vpart2a.indexOf('-')
+  const vsnum3 = vpart2a.slice(0, commapos2v)
+  const vsnum4 = vpart2a.slice(commapos2v)
+  // separate third part
+  const commapos3v = vpart3.indexOf('-')
+  const vsnum5 = vpart3.slice(0, commapos3v)
+  const vsnum6 = vpart3.slice(commapos3v)
   //
+  const vnum1 = vsnum1.replace(/\D/g, '')
+  const vnum2 = vsnum2.replace(/\D/g, '')
+  const vnum3 = vsnum3.replace(/\D/g, '')
+  const vnum4 = vsnum4.replace(/\D/g, '')
+  const vnum5 = vsnum5.replace(/\D/g, '')
+  const vnum6 = vsnum6.replace(/\D/g, '')
+  //
+  // console.log('$ vnums', vnum1, vnum2, vnum3, vnum4, vnum5, vnum6)
+  state.voterange1s = parseFloat(vnum1)
+  state.voterange1e = parseFloat(vnum2)
+  state.voterange2s = parseFloat(vnum3)
+  state.voterange2e = parseFloat(vnum4)
+  state.voterange5s = parseFloat(vnum5)
+  state.voterange5e = parseFloat(vnum6)
 } // === end of parameters table service ===
 
 // === === === === === === === === === === === === === === === === === === === === ===
@@ -301,6 +368,16 @@ export const setRegPopUp = function (state, payload) {
 }
 
 export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOUCH! TODO need review
-  // state.setcongratulationTitle = payload
-  // console.log('=> congratulationTitle=, payload', state.congratulationTitle, payload)
+  //
+  const val = payload.value
+  // console.log('*** Exchange payload:', JSON.stringify(val)) // test
+  console.log('val[0].target_price', val[0].targetprice)
+  console.log('val[0].currentprice', val[0].currentprice)
+  state.targetprice = val[0].targetprice
+  state.currentprice = val[0].currentprice
+  //
+  state.voterange3s = process.env.HARD_EXCHANGE_RATE_FLOOR // parametrize question 3 slider
+  state.voterange3e = state.lockfactor * state.currentprice
+  console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
+  console.log(' A lockfactor/currentprice =', state.lockfactor, state.currentprice)
 }

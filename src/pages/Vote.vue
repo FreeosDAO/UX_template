@@ -139,7 +139,7 @@
           v-model="submitData.q3slider"
           :min=voterange3s
           :max=voterange3e
-          :step= "0.0167"
+          :step= "0.01"
           color="grey-6"
           label
           :label-value="submitData.q3slider + ' percent'"
@@ -332,13 +332,16 @@ export default {
         }
       ],
       iteration: 0,
-      expiration_timer: '2 days 10 hours 30 min',
+      // voterange3s: 0.0167,
+      voterange3s: process.env.HARD_EXCHANGE_RATE_FLOOR,
+      // voterange3e:
+      // expiration_timer: '2 days 10 hours 30 min',
       // Data passed as a result to the back-end as a result of voting.
       submitData: {
         currentAccountName: '',
         q1slider: 0,
         q2slider: 6, // Must start from 6. // TODO
-        q3slider: 6, // Must start from 6. // TODO
+        q3slider: 0.0167,
         q4radio: '', // string
         q5slider: 0,
         q6choice1: 0, // Return number of selected option for each selector.
@@ -448,15 +451,17 @@ export default {
       voterange1e: state => state.svr.voterange1e,
       voterange2s: state => state.svr.voterange2s,
       voterange2e: state => state.svr.voterange2e,
-      voterange3s: state => state.svr.voterange3s,
-      voterange3e: state => state.svr.voterange3e,
+      // voterange3s: state => state.svr.voterange3s, // defined in data
+      voterange3e: state => state.svr.voterange3e, // todo
       voterange5s: state => state.svr.voterange5s,
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,
       iterationSize: state => state.svr.iterationSize,
       voteend: state => state.svr.voteend,
       votestart: state => state.svr.votestart,
-      scan_interval: state => state.svr.scan_interval
+      scan_interval: state => state.svr.scan_interval,
+      currentprice: state => state.currentprice, // ??
+      targetprice: state => state.targetprice // ??
     })
   }
 }

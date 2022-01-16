@@ -20,25 +20,20 @@ export default () => ({
   voteranges: '',
   votestart: 0,
   //
-  //
-  // converted ranges for Survey slides // TODO setup from parameters table as a parsing result
-  surveyrange1s: 1, // TODO change all to zero later.
-  surveyrange1e: 24,
-  surveyrange2s: 1,
-  surveyrange2e: 24,
-  //
-  // converted ranges for Vote sliders // TODO setup from parameters table as a parsing result
-  voterange1s: 0, // TODO change all back to zero later.
-  voterange1e: 100,
-  voterange2s: 6,
-  voterange2e: 30,
-  voterange3s: 0.0167,
-  voterange3e: 0, // todo uses const from .env
+  // converted ranges for Survey slides
+  surveyrange1s: 0,
+  surveyrange1e: 0,
+  surveyrange2s: 0,
+  surveyrange2e: 0,
+  // converted ranges for Vote sliders
+  voterange1s: 0,
+  voterange1e: 0,
+  voterange2s: 0,
+  voterange2e: 0,
+  voterange3s: 0,
+  voterange3e: 0,
   voterange5s: 0,
-  voterange5e: 50,
-  //
-  fieldA: '',
-  fieldB: '',
+  voterange5e: 0,
   // === 'users' table (registration) ===
   isRegOpen: null, // open Registration dialog pop-up, if true
   isUserRecordExists: null, // 'users' table record exists for a given user, if true
@@ -54,6 +49,7 @@ export default () => ({
   iteration: 0, // current iteration counted 'by myself'
   // CONSTANTS: (consider move to .env)
   iterationSize: 3600, // TODO after testing switch back to normal size of iteration: 604800 (todo read from env).
-  current_price: 1.2700, // TODO Source need to be defined!
+  currentprice: 0,
+  targetprice: 0,
   scan_interval: 30000 // 30 sec. right now // the interval between refreshing backend table reads (actually only affect svrs)
 })

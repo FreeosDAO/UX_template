@@ -219,7 +219,7 @@ export default {
       this.selectedItemLabel = menuItem.label
     },
     ...mapActions('account', ['checkIfLoggedIn', 'connectWallet', 'logout']),
-    ...mapActions('svr', ['getUserTable']),
+    ...mapActions('svr', ['getUserTable', 'getSvrsTable']),
     whatever () { // test
       // this.actionWhateverCompute(this.accountName)
     }
@@ -229,7 +229,8 @@ export default {
       immediate: true,
       handler: function (val) {
         if (val && this.accountName) {
-          this.getUserTable(this.accountName)
+          this.getUserTable(this.accountName) // As this have parameter do not work in 'created' section.
+          this.getSvrsTable(this.accountName) // todo Test
           console.log('*** this.accountName=', this.accountName)
         }
         if (val && this.$route.query.returnUrl) {

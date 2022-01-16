@@ -160,14 +160,15 @@ export async function getSvrsTable (state, name) {
       key: 'SVRSData',
       value: result.rows
     }
-    console.log(' ## getSvrsTable', result)
+    // console.log(' ## getSvrsTable', result)
     state.commit('setSVRSTableAttrVal', val)
-    notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+    // notifyAlert('success', 'User may be Registered. Account type verification in progress.')
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
-      // The user has no record in users tasble at all.
-      notifyAlert('err', 'E: User has no svrs table.')
+      if (state.isRegOpen) { // Message is not displayed for v-accounts.
+        notifyAlert('err', 'E: message: User may have no svrs table.')
+      }
     }
   }
 }
@@ -330,14 +331,14 @@ export async function getUserTable (state, name) {
     }
     console.log(' ## getUserTable', result)
     state.commit('setUserTableAttrVal', val)
-    notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+    notifyAlert('success', 'User Registered. Account type verification in progress.')
     state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.
     localStorage.setItem('lsIsRegOpen', 'false')
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
       // The user has no record in users tasble at all.
-      notifyAlert('err', 'E: User is definitely not Registered. Wait 30 sec. for registration page.') // todo push messages to mutations?
+      notifyAlert('err', 'E: User is definitely not Registered. Wait up to 30 sec. for registration page.') // todo push messages to mutations?
       // Set 'on' the (pop-up) the registration's window trigger on Vuex (RegPopUp):
       state.commit('setRegPopUp', true) // The Register Pop-up becomes visible.
       // localStorage.setItem('lsIsRegOpen', 'true')
@@ -348,8 +349,8 @@ export async function getUserTable (state, name) {
   }
 }
 
-// export async function setUserData (state, name) {
+// export async function setUserData (state, name) { // todo ?
 // TODO write user data to users table on the backend
 // state.commit('setRegPopUp', false)
 // this.commit('setIsRegOpen', false)
-// }
+// } // todo ?

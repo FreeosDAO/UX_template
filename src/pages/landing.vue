@@ -210,8 +210,7 @@ export default {
     },
     //
     submit () { // When pressed button the function interpret selected mode
-      // NOTE: This is called only when button is pressed!!!
-      // console.log('281-time_init_point=', this.init_time)
+      // NOTE: This is called only when button is pressed!!
       switch (this.mode) { // Jump to pre-determined page when the button is pushed.
         case 1: // Go to survey
           this.$router.push('/survey')

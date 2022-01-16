@@ -90,22 +90,66 @@ export default {
   methods: {
     ...mapMutations('svr', ['clearuser']),
     PushTest () {
-      this.clearuser()
-    },
-    todo () { // helper for converting time
-      // const now = new Date()
-      // Note that getTime() returns milliseconds, not plain seconds.
-      const currentT = Math.floor((new Date()).getTime() / 1000)
-      console.log('Correct UTC timestamp ' + currentT)
-      const str = '2021-09-15T00:00:00.000'
-      const replaced = str.replace('T', ', ')
-      const myDate = new Date(replaced)
-      console.log('myDate', replaced)
-      const myEpoch = myDate.getTime() / 1000.0
-      console.log('epoch', myEpoch) // TODO ... and this
-      const diff = Math.floor(((currentT - myEpoch) / 604800) + 1)
-      console.log('Iteration = ', diff)
-    }
+      // this.clearuser()
+      // Unpack slider ranges for Vote displays here:
+      const vstr = 'q1:0-100,q2:6-30,q5:0-50'
+      const vcommapos1 = vstr.indexOf(',')
+      const vcommapos2 = vstr.lastIndexOf(',')
+      console.log('$ vcommapos1', vcommapos1)
+      console.log('$ vcommapos2', vcommapos2)
+      const vpart1 = vstr.slice(3, vcommapos1) // before first comma
+      console.log('$ vpart1', vpart1)
+      const vpart2 = vstr.slice(vcommapos1 + 4) // after first comma (before second)
+      console.log('$ vpart2', vpart2)
+      // cut at comma position
+      const vcommapos3 = vpart2.indexOf(',')
+      const vpart2a = vpart2.slice(0, vcommapos3)
+      console.log('$ vpart2a', vpart2a)
+      const vpart3 = vstr.slice(vcommapos2 + 4) // after second comma
+      console.log('$ vpart3', vpart3)
+      // separate from first part
+      const commapos1v = vpart1.indexOf('-')
+      const vsnum1 = vpart1.slice(0, commapos1v)
+      const vsnum2 = vpart1.slice(commapos1v)
+      // separate from second part
+      const commapos2v = vpart2a.indexOf('-')
+      const vsnum3 = vpart2a.slice(0, commapos2v)
+      const vsnum4 = vpart2a.slice(commapos2v)
+      // separate third part
+      const commapos3v = vpart3.indexOf('-')
+      const vsnum5 = vpart3.slice(0, commapos3v)
+      const vsnum6 = vpart3.slice(commapos3v)
+      //
+      const vnum1 = vsnum1.replace(/\D/g, '')
+      const vnum2 = vsnum2.replace(/\D/g, '')
+      const vnum3 = vsnum3.replace(/\D/g, '')
+      const vnum4 = vsnum4.replace(/\D/g, '')
+      const vnum5 = vsnum5.replace(/\D/g, '')
+      const vnum6 = vsnum6.replace(/\D/g, '')
+      //
+      console.log('$ vnums', vnum1, vnum2, vnum3, vnum4, vnum5, vnum6)
+      // state.voterange1s = parseFloat(vnum1)
+      // state.voterange1e = parseFloat(vnum2)
+      // state.voterange2s = parseFloat(vnum3)
+      // state.voterange2e = parseFloat(vnum4)
+      // state.voterange5s = parseFloat(vnum5)
+      // state.voterange5e = parseFloat(vnum6)
+    } // === end of parameters table service ===
+    //
+  },
+  todo () { // helper for converting time
+    // const now = new Date()
+    // Note that getTime() returns milliseconds, not plain seconds.
+    const currentT = Math.floor((new Date()).getTime() / 1000)
+    console.log('Correct UTC timestamp ' + currentT)
+    const str = '2021-09-15T00:00:00.000'
+    const replaced = str.replace('T', ', ')
+    const myDate = new Date(replaced)
+    console.log('myDate', replaced)
+    const myEpoch = myDate.getTime() / 1000.0
+    console.log('epoch', myEpoch) // TODO ... and this
+    const diff = Math.floor(((currentT - myEpoch) / 604800) + 1)
+    console.log('Iteration = ', diff)
   }
 }
 // https://stackoverflow.com/questions/39973087/javascript-date-object-without-time-zone
