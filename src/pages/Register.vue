@@ -3,7 +3,6 @@
   <div class="q-gutter-y-md q-mx-auto" style="max-width: 400px">
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
-      <!-- Removed q-toolbar from here -->
         <!-- Grey Intro Section -->
              <div class="row justify-center" >
                <q-card
@@ -40,27 +39,16 @@
                       no-caps
                       size="25px"
                       align="center"
-                      @click="gohome()"
+                      @click="this.registerUser"
                       class="full-width q-px-xl q-py-xs center"
                       color="grey-6"
                       label="Register with Freeos"
                     >
-                  </q-btn><br>
-                  <q-btn
-                   flat
-                   no-caps
-                   size="25px"
-                   align="center"
-                   @click="gohome()"
-                   class="full-width q-px-xl q-py-xs center"
-                   color="grey-6"
-                   label="Sign In"
-                   >
                   </q-btn>
                  </div>
             </q-card-section>
             <q-card-actions align="right">
-              <q-btn label="Logout (Decline)" v-if="isAuthenticated" no-caps flat style="justify-self: flex-end;" @click="() => logout()"></q-btn>
+              <q-btn label="Logout (Decline)" no-caps flat style="justify-self: flex-end;" @click="byebye()"></q-btn>
             </q-card-actions>
           </q-card>
     </q-card>
@@ -70,14 +58,14 @@
 <script>
 // import notifyAlert from 'src/services/notify-alert'
 // import {"las la-circle"} from '@quasar/extras/line-awesome'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import notifyAlert from 'src/services/notify-alert'
 
 export default {
-  name: 'Vote',
+  name: 'Register',
   data () {
     return {
-      drawerRight: false,
+      // drawerRight: false,
       points: '12,235', // TODO read that data from centralized place in Vuex
       freetok: '38,000',
       price: '0.02145',
@@ -97,12 +85,21 @@ export default {
   },
   methods: {
     ...mapActions('account', ['logout']),
-    gohome () { // Register current user to backend (call backend;s register)
-      // this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. (?This is not getUserTable?)
-      // TODO write registration data to backend 'users' table.
-      // console.log('isRegOpen=', this.isRegOpen)
-      notifyAlert('warning', 'So far this do nothing.')
-      this.$router.push('/land') // back to home page
+    ...mapActions('svr', ['addRegUser']),
+    ...mapMutations('svr', ['hideModal']),
+    registerUser () { // Register current user to backend (call backend;s register)
+      console.log('==> accountName <==', this.accountName)
+      this.addRegUser(this.accountName) // NOTE: Write to Backend - Register this User. todo note that it should setup
+      // todo ... isRegOpen to true if go wrong.
+
+      notifyAlert('warning', 'Going to Home page.')
+      this.hideModal()
+      // this.$router.push('/land') // back to home page todo remove as not necessary
+    },
+    byebye () {
+      this.hideModal()
+      notifyAlert('warning', 'Exiting.')
+      this.logout()
     }
   }
 }

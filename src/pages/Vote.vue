@@ -139,7 +139,7 @@
           v-model="submitData.q3slider"
           :min=voterange3s
           :max=voterange3e
-          :step= "0.01"
+          :step= "0.0001"
           color="grey-6"
           label
           :label-value="submitData.q3slider + ' percent'"
@@ -332,10 +332,9 @@ export default {
         }
       ],
       iteration: 0,
-      // voterange3s: 0.0167,
-      voterange3s: process.env.HARD_EXCHANGE_RATE_FLOOR,
-      // voterange3e:
-      // expiration_timer: '2 days 10 hours 30 min',
+      voterange3s: 0.0167,
+      // voterange3s: process.env.HARD_EXCHANGE_RATE_FLOOR,
+      voterange3e: 0.04,
       // Data passed as a result to the back-end as a result of voting.
       submitData: {
         currentAccountName: '',
@@ -451,8 +450,8 @@ export default {
       voterange1e: state => state.svr.voterange1e,
       voterange2s: state => state.svr.voterange2s,
       voterange2e: state => state.svr.voterange2e,
-      // voterange3s: state => state.svr.voterange3s, // defined in data
-      voterange3e: state => state.svr.voterange3e, // todo
+      // voterange3s: state => state.svr.voterange3s, // defined in data todo change to number
+      voterange3e: state => state.svr.voterange3e, // todo change to number
       voterange5s: state => state.svr.voterange5s,
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,

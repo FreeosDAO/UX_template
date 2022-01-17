@@ -230,6 +230,7 @@ export default {
       handler: function (val) {
         if (val && this.accountName) {
           this.getUserTable(this.accountName) // As this have parameter do not work in 'created' section.
+          // todo get mutation here
           this.getSvrsTable(this.accountName) // todo Test
           console.log('*** this.accountName=', this.accountName)
         }
@@ -241,10 +242,11 @@ export default {
   },
   created () {
     this.checkIfLoggedIn()
-    this.version = process.env.V_STRING // TODO used ?
     this.getSystemTable()
     this.getParametersTable()
     this.getExchangeTable()
+    console.log('*** this.accountName=', this.accountName)
+    console.log('=== isRegOpen ===', this.isRegOpen)
   }
 }
 // Photo by Matthew Henry on Unsplash

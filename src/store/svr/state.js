@@ -36,6 +36,7 @@ export default () => ({
   voterange5e: 0,
   // === 'users' table (registration) ===
   isRegOpen: null, // open Registration dialog pop-up, if true
+  modalComponent: null, // Used for Registration pop-up
   isUserRecordExists: null, // 'users' table record exists for a given user, if true
   stake: 0,
   account_type: null, // 'v' or 'a' - Note: accept only 'v'

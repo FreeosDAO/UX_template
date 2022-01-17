@@ -87,20 +87,10 @@
       </q-card>
         </div>
     <!-- -->
-    <q-dialog v-model="alert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Alert</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" @click="alert = false"></q-btn>
-        </q-card-actions>
-      </q-card>
+    <q-dialog v-model="isRegOpen">
+      <div id="app">
+        <register/>
+      </div>
     </q-dialog>
     <!-- end -->
   </div>
@@ -108,11 +98,14 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-// import Register from 'pages/Register'
+import register from 'pages/Register'
 // import { mapFields } from 'vuex-map-fields'
 // import notifyAlert from 'src/services/notify-alert'
 export default {
   name: 'landing',
+  components: {
+    register
+  },
   data () {
     return {
       keylockOn: false, // Locks button calling S-V-R
@@ -230,9 +223,10 @@ export default {
     console.log('### accountName', this.accountName)
     this.getSvrsTable(this.accountName)
     this.setIntervalId = setInterval(() => {
-      if (this.isRegOpen) {
-        this.$router.push('/regi')
-      }
+      console.log('=== isRegOpen ===', this.isRegOpen)
+      // if (this.isRegOpen) { // todo this was only one working version so far, keep it.
+      //   this.$router.push('/regi')
+      // }
       this.getSvrsTable(this.accountName)
       this.keylockOn = this.modeNow(this.mode)
       console.log('=> mode=', this.mode, '### this.keylockOn = ', this.keylockOn, this.isRegOpen)

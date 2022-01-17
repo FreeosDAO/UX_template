@@ -11,7 +11,8 @@ setRegPopUp - end
 
 // ===               set SVRS Table Attr Val               ===
 
-import notifyAlert from 'src/services/notify-alert'
+// import notifyAlert from 'src/services/notify-alert'
+// import customAlert from 'src/services/customAlert'
 
 export const setSVRSTableAttrVal = function (state, payload) {
   //
@@ -358,7 +359,7 @@ export const setRegPopUp = function (state, payload) {
     } else { // The user's record exists, with incorrect account type :| TODO This should be decided later!
       state.isRegOpen = false // TODO Note: At this moment (only for development) the registration page will be not displayed
       state.isUserRecordExists = true
-      notifyAlert('warning', 'User account is not "v" type.')
+      // notifyAlert('warning', 'User account is not "v" type.') // todo this is original
       console.log('=>2 isRegOpen=', state.isRegOpen)
     }
   } else { // The user's record do not exist at all :(
@@ -380,4 +381,12 @@ export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOU
   state.voterange3e = state.lockfactor * state.currentprice
   console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
   console.log(' A lockfactor/currentprice =', state.lockfactor, state.currentprice)
+}
+
+export const showModal = function (state) {
+  state.isRegOpen = true
+}
+
+export const hideModal = function (state) {
+  state.isRegOpen = false
 }

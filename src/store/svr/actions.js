@@ -3,6 +3,8 @@ import { connect } from 'src/utils/smartContractRequest'
 import ProtonSDK from '../../utils/proton'
 import { Notify } from 'quasar'
 import notifyAlert from 'src/services/notify-alert'
+import customAlert from 'src/services/customAlert'
+// import customAlert from 'src/services/customAlert'
 // import { RpcError } from 'eosjs'
 // ---
 // addSurveyResult
@@ -153,8 +155,7 @@ export async function getSvrsTable (state, name) {
       json: true,
       code: process.env.APP_NAME,
       scope: name,
-      table: 'svrs',
-      limit: 12
+      table: 'svrs'
     })
     const val = {
       key: 'SVRSData',
@@ -236,14 +237,14 @@ export async function getSystemTable (state) {
   state.commit('setSystemTableAttrVal', val)
 }
 
-// R E G I S T R A T I O N
+// - R - E - G - I - S - T - R - A - T - I - O - N -
 //
 
 //
 /* Headers from Backend
   [[eosio::action]] void reguser(name user);
   [[eosio::action]] void reregister(name user);
-  bool is_user_verified(name user);
+  bool is_user_verified(name user); // todo ??
  */
 
 // === a d d R e g U s e r ===
@@ -252,7 +253,7 @@ export async function addRegUser ({ state }, currentAccountName) {
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
     account: process.env.APP_NAME,
-    name: 'reguser',
+    name: 'reguser', // todo which one is correct, this or register ?
     authorization: [{
       actor: currentAccountName,
       permission: 'active'
@@ -285,12 +286,12 @@ export async function addReRegUser ({ state }, currentAccountName) {
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
     account: process.env.APP_NAME,
-    name: 'reregister',
+    name: 'register', // todo or 'reregister' ?
     authorization: [{
       actor: currentAccountName,
       permission: 'active'
     }],
-    data: { // TODO sliders should be double TODO
+    data: {
       user: currentAccountName
     }
   }]
@@ -307,7 +308,7 @@ export async function addReRegUser ({ state }, currentAccountName) {
     })
     return result
   } catch (e) {
-    console.log(e)
+    console.log(e) // todo showModal if not successful
     return e
   }
 }
@@ -315,7 +316,7 @@ export async function addReRegUser ({ state }, currentAccountName) {
 // === === === g e t U s e r T a b l e === === ===
 // Is called by landing.vue
 // Read all the data from table for a given user (scope)
-// Additionally, set-up the RegPopUp displaying Register page when necessary.
+// Additionally, set up the RegPopUp displaying Register page when necessary.
 export async function getUserTable (state, name) {
   try {
     const result = await connect({
@@ -333,14 +334,16 @@ export async function getUserTable (state, name) {
     state.commit('setUserTableAttrVal', val)
     notifyAlert('success', 'User Registered. Account type verification in progress.')
     state.commit('setRegPopUp', false) // The Register Pop-up so far is closed.
-    localStorage.setItem('lsIsRegOpen', 'false')
+    // localStorage.setItem('lsIsRegOpen', 'false')
   } catch (e) {
     console.log('E=', e)
     if (e.message.startsWith('Cannot read properties')) {
       // The user has no record in users tasble at all.
-      notifyAlert('err', 'E: User is definitely not Registered. Wait up to 30 sec. for registration page.') // todo push messages to mutations?
+      // notifyAlert('err', 'E: User is definitely not Registered. Wait up to 30 sec. for registration page.') // todo push messages to mutations?
+      customAlert('warning', 'Registration ??') // todo test
       // Set 'on' the (pop-up) the registration's window trigger on Vuex (RegPopUp):
       state.commit('setRegPopUp', true) // The Register Pop-up becomes visible.
+
       // localStorage.setItem('lsIsRegOpen', 'true')
     } // else { // The user may be registered, however may have not valid account type.
     // notifyAlert('success', 'User may be Registered. Account type verification in progress.')

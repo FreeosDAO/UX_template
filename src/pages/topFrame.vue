@@ -60,7 +60,7 @@
 // import landing from './landing.vue'
 
 // import Register from 'pages/Register'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 // import { bus } from 'C:/Users/Andrew/UX_template/.quasar/app.js' // todo experiment
 // import { bus } from '../App.vue' // todo added by me
 
@@ -74,8 +74,9 @@ export default {
     }
   },
   created () {
-    console.log('this.accountName=', this.accountName, 'isAccount?', this.isAccount) // TODO verify is defined -- Not work here !!!
+    // console.log('this.accountName=', this.accountName, 'isAccount?', this.isAccount) // TODO verify is defined -- Not work here !!!
     // TODO Copy that to mounted !
+    console.log(' === isRegOpen=>', this.isRegOpen)
     // this.getUserTable(this.accountName)
     // console.log('*** this.accountName=', this.accountName)
     // this.getUserTable(this.accountName)
@@ -87,14 +88,15 @@ export default {
     ...mapState({
       accountName: state => state.account.accountName,
       iteration: state => state.svr.iteration,
-      account_type: state => state.svr.account_type
-      // isRegOpen: state => state.svr.isRegOpen // todo to remove
+      account_type: state => state.svr.account_type,
+      isRegOpen: state => state.svr.isRegOpen // todo test
     }),
     ...mapGetters('account', ['isAuthenticated'])
-  },
-  methods: {
-    ...mapActions('svr', ['getUserTable']) // todo to remove
   }
+  // ,
+  // methods: {
+  // ...mapActions('svr', ['getUserTable']) // todo test
+  // }
 }
 </script>
 <style scoped>
