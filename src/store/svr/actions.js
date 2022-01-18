@@ -161,16 +161,19 @@ export async function getSvrsTable (state, name) {
       key: 'SVRSData',
       value: result.rows
     }
-    // console.log(' ## getSvrsTable', result)
+    console.log(' ## ==> getSvrsTable', val)
     state.commit('setSVRSTableAttrVal', val)
     // notifyAlert('success', 'User may be Registered. Account type verification in progress.')
+    // state.commit('svrsError', false)
   } catch (e) {
     console.log('E=', e)
-    if (e.message.startsWith('Cannot read properties')) {
-      if (state.isRegOpen) { // Message is not displayed for v-accounts.
-        notifyAlert('err', 'E: message: User may have no svrs table.')
-      }
-    }
+    // if (e.message.startsWith('Cannot read properties')) {
+    // NOTE: The User may not have svrs table. The SVRS table will be 'mocked up' by zero values to ...
+    // NOTE: ... enable its normal initialization by any of S-V pages.
+    // state.commit('svrsError', true)
+    console.log('Error: No svrs table')
+    state.commit('noSVRS')
+    // }
   }
 }
 
@@ -219,7 +222,6 @@ export async function getExchangeTable (state) {
 
 // === === ===
 //
-// ---
 // === g e t S y s t e m T a b l e ===
 // Where called: MainLayout.vue
 export async function getSystemTable (state) {
@@ -240,20 +242,13 @@ export async function getSystemTable (state) {
 // - R - E - G - I - S - T - R - A - T - I - O - N -
 //
 
-//
-/* Headers from Backend
-  [[eosio::action]] void reguser(name user);
-  [[eosio::action]] void reregister(name user);
-  bool is_user_verified(name user); // todo ??
- */
-
 // === a d d R e g U s e r ===
-export async function addRegUser ({ state }, currentAccountName) {
+export async function addRegUser (state, currentAccountName) {
   // Write user data to users table on the backend
   console.log('&&& acc name=', currentAccountName)
   const actions = [{
     account: process.env.APP_NAME,
-    name: 'reguser', // todo which one is correct, this or register ?
+    name: 'reguser', // this is correct
     authorization: [{
       actor: currentAccountName,
       permission: 'active'

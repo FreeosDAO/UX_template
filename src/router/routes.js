@@ -18,6 +18,7 @@ const routes = [
       { path: '/regi', component: () => import('pages/Register.vue') },
       { path: '/terms', component: () => import('pages/terms.vue') },
       { path: '/topfr', component: () => import('pages/topFrame.vue') },
+      { path: '/terms', component: () => import('pages/terms.vue') },
       { path: '/claim', component: () => import('pages/Claim.vue') }
     ]
   },

@@ -10,7 +10,7 @@
       <!-- Main Q-card -->
       <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
-          &nbsp; &nbsp;{{accountName}} &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
+          &nbsp; &nbsp;{{accountName}} &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn> type: {{account_type}}
         </q-toolbar-title>
         <!-- <div>TEST{{isAuthenticated}}TEST</div> -->
         <q-btn v-if="isAuthenticated" dense flat round icon="menu">
