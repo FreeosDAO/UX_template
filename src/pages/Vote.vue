@@ -290,6 +290,35 @@
     </q-card>
     <!-- end of 'Next vote' section -->
   <!-- end -->
+    <!-- todo test -->
+    <q-dialog v-model="errorpopup" persistent transition-show="flip-down" transition-hide="flip-up">
+      <q-card class="bg-grey-6 bordered text-white">
+        <q-bar>
+          <q-icon color = "red" name="circle"></q-icon>
+
+          <q-space></q-space>
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+          </q-btn>
+        </q-bar>
+
+        <q-card-section>
+          <div class="text-h6">Alert - Vote Answers Incomplete</div>
+        </q-card-section>
+
+        <q-card-section bordered class="q-pt-none">
+          <!-- TODO Change whole line to be v-if block -->
+          {{this.errorString1}} <br v-if="this.Q1">
+          {{this.errorString2}} <br v-if="this.Q2">
+          {{this.errorString3}} <br v-if="this.Q3">
+          {{this.errorString4}} <br v-if="this.Q4">
+          {{this.errorString5}} <br v-if="this.Q5">
+          {{this.errorString6}}
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <!-- test -->
   </div>
 </template>
 
@@ -301,6 +330,19 @@ export default {
   data () { // VOTE
     return {
       version: '',
+      Q1: false,
+      Q2: false,
+      Q3: false,
+      Q4: false,
+      Q5: false,
+      Q6: false,
+      errorpopup: false,
+      errorString1: '',
+      errorString2: '',
+      errorString3: '',
+      errorString4: '',
+      errorString5: '',
+      errorString6: '',
       displaytimer: 0, // local timer
       selection1: 0,
       selection2: 0,
@@ -388,12 +430,64 @@ export default {
       // const self = this
       this.submitData.currentAccountName = this.accountName
       console.log('Vote submitData = ', this.submitData)
-      this.addVoteResult(this.submitData) // Submit to back-end to sum with global results
-      // // .then(response => { // TODO remove it
-      // self.resetForm()
-      notifyAlert('success', 'Vote Submitted Successfully.')
-      // Set up user_mode in Vuex to enable further landing page actions.
-      this.$router.push('/congs') // Congratulation page
+      if (this.validate()) {
+        this.addVoteResult(this.submitData) // Submit to back-end to sum with global results
+        // // .then(response => { // TODO remove it
+        // self.resetForm()
+        notifyAlert('success', 'Vote Submitted Successfully.')
+        // Set up user_mode in Vuex to enable further landing page actions.
+        this.$router.push('/congs') // Congratulation page
+      }
+    },
+    validate () { // Vote pre-validation before sending to backend. Backend do full validation.
+      // todo modify for parametrized questions e.g. variable slider.
+      // todo verify conditions - current are wrong
+      let error = false // true if any error, will define this function return value.
+      this.Q1 = false
+      this.Q2 = false
+      this.Q3 = false
+      this.Q4 = false
+      this.Q5 = false
+      this.Q6 = false
+      this.errorString1 = ''
+      this.errorString2 = ''
+      this.errorString3 = ''
+      this.errorString4 = ''
+      this.errorString5 = ''
+      this.errorString6 = ''
+      if (this.submitData.q1radio === 0) {
+        error = true
+        this.Q1 = true
+        this.errorString1 = ' -> Q1: Select one Option.'
+      }
+      if (this.submitData.q2slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+        error = true
+        this.Q2 = true
+        this.errorString2 = ' -> Q2: Question not answered '
+      }
+      if (this.submitData.q3radio === 0) {
+        error = true
+        this.Q3 = true
+        this.errorString3 = ' -> Q3: Select one option. '
+      }
+      if (this.submitData.q4slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+        error = true
+        this.Q4 = true
+        this.errorString4 = ' -> Q4: Question not answered. '
+      }
+      const a = this.submitData.q5priority1
+      const b = this.submitData.q5priority2
+      const c = this.submitData.q5priority3
+      if ((a === b) || (b === c) || (a === c)) {
+        error = true
+        this.Q6 = true
+        this.errorString5 = ' -> Q5: Duplicated or no Answer. '
+      }
+      // console.log(' ERROR=', error, errorString)
+      if (error) { // define function return value
+        this.errorpopup = true
+        return false // data not validated
+      } else { return true }
     },
     randomize () {
       for (let i = this.options.length - 1; i > 0; i--) {
