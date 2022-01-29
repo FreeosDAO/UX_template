@@ -114,18 +114,19 @@ export const setSVRSTableAttrVal = function (state, payload) {
   }
   console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone)
   let nothing = false
-  let surveyOK = false
-  let voteOK = false
-  let SV_OK = false
+  let S_OK = false // if true - Survey done by the user but not anything other yet.
+  let V_OK = false
+  let SV_OK = false // if true - Survey and Voting done by the user but not the ratification.
   let R_OK = false
-  // // nothing - all three false
+  // nothing - all three false
+  // Note: Do not remove anything. E.g. "if ((voteDone === true) && (ratifyDone === false))" cannot be
+  // replaced by only (voteDone === true) as we need to be sure that ratify not started yet.
   if ((surveyDone === false) && (voteDone === false) && (ratifyDone === false)) { nothing = true }
-  if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { surveyOK = true }
-  if ((voteDone === true) && (ratifyDone === false)) { voteOK = true } // S-any, V-true, R-false
+  if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { S_OK = true }
+  if ((voteDone === true) && (ratifyDone === false)) { V_OK = true } // S-any, V-true, R-false
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
-  // console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
-  // ' SV_OK:', SV_OK, ' R_OK:', R_OK)
+  console.log('nothing:', nothing, ' S_OK:', S_OK, ' V_OK:', V_OK, ' SV_OK:', SV_OK, ' R_OK:', R_OK)
   console.log('systemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
   // const delay = state.delay
   if (isSurveyActive) {
@@ -134,7 +135,7 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.user_mode = 1
       state.timer = surveyend - currentoffset // + delay // survey timer in seconds
     } // Survey Open
-    if (surveyOK) {
+    if (S_OK) {
       state.user_mode = 2
       state.timer = surveyend - currentoffset // survey timer in seconds
     } // Wait for Vote // Required Conditions: S-true, V,R - N/A
@@ -146,11 +147,11 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.timer = voteend - currentoffset // vote timer in seconds
       // console.log('Vote NOW')
     } // Vote Open/Start Vote Now
-    if (surveyOK) {
+    if (S_OK) {
       state.user_mode = 3
       state.timer = voteend - currentoffset // vote timer in seconds
     } // Vote Open/Start Vote Now
-    if (SV_OK) {
+    if (V_OK) { // change from SV_OK to V_OK
       state.user_mode = 4
       state.timer = voteend - currentoffset // vote timer in seconds
     } // Wait for Ratify
@@ -160,11 +161,11 @@ export const setSVRSTableAttrVal = function (state, payload) {
       state.user_mode = 6
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
-    if (surveyOK) {
-      state.user_mode = 5
+    if (S_OK) {
+      state.user_mode = 6 // Changed from 5 to 6, ratify not allowed after survey only
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
-    if (voteOK) {
+    if (V_OK) {
       state.user_mode = 5
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
@@ -394,9 +395,12 @@ export const increment = function (state) {
   state.Increment++
 }
 
-export const noSVRS = function (state) {
-  //
-  // TODO
+export const noSVRS = function (state) { // TODO - Note: this code is duplicated abd used only in case
+  // when new user is registered but not have SVRS table. Rationale: SVRS table is initialized for the new user
+  // by calling survey or vote, but it was impossible if user had no SVRS table as stage in which user is now is
+  // determined by SVRS table. This part of the code allows user to make survey or vote always to allow SVRS initialization.
+  // Note: code duplication was necessary as putting any other solution into original function destroyed timing of aa operations.
+  // TODO Compare with original - search for another solution without code duplication.
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
@@ -464,17 +468,17 @@ export const noSVRS = function (state) {
   }
   console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone)
   let nothing = false
-  let surveyOK = false
-  let voteOK = false
+  let S_OK = false
+  let V_OK = false
   let SV_OK = false
   let R_OK = false
   // // nothing - all three false
   if ((surveyDone === false) && (voteDone === false) && (ratifyDone === false)) { nothing = true }
-  if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { surveyOK = true }
-  if ((voteDone === true) && (ratifyDone === false)) { voteOK = true } // S-any, V-true, R-false
+  if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { S_OK = true }
+  if ((voteDone === true) && (ratifyDone === false)) { V_OK = true } // S-any, V-true, R-false
   if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
   if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
-  // console.log('nothing:', nothing, ' surveyOK:', surveyOK, ' voteOK:', voteOK,
+  // console.log('nothing:', nothing, ' S_OK:', S_OK, ' V_OK:', V_OK,
   // ' SV_OK:', SV_OK, ' R_OK:', R_OK)
   console.log('systemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
   // const delay = state.delay
@@ -484,7 +488,7 @@ export const noSVRS = function (state) {
       state.user_mode = 1
       state.timer = surveyend - currentoffset // + delay // survey timer in seconds
     } // Survey Open
-    if (surveyOK) {
+    if (S_OK) {
       state.user_mode = 2
       state.timer = surveyend - currentoffset // survey timer in seconds
     } // Wait for Vote // Required Conditions: S-true, V,R - N/A
@@ -496,11 +500,11 @@ export const noSVRS = function (state) {
       state.timer = voteend - currentoffset // vote timer in seconds
       // console.log('Vote NOW')
     } // Vote Open/Start Vote Now
-    if (surveyOK) {
+    if (S_OK) {
       state.user_mode = 3
       state.timer = voteend - currentoffset // vote timer in seconds
     } // Vote Open/Start Vote Now
-    if (SV_OK) {
+    if (V_OK) { // change from SV_OK to V_OK
       state.user_mode = 4
       state.timer = voteend - currentoffset // vote timer in seconds
     } // Wait for Ratify
@@ -510,11 +514,11 @@ export const noSVRS = function (state) {
       state.user_mode = 6
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Wait for New Iteration
-    if (surveyOK) {
-      state.user_mode = 5
+    if (S_OK) {
+      state.user_mode = 6 // changed from 5 to 6 as survey alone is not enough for ratify
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
-    if (voteOK) {
+    if (V_OK) {
       state.user_mode = 5
       state.timer = ratifyend - currentoffset // ratify timer in seconds
     } // Ratify Open
