@@ -314,7 +314,8 @@
           {{this.errorString3}} <br v-if="this.Q3">
           {{this.errorString4}} <br v-if="this.Q4">
           {{this.errorString5}} <br v-if="this.Q5">
-          {{this.errorString6}}
+          {{this.errorString6}} <br v-if="this.Q6">
+          {{this.errorString7}}
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -343,6 +344,7 @@ export default {
       errorString4: '',
       errorString5: '',
       errorString6: '',
+      errorString7: 'The above question(s) are answered incorectly. Try again.',
       displaytimer: 0, // local timer
       selection1: 0,
       selection2: 0,
@@ -455,33 +457,42 @@ export default {
       this.errorString4 = ''
       this.errorString5 = ''
       this.errorString6 = ''
-      if (this.submitData.q1radio === 0) {
+      if (this.submitData.q1slider === 0) {
         error = true
         this.Q1 = true
-        this.errorString1 = ' -> Q1: Select one Option.'
+        this.errorString1 = ' -> Q1: Question not answered.'
       }
-      if (this.submitData.q2slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+      console.log('this.submitData.q2slider', this.submitData.q2slider)
+      if (this.submitData.q2slider === 6) { // todo should be min
         error = true
         this.Q2 = true
-        this.errorString2 = ' -> Q2: Question not answered '
+        this.errorString2 = ' -> Q2: Question not answered.'
       }
-      if (this.submitData.q3radio === 0) {
+      if (this.submitData.q3slider === 0.0167) { // todo
         error = true
         this.Q3 = true
-        this.errorString3 = ' -> Q3: Select one option. '
+        this.errorString3 = ' -> Q3: Question not answered. '
       }
-      if (this.submitData.q4slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+      console.log('this.value_radio1', this.value_radio1)
+      if ((this.value_radio1 !== '1') && (this.value_radio1 !== '2')) {
         error = true
         this.Q4 = true
-        this.errorString4 = ' -> Q4: Question not answered. '
+        this.errorString4 = ' -> Q4: Select one Option. '
       }
-      const a = this.submitData.q5priority1
-      const b = this.submitData.q5priority2
-      const c = this.submitData.q5priority3
+      console.log('this.submitData.q5slider', this.submitData.q5slider)
+      if (this.submitData.q5slider === 0) {
+        error = true
+        this.Q5 = true
+        this.errorString5 = ' -> Q5: Question not answered.'
+        console.log('q5slider', this.submitData.q5slider)
+      }
+      const a = this.submitData.q6choice1
+      const b = this.submitData.q6choice2
+      const c = this.submitData.q6choice3
       if ((a === b) || (b === c) || (a === c)) {
         error = true
         this.Q6 = true
-        this.errorString5 = ' -> Q5: Duplicated or no Answer. '
+        this.errorString6 = ' -> Q6: Duplicated or no Answer. '
       }
       // console.log(' ERROR=', error, errorString)
       if (error) { // define function return value
@@ -545,7 +556,7 @@ export default {
       voterange2s: state => state.svr.voterange2s,
       voterange2e: state => state.svr.voterange2e,
       // voterange3s: state => state.svr.voterange3s, // defined in data todo change to number
-      voterange3e: state => state.svr.voterange3e, // todo change to number
+      // voterange3e: state => state.svr.voterange3e, // todo change to number
       voterange5s: state => state.svr.voterange5s,
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,

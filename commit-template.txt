@@ -1,0 +1,10 @@
+#Guidelines: writing useful git messages can ensure that your git commits remains useful and keep your team members happy.
+# FOR BUG FIXES
+# Summary: [what is the fix] + [where fix is applied]
+# Body: [description of the issue]
+# Footer: [ticket number]
+# FOR NEW FEATURE
+# Summary: [name of feature]
+# Body: [description of the feature and where it has been added]
+# Footer: [feature release number]
+# Happy coding! :)

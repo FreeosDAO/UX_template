@@ -1,0 +1,4 @@
+v0.0.1 -   Commits on Jan 28th, 2022 pre-screening Vote and Survey data before sending to backend - in progress (a49d81c) 
+           The difference to previous version is only pop-up window showing incomplete data before submit Survey or Voting data.
+
+v0.0.1  -  Commits on Jan 19, 2022 "Registration" The same version in on web freeos.online/gov (ce4d798)
