@@ -287,6 +287,8 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
   state.voterange2e = parseFloat(vnum4)
   state.voterange5s = parseFloat(vnum5)
   state.voterange5e = parseFloat(vnum6)
+  console.log('voterange', state.voterange1s, state.voterange1e, state.voterange2s,
+    state.voterange2e, state.voterange5s, state.voterange5e)
 } // === end of parameters table service ===
 
 // === === === === === === === === === === === === === === === === === === === === ===
@@ -372,15 +374,18 @@ export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOU
   //
   const val = payload.value
   // console.log('*** Exchange payload:', JSON.stringify(val)) // test
-  console.log('val[0].target_price', val[0].targetprice)
-  console.log('val[0].currentprice', val[0].currentprice)
-  state.targetprice = val[0].targetprice
-  state.currentprice = val[0].currentprice
+  // console.log('val[0].target_price', typeof val[0].targetprice)
+  // console.log('val[0].currentprice', typeof val[0].currentprice)
+  const targetprice = parseFloat(val[0].targetprice)
+  state.targetprice = targetprice
+  const currentprice = parseFloat(val[0].currentprice)
+  state.currentprice = currentprice
+  const price = state.lockfactor * state.currentprice
   //
-  state.voterange3s = process.env.HARD_EXCHANGE_RATE_FLOOR // parametrize question 3 slider
-  state.voterange3e = state.lockfactor * state.currentprice
-  console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
-  console.log(' A lockfactor/currentprice =', state.lockfactor, state.currentprice)
+  state.voterange3s = parseFloat(process.env.HARD_EXCHANGE_RATE_FLOOR) // parametrize question 3 slider
+  state.voterange3e = price
+  // console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
+  // console.log(' A lockfactor/currentprice =', typeof val[0].currentprice, typeof state.voterange3s, typeof currentprice, typeof state.currentprice)
 }
 
 export const showModal = function (state) {

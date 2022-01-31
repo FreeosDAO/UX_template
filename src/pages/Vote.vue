@@ -376,17 +376,17 @@ export default {
         }
       ],
       iteration: 0,
-      voterange3s: 0.0167,
+      // voterange3s: this.voterange3sA,
       // voterange3s: process.env.HARD_EXCHANGE_RATE_FLOOR,
-      voterange3e: 0.04,
+      // voterange3e: this.voterange3eA,
       // Data passed as a result to the back-end as a result of voting.
       submitData: {
         currentAccountName: '',
-        q1slider: 0,
-        q2slider: 6, // Must start from 6. // TODO
-        q3slider: 0.0167,
+        q1slider: this.voterange1s,
+        q2slider: this.voterange2s, // Must start from 6. // TODO
+        q3slider: this.voterange3s,
         q4radio: '', // string
-        q5slider: 0,
+        q5slider: this.voterange5s,
         q6choice1: 0, // Return number of selected option for each selector.
         q6choice2: 0,
         q6choice3: 0
@@ -457,18 +457,18 @@ export default {
       this.errorString4 = ''
       this.errorString5 = ''
       this.errorString6 = ''
-      if (this.submitData.q1slider === 0) {
+      if (this.submitData.q1slider === undefined) {
         error = true
         this.Q1 = true
         this.errorString1 = ' -> Q1: Question not answered.'
       }
       console.log('this.submitData.q2slider', this.submitData.q2slider)
-      if (this.submitData.q2slider === 6) { // todo should be min
+      if (this.submitData.q2slider === undefined) { // todo should be min
         error = true
         this.Q2 = true
         this.errorString2 = ' -> Q2: Question not answered.'
       }
-      if (this.submitData.q3slider === 0.0167) { // todo
+      if (this.submitData.q3slider === undefined) {
         error = true
         this.Q3 = true
         this.errorString3 = ' -> Q3: Question not answered. '
@@ -480,7 +480,7 @@ export default {
         this.errorString4 = ' -> Q4: Select one Option. '
       }
       console.log('this.submitData.q5slider', this.submitData.q5slider)
-      if (this.submitData.q5slider === 0) {
+      if (this.submitData.q5slider === undefined) {
         error = true
         this.Q5 = true
         this.errorString5 = ' -> Q5: Question not answered.'
@@ -555,8 +555,8 @@ export default {
       voterange1e: state => state.svr.voterange1e,
       voterange2s: state => state.svr.voterange2s,
       voterange2e: state => state.svr.voterange2e,
-      // voterange3s: state => state.svr.voterange3s, // defined in data todo change to number
-      // voterange3e: state => state.svr.voterange3e, // todo change to number
+      voterange3s: state => state.svr.voterange3s, // defined in data todo change to number
+      voterange3e: state => state.svr.voterange3e, // todo change to number
       voterange5s: state => state.svr.voterange5s,
       voterange5e: state => state.svr.voterange5e,
       inittime: state => state.svr.initUTC,
@@ -569,6 +569,7 @@ export default {
     })
   }
 }
+
 </script>
 <style scoped>
 .mycard {

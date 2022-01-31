@@ -104,7 +104,7 @@
               ></q-slider>
               <div class="row">
                 <div class="col text-left">
-                  {{surveyrange1s}}
+                  {{surveyrange2s}}
                 </div>
                 <div class="col">
                   <div class="text-center">
@@ -114,7 +114,7 @@
                   </div>
                 </div>
                 <div class="col text-right">
-                  {{surveyrange1e}}
+                  {{surveyrange2e}}
                 </div>
               </div>
             </div>
@@ -303,9 +303,9 @@ export default {
       submitData: {
         currentAccountName: '',
         q1radio: 0,
-        q2slider: 0,
+        q2slider: this.surveyrange2s,
         q3radio: 0,
-        q4slider: 0,
+        q4slider: this.surveyrange4s,
         q5priority1: 0,
         q5priority2: 0,
         q5priority3: 0
@@ -314,7 +314,7 @@ export default {
       selector2: 0,
       selector3: 0,
       // selectors:
-      options: [
+      options: [ // todo I believe these labels should be read from backend.
         {
           label: 'Growing the participants',
           value: '1'
@@ -353,12 +353,12 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  filters: { // todo extract sliders parameters for survey.
+  filters: { // todo extract sliders parameters for survey. // todo probably to remove?
     q1slidermin: function (string) { return string.substring(0, 15) },
     q1slidermax: function (string) { return string.substring(0, 15) },
     q2slidermin: function (string) { return string.substring(0, 15) },
     q2slidermax: function (string) { return string.substring(0, 15) }
-  }, // filters end
+  }, // filters end todo ??
   // created () {
   // this.randomize() // randomize display for question 5.
   // },
@@ -367,10 +367,10 @@ export default {
       accountName: state => state.account.accountName,
       mode: state => state.account.user_mode,
       // surveyranges: state => state.svr.surveyranges,
-      surveyrange1s: state => state.svr.surveyrange1s, // Start of slider1 scope (Q2)
-      surveyrange1e: state => state.svr.surveyrange1e,
-      surveyrange2s: state => state.svr.surveyrange2s, // Start of slider2 scope (Q4)
-      surveyrange2e: state => state.svr.surveyrange2e,
+      surveyrange2s: state => state.svr.surveyrange1s, // Start of slider1 scope (Q2)
+      surveyrange2e: state => state.svr.surveyrange1e,
+      surveyrange4s: state => state.svr.surveyrange2s, // Start of slider2 scope (Q4)
+      surveyrange4e: state => state.svr.surveyrange2e,
       inittime: state => state.svr.initUTC,
       iterationSize: state => state.svr.iterationSize,
       surveyend: state => state.svr.surveyend,
@@ -431,7 +431,7 @@ export default {
         this.Q1 = true
         this.errorString1 = ' -> Q1: Select one Option.'
       }
-      if (this.submitData.q2slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+      if (this.submitData.q2slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
         error = true
         this.Q2 = true
         this.errorString2 = ' -> Q2: Question not answered '
@@ -441,7 +441,7 @@ export default {
         this.Q3 = true
         this.errorString3 = ' -> Q3: Select one option. '
       }
-      if (this.submitData.q4slider === 0) { // if slider not touched by the user it is always 0, not min slider range
+      if (this.submitData.q4slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
         error = true
         this.Q4 = true
         this.errorString4 = ' -> Q4: Question not answered. '

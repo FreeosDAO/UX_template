@@ -20,20 +20,23 @@ export default () => ({
   voteranges: '',
   votestart: 0,
   //
-  // converted ranges for Survey slides
+  // converted ranges for displaying parametrized Survey slides
+  // processed by the
   surveyrange1s: 0,
   surveyrange1e: 0,
   surveyrange2s: 0,
   surveyrange2e: 0,
-  // converted ranges for Vote sliders
+  // converted ranges for displaying parametrized Vote sliders
+  // processed by the
   voterange1s: 0,
   voterange1e: 0,
   voterange2s: 0,
   voterange2e: 0,
-  voterange3s: 0,
-  voterange3e: 0,
+  voterange3s: 0.0,
+  voterange3e: 0.0,
   voterange5s: 0,
   voterange5e: 0,
+  //
   // === 'users' table (registration) ===
   isRegOpen: null, // open Registration dialog pop-up, if true
   Increment: 0,
