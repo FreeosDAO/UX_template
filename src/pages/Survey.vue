@@ -94,8 +94,8 @@
             <div class="q-pa-md">
               <q-slider
                 v-model="submitData.q2slider"
-                :min=surveyrange1s
-                :max=surveyrange1e
+                :min=surveyrange2s
+                :max=surveyrange2e
                 :step="1"
                 color="grey-6"
                 label
@@ -173,7 +173,7 @@
             ></q-slider>
             <div class="row">
               <div class="col text-left">
-                {{surveyrange2s}}
+                {{surveyrange2s}}TEST{{submitData.q4slider}}
               </div>
               <div class="col">
                 <div class="text-center">
@@ -262,9 +262,9 @@
         <q-card-section class="q-pt-none">
           <!-- Change whole line to be v-if block -->
           {{this.errorString1}} <br v-if="this.Q1">
-          {{this.errorString2}} <br v-if="this.Q2">
+          <!-- {{this.errorString2}} <br v-if="this.Q2"> -->
           {{this.errorString3}} <br v-if="this.Q3">
-          {{this.errorString4}} <br v-if="this.Q4">
+          <!-- {{this.errorString4}} <br v-if="this.Q4"> -->
           {{this.errorString5}} <br v-if="this.Q5">
           {{this.errorString6}}
         </q-card-section>
@@ -283,15 +283,15 @@ export default {
     return {
       version: '',
       Q1: false,
-      Q2: false,
+      // Q2: false,
       Q3: false,
-      Q4: false,
+      // Q4: false,
       Q5: false,
       errorpopup: false,
       errorString1: '',
-      errorString2: '',
+      // errorString2: '',
       errorString3: '',
-      errorString4: '',
+      // errorString4: '',
       errorString5: '',
       errorString6: 'The above question(s) are answered incorectly. Try again.',
       iteration: 0,
@@ -303,9 +303,9 @@ export default {
       submitData: {
         currentAccountName: '',
         q1radio: 0,
-        q2slider: this.surveyrange2s,
+        q2slider: 0.0,
         q3radio: 0,
-        q4slider: this.surveyrange4s,
+        q4slider: 0.0,
         q5priority1: 0,
         q5priority2: 0,
         q5priority3: 0
@@ -353,21 +353,23 @@ export default {
         ' ex ea commodo consequat.'
     }
   },
-  filters: { // todo extract sliders parameters for survey. // todo probably to remove?
-    q1slidermin: function (string) { return string.substring(0, 15) },
-    q1slidermax: function (string) { return string.substring(0, 15) },
-    q2slidermin: function (string) { return string.substring(0, 15) },
-    q2slidermax: function (string) { return string.substring(0, 15) }
-  }, // filters end todo ??
+  // filters: { // todo extract sliders parameters for survey. // todo probably to remove?
+  //  q1slidermin: function (string) { return string.substring(0, 15) },
+  //  q1slidermax: function (string) { return string.substring(0, 15) },
+  //  q2slidermin: function (string) { return string.substring(0, 15) },
+  //  q2slidermax: function (string) { return string.substring(0, 15) }
+  // }, // filters end todo ?? remove
   // created () {
   // this.randomize() // randomize display for question 5.
-  // },
+  // }, todo remove ?
   computed: {
     ...mapState({
       accountName: state => state.account.accountName,
       mode: state => state.account.user_mode,
       // surveyranges: state => state.svr.surveyranges,
       surveyrange2s: state => state.svr.surveyrange1s, // Start of slider1 scope (Q2)
+      // surveymiddle2: state => state.svr.surveymiddle2, todo remove
+      // surveymiddle4: state => state.svr.surveymiddle4, todo remove
       surveyrange2e: state => state.svr.surveyrange1e,
       surveyrange4s: state => state.svr.surveyrange2s, // Start of slider2 scope (Q4)
       surveyrange4e: state => state.svr.surveyrange2e,
@@ -378,7 +380,8 @@ export default {
       scan_interval: state => state.svr.scan_interval
     }),
     ...mapGetters('account', ['isAuthenticated', 'connecting']),
-    congratTitle: { // serve for v-model for the Register pop-up window
+    ...mapGetters('svr', ['surveymiddle2', 'surveymiddle4']),
+    congratTitle: { // todo not ready yet
       get () {
         return this.$store.state.svr.congratulationTitle
       },
@@ -389,7 +392,17 @@ export default {
   },
   methods: {
     ...mapActions('svr', ['addSurveyResult']),
+    // middle_range2 () {
+    //  const middle2 = (this.surveyrange2e - this.surveyrange2s) / 2
+    //  console.log(' middle2 ', middle2, typeof middle2)
+    //  return middle2
+    // },
+    fetchSliders () {
+      this.submitData.q2slider = this.surveymiddle2
+      this.submitData.q4slider = this.surveymiddle4
+    },
     submit () { // Export survey results to back-end.
+      console.log(' MIDDLE ', this.submitData.q4slider, typeof this.submitData.q4slider, this.surveymiddle4, typeof this.surveymiddle4)
       this.submitData.q5priority1 = this.selector1.value
       this.submitData.q5priority2 = this.selector2.value
       this.submitData.q5priority3 = this.selector3.value
@@ -417,35 +430,35 @@ export default {
       // todo modify for parametrized questions e.g. variable slider.
       let error = false // true if any error, will define this function return value.
       this.Q1 = false
-      this.Q2 = false
+      // this.Q2 = false
       this.Q3 = false
-      this.Q4 = false
+      // this.Q4 = false
       this.Q5 = false
       this.errorString1 = ''
-      this.errorString2 = ''
+      // this.errorString2 = ''
       this.errorString3 = ''
-      this.errorString4 = ''
+      // this.errorString4 = ''
       this.errorString5 = ''
       if (this.submitData.q1radio === 0) {
         error = true
         this.Q1 = true
         this.errorString1 = ' -> Q1: Select one Option.'
       }
-      if (this.submitData.q2slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
-        error = true
-        this.Q2 = true
-        this.errorString2 = ' -> Q2: Question not answered '
-      }
+      // if (this.submitData.q2slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
+      //  error = true
+      //  this.Q2 = true
+      //  this.errorString2 = ' -> Q2: Question not answered '
+      // }
       if (this.submitData.q3radio === 0) {
         error = true
         this.Q3 = true
         this.errorString3 = ' -> Q3: Select one option. '
       }
-      if (this.submitData.q4slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
-        error = true
-        this.Q4 = true
-        this.errorString4 = ' -> Q4: Question not answered. '
-      }
+      // if (this.submitData.q4slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
+      //  error = true
+      //  this.Q4 = true
+      //  this.errorString4 = ' -> Q4: Question not answered. '
+      // }
       const a = this.submitData.q5priority1
       const b = this.submitData.q5priority2
       const c = this.submitData.q5priority3
@@ -502,6 +515,9 @@ export default {
       }
     }
   }, // end of methods
+  mounted () {
+    this.fetchSliders()
+  },
   created () { // auto refresh of selected backend tables and screen timer.
     // this.getSvrsTable(this.accountName)
     // this.getUserTable(this.accountName)

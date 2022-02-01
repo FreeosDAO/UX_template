@@ -16,17 +16,6 @@ import notifyAlert from 'src/services/notify-alert'
 
 export const setSVRSTableAttrVal = function (state, payload) {
   //
-  // TODO TEST
-  // sample:
-  // const str = '2021-09-15T00:00:00.000 GMT+00:00' // TODO ADD GMT
-  // const replaced = str.replace('T', ', ')
-  // const myDate = new Date(replaced)
-  // const initUTC = myDate.getTime() / 1000.0
-  // state.initUTC = initUTC // init point in UTC seconds
-  // console.log('Basic =>init in UTC sec.', initUTC)
-  // //
-  // https://www.epochconverter.com/
-  // TODO test END --- --- --- --- --- --- --- --- ---
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
@@ -37,10 +26,6 @@ export const setSVRSTableAttrVal = function (state, payload) {
   // console.log('Time Zone =', n)
   // console.log(' init_time_seconds = ', state.initUTC)
   console.log(' current_offset = ', currentoffset)
-  // console.log(' state.timerOffset = ', state.timerOffset)
-  // const now = new Date()
-  // console.log('My Time=', Math.floor(now.getTime() / 1000)) // TODO Seems to be the best one. TODO LOOKS OK AS GMT UTC
-  // TODO this timer is not implemented for counting of the iteration TODO TODO !!! === === === === === === === === ===
   const ratifyend = state.ratifyend
   const ratifystart = state.ratifystart
   const surveyend = state.surveyend
@@ -241,8 +226,13 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
   // console.log('$ num', num1, num2, num3, num4)
   state.surveyrange1s = parseFloat(num1)
   state.surveyrange1e = parseFloat(num2)
+  state.surveymiddle2 = (num2 - num1) / 2.0 + parseFloat(num1) // default value of Q2 survey slider
   state.surveyrange2s = parseFloat(num3)
   state.surveyrange2e = parseFloat(num4)
+  state.surveymiddle4 = (num4 - num3) / 2 + parseFloat(num3) // default value of Q4 survey slider
+  console.log('@ middle ', state.surveyrange1s, typeof state.surveyrange1s, state.surveyrange2s, typeof state.surveyrange2s)
+  console.log('# middle ', state.surveyrange1e, typeof state.surveyrange1e, state.surveyrange2e, typeof state.surveyrange2e)
+  console.log('  middle ', state.surveymiddle2, typeof state.surveymiddle2, state.surveymiddle4, typeof state.surveymiddle2)
 
   // Unpack slider ranges for Vote displays here:
   const vstr = state.voteranges
@@ -283,12 +273,22 @@ export const setParamTableAttrVal = function (state, val) { // TODO Note: This m
   // console.log('$ vnums', vnum1, vnum2, vnum3, vnum4, vnum5, vnum6)
   state.voterange1s = parseFloat(vnum1)
   state.voterange1e = parseFloat(vnum2)
+  state.votemiddle1 = (vnum2 - vnum1) / 2.0 + parseFloat(vnum1) // default value of Q1 survey slider
   state.voterange2s = parseFloat(vnum3)
   state.voterange2e = parseFloat(vnum4)
+  state.votemiddle2 = (vnum4 - vnum3) / 2.0 + parseFloat(vnum3) // default value of Q2 survey slider
+  // Note: slider3 is different - see lines 391 - 405
   state.voterange5s = parseFloat(vnum5)
   state.voterange5e = parseFloat(vnum6)
+  state.votemiddle5 = (vnum6 - vnum5) / 2.0 + parseFloat(vnum5) // default value of Q2 survey slider
+  console.log('@ vmiddle ', state.voterange1s, typeof state.voterange1s, state.voterange2s, typeof state.voterange2s)
+  console.log('# vmiddle ', state.voterange1e, typeof state.voterange1e, state.voterange2e, typeof state.voterange2e)
+  console.log('  vmiddle ', state.votemiddle1, typeof state.votemiddle1, state.votemiddle2, typeof state.votemiddle2)
+  //
   console.log('voterange', state.voterange1s, state.voterange1e, state.voterange2s,
     state.voterange2e, state.voterange5s, state.voterange5e)
+  // console.log('voterange', typeof state.voterange1s, typeof state.voterange1e, typeof state.voterange2s,
+  //  typeof state.voterange2e, typeof state.voterange5s, typeof state.voterange5e)
 } // === end of parameters table service ===
 
 // === === === === === === === === === === === === === === === === === === === === ===
@@ -382,10 +382,15 @@ export const setExchangeTableAttrVal = function (state, payload) { // DO NOT TOU
   state.currentprice = currentprice
   const price = state.lockfactor * state.currentprice
   //
-  state.voterange3s = parseFloat(process.env.HARD_EXCHANGE_RATE_FLOOR) // parametrize question 3 slider
+  const vnums = parseFloat(process.env.HARD_EXCHANGE_RATE_FLOOR) // parametrize question 3 slider
+  console.log(' voteranges vnums = ', vnums, typeof vnums)
+  console.log(' voteranges price = ', price, typeof price)
+  state.voterange3s = vnums
   state.voterange3e = price
-  // console.log(' VOTERANGES =', state.voterange3s, state.voterange3e)
-  // console.log(' A lockfactor/currentprice =', typeof val[0].currentprice, typeof state.voterange3s, typeof currentprice, typeof state.currentprice)
+  state.votemiddle3 = (price - vnums) / 2.0 + vnums // default value of Q3 survey slider
+  console.log(' voteranges voterange3s = ', state.voterange3s, typeof state.voterange3s)
+  console.log(' voteranges voterange3e = ', state.voterange3e, typeof state.voterange3e)
+  console.log(' voteranges votemiddle3 = ', state.votemiddle3, typeof state.votemiddle3)
 }
 
 export const showModal = function (state) {
@@ -450,6 +455,7 @@ export const noSVRS = function (state) { // TODO - Note: this code is duplicated
   const thisIteration = state.iteration
   console.log('thisIteration = ', thisIteration)
   // Note: All of this is already updated by the S-V-R pages.
+  // TODO This need to be rewritten TODO === === === === ===
   if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
     (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
     surveyDone = false
@@ -472,6 +478,7 @@ export const noSVRS = function (state) { // TODO - Note: this code is duplicated
     console.log('user has already completed the ratify')
   }
   console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone)
+  // todo end of part to rewrite.
   let nothing = false
   let S_OK = false
   let V_OK = false

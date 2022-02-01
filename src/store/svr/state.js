@@ -22,20 +22,26 @@ export default () => ({
   //
   // converted ranges for displaying parametrized Survey slides
   // processed by the
-  surveyrange1s: 0,
-  surveyrange1e: 0,
-  surveyrange2s: 0,
-  surveyrange2e: 0,
+  surveyrange1s: 0, // Q2 slider start
+  surveyrange1e: 0, // Q2 slider end
+  surveymiddle2: 0, // Q2 slider default in the middle
+  surveyrange2s: 0, // @4 slider start
+  surveyrange2e: 0, // Q4 slider end
+  surveymiddle4: 0, // Q4 slider default in the middle
   // converted ranges for displaying parametrized Vote sliders
   // processed by the
-  voterange1s: 0,
-  voterange1e: 0,
+  voterange1s: 0, // Q1 slider start
+  voterange1e: 0, // Q1 slider end
+  votemiddle1: 0, // Q1 slider default in the middle
   voterange2s: 0,
   voterange2e: 0,
+  votemiddle2: 0,
   voterange3s: 0.0,
   voterange3e: 0.0,
+  votemiddle3: 0,
   voterange5s: 0,
   voterange5e: 0,
+  votemiddle5: 0,
   //
   // === 'users' table (registration) ===
   isRegOpen: null, // open Registration dialog pop-up, if true

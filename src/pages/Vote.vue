@@ -309,11 +309,11 @@
 
         <q-card-section bordered class="q-pt-none">
           <!-- TODO Change whole line to be v-if block -->
-          {{this.errorString1}} <br v-if="this.Q1">
-          {{this.errorString2}} <br v-if="this.Q2">
-          {{this.errorString3}} <br v-if="this.Q3">
+          <!-- {{this.errorString1}} <br v-if="this.Q1"> -->
+          <!-- {{this.errorString2}} <br v-if="this.Q2"> -->
+          <!-- {{this.errorString3}} <br v-if="this.Q3"> -->
           {{this.errorString4}} <br v-if="this.Q4">
-          {{this.errorString5}} <br v-if="this.Q5">
+          <!-- {{this.errorString5}} <br v-if="this.Q5"> -->
           {{this.errorString6}} <br v-if="this.Q6">
           {{this.errorString7}}
         </q-card-section>
@@ -325,24 +325,24 @@
 
 <script>
 import notifyAlert from 'src/services/notify-alert'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Vote',
   data () { // VOTE
     return {
       version: '',
-      Q1: false,
-      Q2: false,
-      Q3: false,
+      // Q1: false,
+      // Q2: false,
+      // Q3: false,
       Q4: false,
-      Q5: false,
+      // Q5: false,
       Q6: false,
       errorpopup: false,
-      errorString1: '',
-      errorString2: '',
-      errorString3: '',
+      // errorString1: '',
+      // errorString2: '',
+      // errorString3: '',
       errorString4: '',
-      errorString5: '',
+      // errorString5: '',
       errorString6: '',
       errorString7: 'The above question(s) are answered incorectly. Try again.',
       displaytimer: 0, // local timer
@@ -382,11 +382,15 @@ export default {
       // Data passed as a result to the back-end as a result of voting.
       submitData: {
         currentAccountName: '',
-        q1slider: this.voterange1s,
-        q2slider: this.voterange2s, // Must start from 6. // TODO
-        q3slider: this.voterange3s,
+        // q1slider: this.voterange1s,
+        // q2slider: this.voterange2s, // TODO remove
+        // q3slider: this.voterange3s,
+        q1slider: 0.0,
+        q2slider: 0.0,
+        q3slider: 0.0,
         q4radio: '', // string
-        q5slider: this.voterange5s,
+        // q5slider: this.voterange5s, // todo remove
+        q5slider: 0.0,
         q6choice1: 0, // Return number of selected option for each selector.
         q6choice2: 0,
         q6choice3: 0
@@ -416,8 +420,17 @@ export default {
   beforeDestroy () {
     clearInterval(this.setIntervalId)
   },
+  mounted () {
+    this.fetchSliders()
+  },
   methods: {
     ...mapActions('svr', ['addVoteResult']),
+    fetchSliders () { // TODO !!!
+      this.submitData.q1slider = this.votemiddle1
+      this.submitData.q2slider = this.votemiddle2
+      this.submitData.q3slider = this.votemiddle3
+      this.submitData.q5slider = this.votemiddle5
+    },
     submit () { // VOTE
       // Export Q1 vote results to back-end as a string.
       console.log('value_radio1', this.value_radio1)
@@ -445,47 +458,47 @@ export default {
       // todo modify for parametrized questions e.g. variable slider.
       // todo verify conditions - current are wrong
       let error = false // true if any error, will define this function return value.
-      this.Q1 = false
-      this.Q2 = false
-      this.Q3 = false
+      // this.Q1 = false
+      // this.Q2 = false
+      // this.Q3 = false
       this.Q4 = false
-      this.Q5 = false
+      // this.Q5 = false
       this.Q6 = false
-      this.errorString1 = ''
-      this.errorString2 = ''
-      this.errorString3 = ''
+      // this.errorString1 = ''
+      // this.errorString2 = ''
+      // this.errorString3 = ''
       this.errorString4 = ''
-      this.errorString5 = ''
+      // this.errorString5 = ''
       this.errorString6 = ''
-      if (this.submitData.q1slider === undefined) {
-        error = true
-        this.Q1 = true
-        this.errorString1 = ' -> Q1: Question not answered.'
-      }
-      console.log('this.submitData.q2slider', this.submitData.q2slider)
-      if (this.submitData.q2slider === undefined) { // todo should be min
-        error = true
-        this.Q2 = true
-        this.errorString2 = ' -> Q2: Question not answered.'
-      }
-      if (this.submitData.q3slider === undefined) {
-        error = true
-        this.Q3 = true
-        this.errorString3 = ' -> Q3: Question not answered. '
-      }
+      // if (this.submitData.q1slider === undefined) {
+      //  error = true
+      //  this.Q1 = true
+      //  this.errorString1 = ' -> Q1: Question not answered.'
+      // }
+      // console.log('this.submitData.q2slider', this.submitData.q2slider)
+      // if (this.submitData.q2slider === undefined) { // todo should be min
+      //  error = true
+      //  this.Q2 = true
+      //  this.errorString2 = ' -> Q2: Question not answered.'
+      // }
+      // if (this.submitData.q3slider === undefined) {
+      //  error = true
+      //  this.Q3 = true
+      //  this.errorString3 = ' -> Q3: Question not answered. '
+      // }
       console.log('this.value_radio1', this.value_radio1)
       if ((this.value_radio1 !== '1') && (this.value_radio1 !== '2')) {
         error = true
         this.Q4 = true
         this.errorString4 = ' -> Q4: Select one Option. '
       }
-      console.log('this.submitData.q5slider', this.submitData.q5slider)
-      if (this.submitData.q5slider === undefined) {
-        error = true
-        this.Q5 = true
-        this.errorString5 = ' -> Q5: Question not answered.'
-        console.log('q5slider', this.submitData.q5slider)
-      }
+      // console.log('this.submitData.q5slider', this.submitData.q5slider)
+      // if (this.submitData.q5slider === undefined) {
+      //  error = true
+      //   this.Q5 = true
+      //  this.errorString5 = ' -> Q5: Question not answered.'
+      //  console.log('q5slider', this.submitData.q5slider)
+      // }
       const a = this.submitData.q6choice1
       const b = this.submitData.q6choice2
       const c = this.submitData.q6choice3
@@ -565,7 +578,9 @@ export default {
       votestart: state => state.svr.votestart,
       scan_interval: state => state.svr.scan_interval,
       currentprice: state => state.currentprice, // ??
-      targetprice: state => state.targetprice // ??
+      targetprice: state => state.targetprice, // ??
+      ...mapGetters('svr', ['votemiddle1', 'votemiddle2']),
+      ...mapGetters('svr', ['votemiddle3', 'votemiddle5'])
     })
   }
 }
