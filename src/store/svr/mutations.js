@@ -15,7 +15,8 @@ import notifyAlert from 'src/services/notify-alert'
 // import customAlert from 'src/services/customAlert'
 
 export const setSVRSTableAttrVal = function (state, payload) {
-  //
+  // Ref: called from svr/actions.js line 165 as  state.commit('setSVRSTableAttrVal', val)
+  // This is the usual work when all user data are complete.
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
@@ -61,14 +62,17 @@ export const setSVRSTableAttrVal = function (state, payload) {
   let surveyDone = false // Keep it as it is (whatever do you think :) )
   let voteDone = false
   let ratifyDone = false
+  const survey0 = val[0].survey0
   const survey1 = val[0].survey1
   const survey2 = val[0].survey2
   const survey3 = val[0].survey3
   const survey4 = val[0].survey4
+  const vote0 = val[0].vote0
   const vote1 = val[0].vote1
   const vote2 = val[0].vote2
   const vote3 = val[0].vote3
   const vote4 = val[0].vote4
+  const ratify0 = val[0].ratify0
   const ratify1 = val[0].ratify1
   const ratify2 = val[0].ratify2
   const ratify3 = val[0].ratify3
@@ -76,21 +80,21 @@ export const setSVRSTableAttrVal = function (state, payload) {
   const thisIteration = state.iteration
   console.log('thisIteration = ', thisIteration)
   // Note: All of this is already updated by the S-V-R pages.
-  if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
-     (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
+  if ((survey0 !== thisIteration) && (survey1 !== thisIteration) &&
+     (survey2 !== thisIteration) && (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
     surveyDone = false
   } else {
     surveyDone = true
     console.log('user has already completed the survey')
   }
-  if ((vote1 !== thisIteration) && (vote2 !== thisIteration) &&
+  if ((vote0 !== thisIteration) && (vote1 !== thisIteration) && (vote2 !== thisIteration) &&
     (vote3 !== thisIteration) && (vote4 !== thisIteration)) {
     voteDone = false
   } else {
     voteDone = true
     console.log('user has already completed the vote')
   }
-  if ((ratify1 !== thisIteration) && (ratify2 !== thisIteration) &&
+  if ((ratify0 !== thisIteration) && (ratify1 !== thisIteration) && (ratify2 !== thisIteration) &&
     (ratify3 !== thisIteration) && (ratify4 !== thisIteration)) {
     ratifyDone = false
   } else {
@@ -405,15 +409,23 @@ export const increment = function (state) {
   state.Increment++
 }
 
-export const noSVRS = function (state) { // TODO - Note: this code is duplicated abd used only in case
-  // when new user is registered but not have SVRS table. Rationale: SVRS table is initialized for the new user
+//
+// === === ===
+//
+// Ref: called from svr/actions.js line 175 as state.commit('noSVRS')
+export const noSVRS = function (state) {
+  // TODO - Note: this code is duplicated and used only in case of no svrs record for the current user.
+  // when new user is registered not have SVRS table. Rationale: SVRS table is initialized for the new user
   // by calling survey or vote, but it was impossible if user had no SVRS table as stage in which user is now is
-  // determined by SVRS table. This part of the code allows user to make survey or vote always to allow SVRS initialization.
-  // Note: code duplication was necessary as putting any other solution into original function destroyed timing of aa operations.
-  // TODO Compare with original - search for another solution without code duplication.
+  // determined by SVRS table.
+  // This part of the code allows user to make survey or vote always to allow SVRS initialization.
+  // Note: code duplication was necessary as putting any other solution into original function destroyed
+  // timing of many operations.
+
   let isSurveyActive = false
   let isVoteActive = false
   let isRatifyActive = false
+  console.log('=== called noSVRS ===')
   const currentT = Math.floor((new Date().getTime() / 1000)) // Current UTC GMT time in sec (msec cut off). TODO use this!
   const currentoffset = (currentT - state.initUTC) % state.iterationSize
   state.timerOffset = currentoffset
@@ -425,122 +437,34 @@ export const noSVRS = function (state) { // TODO - Note: this code is duplicated
   const voteend = state.voteend
   const votestart = state.votestart
   // set userStatus:
-  console.log('systemStatus: isSurveyActive=', isSurveyActive, ' isVoteActive=', isVoteActive, ' isRatifyActive=', isRatifyActive)
-  if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) { isSurveyActive = true } // We are in Survey period.
-  if ((votestart <= currentoffset) && (currentoffset <= voteend)) { isVoteActive = true } // -- "" --  Vote period.
-  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) { isRatifyActive = true } // Ratify period
-  //
-  // SYSTEM data processing
-  //
+  if ((surveystart <= currentoffset) && (currentoffset <= surveyend)) {
+    isSurveyActive = true
+  } // We are in Survey period.
+  if ((votestart <= currentoffset) && (currentoffset <= voteend)) {
+    isVoteActive = true
+  } // -- "" --  Vote period.
+  if ((ratifystart <= currentoffset) && (currentoffset <= ratifyend)) {
+    isRatifyActive = true
+  } // Ratify period
+
+  console.log('systemStatus: isSurveyActive=', isSurveyActive, ' isVoteActive=', isVoteActive,
+    ' isRatifyActive=', isRatifyActive)
+
   // const currentTimeSec = Math.floor((new Date()).getTime() / 1000) // ?? delete
   const diff = Math.floor(((currentT - state.initUTC) / state.iterationSize) + 1)
   state.iteration = diff // active iteration number
   // console.log('Counted ITERATION:', diff)
   //
-  let surveyDone = false // Keep it as it is (whatever do you think :) )
-  let voteDone = false
-  let ratifyDone = false
-  const survey1 = 0
-  const survey2 = 0
-  const survey3 = 0
-  const survey4 = 0
-  const vote1 = 0
-  const vote2 = 0
-  const vote3 = 0
-  const vote4 = 0
-  const ratify1 = 0
-  const ratify2 = 0
-  const ratify3 = 0
-  const ratify4 = 0
-  const thisIteration = state.iteration
-  console.log('thisIteration = ', thisIteration)
-  // Note: All of this is already updated by the S-V-R pages.
-  // TODO This need to be rewritten TODO === === === === ===
-  if ((survey1 !== thisIteration) && (survey2 !== thisIteration) &&
-    (survey3 !== thisIteration) && (survey4 !== thisIteration)) {
-    surveyDone = false
-  } else {
-    surveyDone = true
-    console.log('user has already completed the survey')
-  }
-  if ((vote1 !== thisIteration) && (vote2 !== thisIteration) &&
-    (vote3 !== thisIteration) && (vote4 !== thisIteration)) {
-    voteDone = false
-  } else {
-    voteDone = true
-    console.log('user has already completed the vote')
-  }
-  if ((ratify1 !== thisIteration) && (ratify2 !== thisIteration) &&
-    (ratify3 !== thisIteration) && (ratify4 !== thisIteration)) {
-    ratifyDone = false
-  } else {
-    ratifyDone = true
-    console.log('user has already completed the ratify')
-  }
-  console.log('userStatus: S=', surveyDone, ' V=', voteDone, ' R=', ratifyDone)
-  // todo end of part to rewrite.
-  let nothing = false
-  let S_OK = false
-  let V_OK = false
-  let SV_OK = false
-  let R_OK = false
-  // // nothing - all three false
-  if ((surveyDone === false) && (voteDone === false) && (ratifyDone === false)) { nothing = true }
-  if ((surveyDone === true) && (voteDone === false) && (ratifyDone === false)) { S_OK = true }
-  if ((voteDone === true) && (ratifyDone === false)) { V_OK = true } // S-any, V-true, R-false
-  if ((surveyDone === true) && (voteDone === true) && (ratifyDone === false)) { SV_OK = true }
-  if (ratifyDone === true) { R_OK = true } // S, V - any value, but R-true
-  // console.log('nothing:', nothing, ' S_OK:', S_OK, ' V_OK:', V_OK,
-  // ' SV_OK:', SV_OK, ' R_OK:', R_OK)
-  console.log('systemStatus isSurveyActive: ', isSurveyActive, 'isVoteActive: ', isVoteActive, 'isRatifyActive: ', isRatifyActive)
-  // const delay = state.delay
   if (isSurveyActive) {
-    // state.user_mode = 0 means system inactive
-    if (nothing) {
-      state.user_mode = 1
-      state.timer = surveyend - currentoffset // + delay // survey timer in seconds
-    } // Survey Open
-    if (S_OK) {
-      state.user_mode = 2
-      state.timer = surveyend - currentoffset // survey timer in seconds
-    } // Wait for Vote // Required Conditions: S-true, V,R - N/A
-  }
-  // console.log('119', isVoteActive, nothing)
+    state.user_mode = 1
+    state.timer = surveyend - currentoffset // + delay // survey timer in seconds
+  } // Survey Open
   if (isVoteActive) {
-    if (nothing) {
-      state.user_mode = 3
-      state.timer = voteend - currentoffset // vote timer in seconds
-      // console.log('Vote NOW')
-    } // Vote Open/Start Vote Now
-    if (S_OK) {
-      state.user_mode = 3
-      state.timer = voteend - currentoffset // vote timer in seconds
-    } // Vote Open/Start Vote Now
-    if (V_OK) { // change from SV_OK to V_OK
-      state.user_mode = 4
-      state.timer = voteend - currentoffset // vote timer in seconds
-    } // Wait for Ratify
+    state.user_mode = 3
+    state.timer = voteend - currentoffset // vote timer in seconds
   }
   if (isRatifyActive) {
-    if (nothing) {
-      state.user_mode = 6
-      state.timer = ratifyend - currentoffset // ratify timer in seconds
-    } // Wait for New Iteration
-    if (S_OK) {
-      state.user_mode = 6 // changed from 5 to 6 as survey alone is not enough for ratify
-      state.timer = ratifyend - currentoffset // ratify timer in seconds
-    } // Ratify Open
-    if (V_OK) {
-      state.user_mode = 5
-      state.timer = ratifyend - currentoffset // ratify timer in seconds
-    } // Ratify Open
-    if (SV_OK) {
-      state.user_mode = 5
-      state.timer = ratifyend - currentoffset // ratify timer in seconds
-    } // Ratify Open // extras
-    if (R_OK) {
-      state.user_mode = 6
-      state.timer = ratifyend - currentoffset // ratify timer in seconds
-    } // Wait for New Iteration
-  }
+    state.user_mode = 6
+    state.timer = ratifyend - currentoffset // ratify timer in seconds
+  } // Wait for New Iteration}
 }

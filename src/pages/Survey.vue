@@ -430,35 +430,23 @@ export default {
       // todo modify for parametrized questions e.g. variable slider.
       let error = false // true if any error, will define this function return value.
       this.Q1 = false
-      // this.Q2 = false
       this.Q3 = false
-      // this.Q4 = false
       this.Q5 = false
       this.errorString1 = ''
-      // this.errorString2 = ''
       this.errorString3 = ''
-      // this.errorString4 = ''
       this.errorString5 = ''
       if (this.submitData.q1radio === 0) {
         error = true
         this.Q1 = true
         this.errorString1 = ' -> Q1: Select one Option.'
       }
-      // if (this.submitData.q2slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
-      //  error = true
-      //  this.Q2 = true
-      //  this.errorString2 = ' -> Q2: Question not answered '
-      // }
+
       if (this.submitData.q3radio === 0) {
         error = true
         this.Q3 = true
         this.errorString3 = ' -> Q3: Select one option. '
       }
-      // if (this.submitData.q4slider === undefined) { // if slider not touched by the user it is always 0, not min slider range
-      //  error = true
-      //  this.Q4 = true
-      //  this.errorString4 = ' -> Q4: Question not answered. '
-      // }
+
       const a = this.submitData.q5priority1
       const b = this.submitData.q5priority2
       const c = this.submitData.q5priority3
@@ -481,7 +469,6 @@ export default {
         this.$set(this.options, randomIndex, temp)
       }
     },
-    // Efficiency Note: This should be made in the future as a globally accessible function (in mixins or plugins)
     secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
       a = Number(a)
       const d = Math.floor(a / 86400)

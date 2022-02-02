@@ -1,7 +1,7 @@
 <template>
   <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
-      <b>Current Web based on commit 7199a06 1/02/2022 2:06 am</b>
+      <b>Current Web based on commit cce4d09 1/02/2022 10:37 pm</b>
       <div>Current Configuration .env
         <table left>
           <tr><td>APP_NAME:</td><td>{{this.app_name}}</td></tr>

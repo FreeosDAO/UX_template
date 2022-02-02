@@ -162,7 +162,7 @@ export async function getSvrsTable (state, name) {
       value: result.rows
     }
     console.log(' ## ==> getSvrsTable', val)
-    state.commit('setSVRSTableAttrVal', val)
+    state.commit('setSVRSTableAttrVal', val) // Ref: See: svr/mutations.js line 17
     // notifyAlert('success', 'User may be Registered. Account type verification in progress.')
     // state.commit('svrsError', false)
   } catch (e) {
@@ -172,7 +172,7 @@ export async function getSvrsTable (state, name) {
     // NOTE: ... enable its normal initialization by any of S-V pages.
     // state.commit('svrsError', true)
     console.log('Error: No svrs table')
-    state.commit('noSVRS')
+    state.commit('noSVRS') // Ref: See: svr/mutations.js line 415
     // }
   }
 }
