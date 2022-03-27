@@ -4,7 +4,7 @@
     <!-- Title/Intro Section -->
     <q-card flat bordered class="mycard">
       <!-- Main Q-card -->
-      <q-toolbar>
+      <!-- <q-toolbar>
         <q-toolbar-title class="text-body2 bg-grey-4">
           {{accountName}} &nbsp; &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
         </q-toolbar-title>
@@ -36,7 +36,7 @@
             </q-list>
           </q-menu>
         </q-btn>
-      </q-toolbar>
+      </q-toolbar> -->
         <q-card-section>
             <div class="text-h5 text-left">Claim</div>
             <div>Select the weeks you wish to Claim first</div>
@@ -155,7 +155,8 @@ export default {
   },
   methods: {
     onSubmit () {
-      notifyAlert(1, 'Submitted Successfully')
+      notifyAlert(1, 'Claim Data Updated')
+      this.$router.push('/land') // back to home page
     },
     onSelectMenu (menuItem) {
       // (this.$route.path !== menuItem.route) && this.$router.push(menuItem.route)

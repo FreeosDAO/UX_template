@@ -539,6 +539,12 @@ text-color: #FFFFFF;
 .mycard1 {
   background-color: #E0E1E1;
 }
+.mycard2 {
+  border-radius: 66px;
+  background: linear-gradient(315deg, #cacaca, #f0f0f0);
+  box-shadow:  -35px -35px 70px #797979,
+  35px 35px 70px #ffffff;
+}
 .example {
   margin: 20px;
 }

@@ -425,7 +425,7 @@ export default {
   },
   methods: {
     ...mapActions('svr', ['addVoteResult']),
-    fetchSliders () { // TODO !!!
+    fetchSliders () {
       this.submitData.q1slider = this.votemiddle1
       this.submitData.q2slider = this.votemiddle2
       this.submitData.q3slider = this.votemiddle3
