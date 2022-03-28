@@ -352,3 +352,73 @@ export async function getUserTable (state, name) {
 // state.commit('setRegPopUp', false)
 // this.commit('setIsRegOpen', false)
 // } // todo ?
+
+// === c l a i m A c t i o n ===
+export async function claimAction (state, currentAccountName) {
+  // Write user data to users table on the backend
+  console.log('&&& acc name=', currentAccountName)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'claim',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: {
+      user: currentAccountName
+    }
+  }]
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Claiming successful'
+      Notify.create({
+        message: responseMessage,
+        color: 'positive'
+      })
+    }
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
+
+// === m i n t C o n v e r t  ===
+export async function mintConvert (state, currentAccountName, targetAccountName, targetquantity, memostring) {
+  // Write user data to users table on the backend
+  console.log('&&& acc name=', currentAccountName)
+  const actions = [{
+    account: process.env.APP_NAME,
+    name: 'mint',
+    authorization: [{
+      actor: currentAccountName,
+      permission: 'active'
+    }],
+    data: {
+      minter: currentAccountName,
+      to: 'billbeaumont',
+      quantity: '1.0000 FREEOS',
+      memo: memostring
+    }
+  }]
+  try {
+    const result = await ProtonSDK.sendTransaction(actions)
+    console.log('@@@ result=', result)
+    let responseMessage = result.processed.action_traces[0].console
+    if (!responseMessage) {
+      responseMessage = 'Minting successful'
+      Notify.create({
+        message: responseMessage,
+        color: 'positive'
+      })
+    }
+    return result
+  } catch (e) {
+    console.log(e)
+    return e
+  }
+}
+// `void freeosgov::mint(const name &minter, const name &to, const asset &quantity, const string &memo)

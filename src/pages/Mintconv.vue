@@ -5,9 +5,6 @@
     <q-card flat bordered class="mycard">
       <!-- Main Q-card -->
       <q-toolbar>
-        <q-toolbar-title class="text-body2 bg-grey-4">
-          {{accountName}} &nbsp; &nbsp; <q-btn round flat class="bg-grey-6 text-grey-2">{{iteration}}</q-btn>
-        </q-toolbar-title>
         <q-btn dense flat round icon="menu">
           <q-menu anchor="bottom left" self="top right"
                   :style="{ backgroundColor: '#eee', color: 'blue'}">
@@ -80,53 +77,19 @@
                    <!---->
                    <div class="row">
                      <div class="col">
-                       <q-btn-dropdown color="primary" label="POINTS">
-                         <q-list>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                               <q-item-label>Photos</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                               <q-item-label>Videos</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                               <q-item-label>Articles</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                         </q-list>
-                       </q-btn-dropdown>
+                       <q-select color="purple-12" v-model="this.model1" :options="this.options1" label="Label">
+                       </q-select>
                      </div>
                      <div class="col-2"></div>
                      <div class="col text-right">
-                       <q-btn-dropdown color="grey-6" label="FREEOS">
-                         <q-list>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                                <q-item-label>Photos</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                               <q-item-label>Videos</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                           <q-item clickable v-close-popup @click="onItemClick">
-                             <q-item-section>
-                               <q-item-label>Articles</q-item-label>
-                             </q-item-section>
-                           </q-item>
-                         </q-list>
-                       </q-btn-dropdown>
+                       <q-select color="purple-12" v-model="this.model" :options="this.options" label="Label">
+                       </q-select>
                      </div>
                    </div> <!-- div class row -->
                    <!---->
                    <div class="mini row justify-center">Mint<br></div>
                    <div class="row">
-                     <div class="col"><q-input outlined dense v-model="text"></q-input>
+                     <div class="col"><q-input outlined dense v-model="text1"></q-input>
                      </div>
                      <div class="col">
                        <div class="row justify-center">
@@ -181,7 +144,7 @@
                            no-caps
                            size="25px"
                            align="center"
-                           @click="gohome()"
+                           to="/"
                            class="full-width q-px-xl q-py-xs center"
                            color="grey-6"
                            label="Home"
@@ -196,10 +159,22 @@
 
 <script>
 // import notifyAlert from 'src/services/notify-alert'
+import { mapActions, mapState } from 'vuex'
+
 export default {
-  name: 'Vote',
+  name: 'Mintconv',
   data () {
     return {
+      model: 'FREEOS',
+      options: [
+        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+      ],
+      model1: 'POINTS',
+      options1: [
+        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+      ],
+      text1: '',
+      onItemClick: '',
       points: '12,235',
       freetok: '38,000',
       price: '0.02145',
@@ -207,12 +182,21 @@ export default {
       stackedpoints: '1123',
       iteration: 0,
       unlockpercent: '13',
-      freeby: '23433.12'
+      freeby: '23433.12',
+      targetAccountName: 'billbeaumont',
+      targetquantity: '1.0000 FREEOS',
+      memostring: 'minted'
     }
   },
+  computed: {
+    ...mapState({
+      accountName: state => state.account.accountName
+    })
+  },
   methods: {
-    gohome () {
-      // tt
+    ...mapActions('svr', ['mintConvert']),
+    doit () {
+      this.mintConvert(this.accountName, this.targetAccountName, this.targetquantity, this.memostring)
     }
   }
 }

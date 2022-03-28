@@ -35,9 +35,10 @@
           </div>
           <div class="col text-center">
             <div  class="mini">Mint</div>
+            <!-- this.$router.push('/mint') -->
             <div>
               <q-btn outline
-                     @click="doit()"
+                     to="/mint"
                      round color="gray-6"
                      icon="animation"></q-btn>
             </div>
@@ -83,7 +84,8 @@
           round
           no-caps
           color="grey-6"
-        ><div class="mini1">Claimed</div></q-btn>
+          @click="callClaim()"
+        ><div class="mini1">Claim</div></q-btn>
       </q-card>
         </div>
     <!-- -->
@@ -173,7 +175,7 @@ export default {
     // eslint-disable-next-line vue/no-dupe-keys
   }, // End of 'computed' section.
   methods: {
-    ...mapActions('svr', ['getSvrsTable', 'getParametersTable', 'getUserTable']),
+    ...mapActions('svr', ['claimAction', 'getSvrsTable', 'getParametersTable', 'getUserTable']),
     // removed 'gohome()' from here.
     ver () { // TODO can be removed
       this.version = process.env.V_STRING
@@ -187,8 +189,13 @@ export default {
         return true // when true lock main key
       } else { return false }
     },
-    doit () {
-      // serving for mint page TODO
+    // doit () {
+    //  // serving for mint page
+    //  this.$router.push('/mint')
+    // },
+    callClaim () {
+      console.log('claim')
+      this.claimAction(this.accountName)
     },
     secondsToDHms (a) { // format given number of seconds 'a' as number of days, hours, and minutes.
       a = Number(a)
